@@ -157,6 +157,9 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
         if local: return local_data
         return None
     
+    def _do_redircet(self):
+        return None
+    
     def _read_modify_wirte(self, soc, max_idling=20, local=False):
         print 'modify'
         url = 'http://127.0.0.1/test.php'
