@@ -35,6 +35,7 @@ import ftplib
 import urllib2
 import gzip
 from StringIO import StringIO
+import ProxyConfig
   
 DEFAULT_LOG_FILENAME = "proxy.log"
   
@@ -315,6 +316,7 @@ def daemonize (logger):
     if fd not in (1, 2): os.close (fd)
 '''  
 def main ():
+    cfgfile = 'config.json'
     logfile = None
     daemon  = False
     max_log_size = 20
@@ -329,6 +331,7 @@ def main ():
         return 1
   
     for opt, value in opts:
+        if opt == "-c": cfgfile = value
         if opt == "-p": port = int (value)
         if opt == "-l": logfile = value
         if opt == "-d": daemon = not daemon
@@ -353,6 +356,10 @@ def main ():
         ProxyHandler.allowed_clients = allowed
     else:
         logger.log (logging.INFO, "Any clients will be served...")
+        
+    cfgcls = ProxyConfig.config(cfgfile)
+    cfg = cfgcls.read()
+    ProxyHandler.config = cfg
   
     server_address = (socket.gethostbyname (local_hostname), port)
     ProxyHandler.protocol = "HTTP/1.0"

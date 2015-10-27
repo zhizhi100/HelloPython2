@@ -1,0 +1,40 @@
+{
+	"Modify" : {
+		"Type" : ["html"],
+		"Rules" : [{
+				"Action" : "AppendHTML",
+				"Contetnt" : "<script>alert(\"Hello!\");</script>",
+				"MatchMode" : "StartWith",
+				"MatchContent" : "dddl",
+				"Type" : "html",
+				"Comment" : ""
+			}, {
+				"Action" : "AppendHTML",
+				"Contetnt" : "<script>alert(\"Hello!\");</script>",
+				"MatchMode" : "Regex",
+				"MatchContent" : "dddl",
+				"Type" : "html",
+				"Comment" : ""
+			}
+		]
+	},
+	"Redirect" : {
+		"Type" : ["js"],
+		"Rules" : [{
+				"Action" : "AppendHTML",
+				"Contetnt" : "<script>alert(\"Hello!\");</script>",
+				"MatchMode" : "StartWith",
+				"MatchContent" : "dddl",
+				"Type" : "html",
+				"Comment" : ""
+			}, {
+				"Action" : "AppendHTML",
+				"Contetnt" : "<script>alert(\"Hello!\");</script>",
+				"MatchMode" : "Regex",
+				"MatchContent" : "dddl",
+				"Type" : "html",
+				"Comment" : ""
+			}
+		]
+	}
+}
