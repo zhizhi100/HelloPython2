@@ -59,7 +59,9 @@ class RuleMatch():
         elif mode == 'Equal':#等于
             return content == path
         elif mode == 'EndWith':#结束字符
-            return path.find(content) == (len(path) - len(content) - 1)
+            a = path.find(content)
+            b = len(path) - len(content) 
+            return a == b
         return False
     
     #redirect mode:Change,ChangeHost(not finished),ChangeKeyword,RegexChange
