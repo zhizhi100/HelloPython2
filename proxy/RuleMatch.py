@@ -21,7 +21,9 @@ class RuleMatch():
         if rdtrules.has_key('Type'):#不为空
             redirecttype = rdtrules['Type']
             for i in redirecttype:
-                if i == '*':allredirect = True       
+                if i == '*' :
+                    self.allredirect = True
+                    break       
         
         if rdtrules.has_key('Rules'):#有转发规则
             self.redirectrules = rdtrules['Rules']    
@@ -35,6 +37,7 @@ class RuleMatch():
         if mdfrules.has_key('Rules'):#有改写规则
             self.mdfrules = rdtrules['Rules']    
     
+    #match mode:StartWith,HasKeyword,Regex,Equal,EndWith
     def matchpath(self,rule,path):
         mode = rule['MatchMode']
         content = rule['MatchContent']
@@ -56,9 +59,10 @@ class RuleMatch():
         elif mode == 'Equal':#等于
             return content == path
         elif mode == 'EndWith':#结束字符
-            return path.find(content) == path.length() - content.length() - 1
+            return path.find(content) == (len(path) - len(content) - 1)
         return False
     
+    #redirect mode:Change,ChangeHost(not finished),ChangeKeyword,RegexChange
     def redirectpath(self,rule,path):
         action = rule['Action']
         content = rule['Content']
@@ -158,3 +162,6 @@ class RuleMatch():
                     need = False
                 break
         if not(need): return (False,'',None)#do not need modify html
+        
+if __name__ == '__main__':
+    print 'json'

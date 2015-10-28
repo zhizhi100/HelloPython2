@@ -368,7 +368,8 @@ def main ():
         logger.log (logging.INFO, "Any clients will be served...")
         
     cfgcls = ProxyConfig.config(cfgfile)
-    cfg = cfgcls.read()
+    cfg = {}
+    (cfg['Redirect'],cfg['Modify']) = cfgcls.read()
     ProxyHandler.config = cfg
     
     rulematch = RuleMatch.RuleMatch(cfg['Redirect'],cfg['Modify'])
