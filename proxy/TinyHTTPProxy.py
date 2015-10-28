@@ -36,6 +36,7 @@ import urllib2
 import gzip
 from StringIO import StringIO
 import ProxyConfig
+import RuleMatch
   
 DEFAULT_LOG_FILENAME = "proxy.log"
   
@@ -85,19 +86,28 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
             self.connection.close()
   
     def do_GET(self):
+        #0 get request accept type,now set it to *
+        accepttype = self.headers.get('Accept')
+        if accepttype == '*/*':
+            accepttype = '*'
+        elif accepttype.find('text/html') == 0:
+            accepttype = 'html'
+        else:
+            accepttype = 'other'
+        #1 deal with redirect rules, FTP may raise error
+        (needredirect,self.path) = self.rulehandler.redirect(self.path,accepttype)
+        #finished the redirect
+        
         (scm, netloc, path, params, query, fragment) = urlparse.urlparse(
             self.path, 'http')
-        if scm not in ('http', 'ftp') or fragment or not netloc:
+        #do not support ftp protecl
+        if scm not in ('http', 'noftp') or fragment or not netloc:
             self.send_error(400, "bad url %s" % self.path)
             return
         #print self.headers
         soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             if scm == 'http':
-                redirect = False
-                change = True
-                if redirect :
-                    (scm, netloc, path, params, query, fragment) = urlparse.urlparse('http://127.0.0.1/test.php', 'http')
                 if self._connect_to(netloc, soc) :
                     self.log_request()
                     soc.send("%s %s %s\r\n" % (self.command,
@@ -110,7 +120,7 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
                     for key_val in self.headers.items():
                         soc.send("%s: %s\r\n" % key_val)
                     soc.send("\r\n")
-                    if change:
+                    if not(needredirect):
                         self._read_modify_wirte(soc)
                     else:
                         self._read_write(soc)
@@ -360,6 +370,9 @@ def main ():
     cfgcls = ProxyConfig.config(cfgfile)
     cfg = cfgcls.read()
     ProxyHandler.config = cfg
+    
+    rulematch = RuleMatch.RuleMatch(cfg['Redirect'],cfg['Modify'])
+    ProxyHandler.rulehandler = rulematch
   
     server_address = (socket.gethostbyname (local_hostname), port)
     ProxyHandler.protocol = "HTTP/1.0"

@@ -5,7 +5,9 @@ Created on 2015年10月27日
 @author: ZhongPing
 '''
 import re
-
+from urllib2 import Request, urlopen, URLError, HTTPError 
+import gzip
+from StringIO import StringIO
 
 class RuleMatch():
     allredirect = False
@@ -59,7 +61,7 @@ class RuleMatch():
     
     def redirectpath(self,rule,path):
         action = rule['Action']
-        content = rule['Contetnt']
+        content = rule['Content']
         if action == 'Change':
             return content
         elif action == 'ChangeHost':
@@ -77,7 +79,7 @@ class RuleMatch():
                 return info.sub(keywords[1],path)
             else:
                 return path
-        return None
+        return path
     
     def redirect(self,path,accepttype):
         need = False
@@ -87,8 +89,72 @@ class RuleMatch():
                     need = True
                     break
         if not(self.allredirect) and not(need):#不需要跳转的类型
-            return (False,'')
+            return (False,path)
         for r in self.redirectrules:
             if self.matchpath(r, path):
+                return (True,self.redirectpath(r, path))
+        return (False,path)
+    
+    def getdoc(self,path,reqheaders):
+        l_headers = reqheaders[:]
+        del l_headers['if-modified-since']
+        idoc = ''
+        code = ''
+        errmsg = ''
+        req = Request(path,headers=l_headers)
+        try:
+            r = urlopen(req)
+            idoc = r.read()
+            code = r.getcode()
+            receive_header = r.info()   
+            del receive_header['Content-Encoding']
+            if receive_header.get('Content-Encoding') == 'gzip': # and receive_header.get('Content-type').find('html'):
+                buf = StringIO(idoc)
+                f = gzip.GzipFile(fileobj=buf)
+                idoc = f.read()                     
+        except HTTPError, e:
+            errmsg = 'HTTPError:'+e.error_code
+        except URLError, e:
+            errmsg = 'URLError:'+e.reason()
+        return (code,idoc,receive_header,errmsg)
+    
+    def modifyhtml(self,rule,html):
+        action = rule['Action']
+        content = rule['Content']
+        if action == 'AppendHTML':
+            html = html + content
+        elif action == 'ChangeKeyword':
+            keywords = content.split('|')#|
+            if len(keywords)==2:
+                html =  html.replace(keywords[0],keywords[1])
+            else:
+                return html
+        elif action == 'RegexChange':
+            keywords = content.split('|')#|
+            if len(keywords)==2:
+                info = re.compile(keywords[0])
+                html =  info.sub(keywords[1],html)
+            else:
+                return None
+        else:
+            return None               
+    
+    def modify(self,path,accepttype,headers):
+        need = False
+        for i in self.modifytype:
+            if (i == accepttype):
+                need = True
+                if self.matchpath(i, path):
+                    (responsecode,html,receive_header,errormsg) = self.getdoc(path, headers)
+                    if not(errormsg == ''):
+                        return (True,errormsg,None)
+                    else:
+                        resp = {}
+                        resp['code'] = responsecode
+                        resp['html'] = self.modifyhtml(i, html)
+                        resp['header'] = receive_header
+                        return (True,'',resp)
+                else:
+                    need = False
                 break
-                
+        if not(need): return (False,'',None)#do not need modify html

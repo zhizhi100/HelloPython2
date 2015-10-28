@@ -22,10 +22,10 @@ class config():
             return
         rules = cfg['Rules']
         for r in rules:
-            if not(r.has_key('Action') and r.has_key('Contetnt') \
+            if not(r.has_key('Action') and r.has_key('Content') \
                    and r.has_key('MatchMode') and r.has_key('MatchContent') and r.has_key('Type')):
                 rules.remove(r)
-            if (r['Action']=='' or r['Contetnt']=='' or r['MatchMode']=='' \
+            if (r['Action']=='' or r['Content']=='' or r['MatchMode']=='' \
                 or r['MatchContent']=='' or r['Type']==''):
                 rules.remove(r)
         
