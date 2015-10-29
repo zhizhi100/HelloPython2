@@ -5,14 +5,21 @@
 				"Action" : "AppendHTML",
 				"Content" : "<script>alert(\"Hello!\");</script>",
 				"MatchMode" : "StartWith",
-				"MatchContent" : "dddl",
+				"MatchContent" : "http://127.0.0.1/testpage",
 				"Type" : "html",
 				"Comment" : ""
 			}, {
-				"Action" : "AppendHTML",
-				"Content" : "<script>alert(\"Hello!\");</script>",
+				"Action" : "ChangeKeyword",
+				"Content" : "test|changedRegexword",
 				"MatchMode" : "Regex",
-				"MatchContent" : "dddl",
+				"MatchContent" : "\\S+Regex\\S+",
+				"Type" : "html",
+				"Comment" : ""
+			}, {
+				"Action" : "RegexChange",
+				"Content" : "test|changedkeyword",
+				"MatchMode" : "Equal",
+				"MatchContent" : "http://127.0.0.1/Equal.html",
 				"Type" : "html",
 				"Comment" : ""
 			}

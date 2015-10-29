@@ -104,9 +104,12 @@ class RuleMatch():
     def getdoc(self,path,reqheaders):
         l_headers = copy.copy(reqheaders)
         if l_headers.has_key('if-modified-since'): del l_headers['if-modified-since']
+        if l_headers.has_key('If-None-Match'): del l_headers['If-None-Match']
+        print l_headers
         idoc = ''
         code = ''
         errmsg = ''
+        receive_header = {}
         req = Request(path,headers=l_headers)
         try:
             r = urlopen(req)
@@ -119,7 +122,7 @@ class RuleMatch():
                 f = gzip.GzipFile(fileobj=buf)
                 idoc = f.read()                     
         except HTTPError, e:
-            errmsg = 'HTTPError:'+e.error_code
+            errmsg = 'HTTPError:'+e.msg
         except URLError, e:
             errmsg = 'URLError:'+e.reason()
         return (code,idoc,receive_header,errmsg)

@@ -109,7 +109,7 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
         try:
             if scm == 'http':
                 if self._connect_to(netloc, soc) :
-                    self.log_request()
+                    #self.log_request()
                     soc.send("%s %s %s\r\n" % (self.command,
                                                urlparse.urlunparse(('', '', path,
                                                                     params, query,
@@ -121,7 +121,7 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
                         soc.send("%s: %s\r\n" % key_val)
                     soc.send("\r\n")
                     if not(needredirect):
-                        (ismodified,errmsg,resp) = self.rulehandler.modify(path,accepttype,self.headers)
+                        (ismodified,errmsg,resp) = self.rulehandler.modify(self.path,accepttype,self.headers)
                         if ismodified:
                             self._write_modifiedtext(resp)
                         else:
