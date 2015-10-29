@@ -8,6 +8,7 @@ import re
 from urllib2 import Request, urlopen, URLError, HTTPError 
 import gzip
 from StringIO import StringIO
+import copy
 
 class RuleMatch():
     allredirect = False
@@ -29,13 +30,12 @@ class RuleMatch():
             self.redirectrules = rdtrules['Rules']    
 
         if mdfrules.has_key('Type'):#不为空
-            if mdfrules['Type'] == '*':
-                self.modifytype = mdfrules['Type']
-                for i in self.modifytype:
-                    if i== '*':modifyall = True
+            self.modifytype = mdfrules['Type']
+            for i in self.modifytype:
+                if i== '*':modifyall = True
         
         if mdfrules.has_key('Rules'):#有改写规则
-            self.mdfrules = rdtrules['Rules']    
+            self.mdfrules = mdfrules['Rules']    
     
     #match mode:StartWith,HasKeyword,Regex,Equal,EndWith
     def matchpath(self,rule,path):
@@ -102,8 +102,8 @@ class RuleMatch():
         return (False,path)
     
     def getdoc(self,path,reqheaders):
-        l_headers = reqheaders[:]
-        del l_headers['if-modified-since']
+        l_headers = copy.copy(reqheaders)
+        if l_headers.has_key('if-modified-since'): del l_headers['if-modified-since']
         idoc = ''
         code = ''
         errmsg = ''
@@ -124,15 +124,19 @@ class RuleMatch():
             errmsg = 'URLError:'+e.reason()
         return (code,idoc,receive_header,errmsg)
     
+    #modify mode:AppendHTML,ChangeKeyword,RegexChange
     def modifyhtml(self,rule,html):
+        #if html encode type is not utf8,may raise error
         action = rule['Action']
-        content = rule['Content']
+        content = rule['Content'].decode('ascii','ignore').encode('utf-8')
         if action == 'AppendHTML':
             html = html + content
+            return html
         elif action == 'ChangeKeyword':
             keywords = content.split('|')#|
             if len(keywords)==2:
                 html =  html.replace(keywords[0],keywords[1])
+                return html
             else:
                 return html
         elif action == 'RegexChange':
@@ -140,6 +144,7 @@ class RuleMatch():
             if len(keywords)==2:
                 info = re.compile(keywords[0])
                 html =  info.sub(keywords[1],html)
+                return html
             else:
                 return None
         else:
@@ -150,18 +155,19 @@ class RuleMatch():
         for i in self.modifytype:
             if (i == accepttype):
                 need = True
-                if self.matchpath(i, path):
-                    (responsecode,html,receive_header,errormsg) = self.getdoc(path, headers)
-                    if not(errormsg == ''):
-                        return (True,errormsg,None)
+                for j in self.mdfrules:
+                    if self.matchpath(j, path):
+                        (responsecode,html,receive_header,errormsg) = self.getdoc(path, headers)
+                        if not(errormsg == ''):
+                            return (True,errormsg,None)
+                        else:
+                            resp = {}
+                            resp['code'] = responsecode
+                            resp['html'] = self.modifyhtml(j, html)
+                            resp['header'] = receive_header
+                            return (True,'',resp)
                     else:
-                        resp = {}
-                        resp['code'] = responsecode
-                        resp['html'] = self.modifyhtml(i, html)
-                        resp['header'] = receive_header
-                        return (True,'',resp)
-                else:
-                    need = False
+                        need = False
                 break
         if not(need): return (False,'',None)#do not need modify html
         

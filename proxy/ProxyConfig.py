@@ -36,7 +36,7 @@ class config():
     def read(self):
         if os.path.isfile(self.cfgfile):
             f = file(self.cfgfile)
-            j = json.load(f)
+            j = json.load(f,encoding ='utf-8')
             if j.has_key('Redirect'):
                 self.redirectcfg = j['Redirect']
             if j.has_key('Modify'):
