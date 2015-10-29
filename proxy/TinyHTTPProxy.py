@@ -121,7 +121,13 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
                         soc.send("%s: %s\r\n" % key_val)
                     soc.send("\r\n")
                     if not(needredirect):
-                        self._read_modify_wirte(soc)
+                        (ismodified,errmsg,resp) = self.rulehandler.modify(path,accepttype,self.headers)
+                        if ismodified:
+                            self._write_modifiedtext(resp)
+                        else:
+                            if not(errmsg ==''):self.server.logger.log (logging.ERROR,'Error occuced in Modify work,path is:['\
+                                                                        + self.path + '],error msg:'+errmsg)
+                            self._read_write(soc)
                     else:
                         self._read_write(soc)
             elif scm == 'ftp':
@@ -167,6 +173,17 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
             if count == max_idling: break
         if local: return local_data
         return None
+    
+    def _write_modifiedtext(self,r):
+        code = r['code']
+        self.send_response(code)
+        receive_header = r['header']
+        for key,val in receive_header.items():
+            if val != 'gzip':
+                self.send_header(key,val)
+        self.end_headers()
+        html = r['html'] 
+        self.wfile.write(html)
     
     def _do_redircet(self):
         return None
