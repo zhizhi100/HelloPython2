@@ -184,69 +184,7 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
         self.end_headers()
         html = r['html'] 
         self.wfile.write(html)
-    
-    def _do_redircet(self):
-        return None
-    
-    def _read_modify_wirte(self, soc, max_idling=20, local=False):
-        print 'modify'
-        url = 'http://127.0.0.1/test.php'
-        url = self.path
-        req = urllib2.Request(url,headers=self.headers)
-        r = urllib2.urlopen(req)
-        
-        html = r.read()
-        receive_header = r.info()
-        if receive_header.get('Content-Encoding') == 'gzip' and receive_header.get('Content-type').find('html'):
-            buf = StringIO(html)
-            f = gzip.GzipFile(fileobj=buf)
-            html = f.read()
-        #print receive_header
-
-        #print html
-        '''
-        for key_val in receive_header.items():
-            soc.send("%s: %s\r\n" % key_val)
-        soc.send("\r\n")        
-        '''
-        #self.send_header(receive_header)
-        '''
-        if ('Content-Encoding' in receive_header and receive_header['Content-Encoding']) or \
-        ('content-encoding' in receive_header and receive_header['content-encoding']):
-            import gzip
-            import StringIO
-            data = StringIO.StringIO(html)
-            gz = gzip.GzipFile(fileobj=data)
-            html = gz.read()
-            gz.close()
-        '''
-        #del receive_header['Content-Encoding']
-        #del receive_header['content-encoding']
-        #print receive_header
-        code = r.getcode()
-        self.send_response(code)
-        for key,val in receive_header.items():
-            if val != 'gzip':
-                self.send_header(key,val)
-        self.end_headers()
-        
-        #print html
-        if receive_header.get('Content-type').find('html'):
-            html = self._add_js(html)
-    
-        self.wfile.write(html)
-        return None
-    
-    def _add_js(self, html):
-        content = '<script>console.log("this is inserted by proxy");alert(1);</script>'
-        '''
-        pos = html.find('</body>')
-        if (pos > 0):
-            html = html[:pos] + content + html[pos:]
-        '''
-        html = html + content
-        return html
-  
+      
     do_HEAD = do_GET
     do_POST = do_GET
     do_PUT  = do_GET
