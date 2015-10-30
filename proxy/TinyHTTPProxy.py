@@ -184,7 +184,7 @@ class ThreadingHTTPServer (SocketServer.ThreadingMixIn,
         self.logger = logger
   
 def logSetup (filename, log_size, daemon):
-    logger = logging.getLogger ("TinyHTTPProxy")
+    logger = logging.getLogger ("Golden Proxy")
     logger.setLevel (logging.INFO)
     if not filename:
         if not daemon:
