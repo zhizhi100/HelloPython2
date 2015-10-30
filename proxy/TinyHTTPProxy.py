@@ -32,9 +32,6 @@ import threading
 from types import FrameType, CodeType
 from time import sleep
 import ftplib
-import urllib2
-import gzip
-from StringIO import StringIO
 import ProxyConfig
 import RuleMatch
   
