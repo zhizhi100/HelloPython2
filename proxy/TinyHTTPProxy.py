@@ -4,22 +4,16 @@ Created on 2015-10-12
 @author: ZhongPing
 '''
  
-__doc__ = """Tiny HTTP Proxy.
+__doc__ = """Golden Proxy.
   
-This module implements GET, HEAD, POST, PUT and DELETE methods
-on BaseHTTPServer, and behaves as an HTTP proxy.  The CONNECT
-method is also implemented experimentally, but has not been
-tested yet.
+This is modified based of TinyHTTPProxy version 0.3.1.
   
-Any help will be greatly appreciated.       SUZUKI Hisao
-  
-2009/11/23 - Modified by Mitko Haralanov
-             * Added very simple FTP file retrieval
-             * Added custom logging methods
-             * Added code to make this a standalone application
+2015/10/30 - Modified by zhongping
+             * Delete FTP support
+             * Modify logfile support windows(unfinished)
 """
   
-__version__ = "0.3.1"
+__version__ = "0.4.0"
   
 import BaseHTTPServer, select, socket, SocketServer, urlparse
 import logging
@@ -41,7 +35,7 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
     __base = BaseHTTPServer.BaseHTTPRequestHandler
     __base_handle = __base.handle
   
-    server_version = "TinyHTTPProxy/" + __version__
+    server_version = "GoldenProxy/" + __version__
     rbufsize = 0                        # self.rfile Be unbuffered
   
     def handle(self):
@@ -51,7 +45,9 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
             self.raw_requestline = self.rfile.readline()
             if self.parse_request(): self.send_error(403)
         else:
-            self.__base_handle()
+            try:self.__base_handle()
+            except Exception as e:
+                print e 
   
     def _connect_to(self, netloc, soc):
         i = netloc.find(':')
@@ -129,22 +125,7 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
                         self._read_write(soc)
             elif scm == 'ftp':
                 # fish out user and password information
-                i = netloc.find ('@')
-                if i >= 0:
-                    login_info, netloc = netloc[:i], netloc[i+1:]
-                    try: user, passwd = login_info.split (':', 1)
-                    except ValueError: user, passwd = "anonymous", None
-                else: user, passwd ="anonymous", None
-                self.log_request ()
-                try:
-                    ftp = ftplib.FTP (netloc)
-                    ftp.login (user, passwd)
-                    if self.command == "GET":
-                        ftp.retrbinary ("RETR %s"%path, self.connection.send)
-                    ftp.quit ()
-                except Exception, e:
-                    self.server.logger.log (logging.WARNING, "FTP Exception: %s",
-                                            e)
+                pass
         finally:
             soc.close()
             self.connection.close()
@@ -327,7 +308,8 @@ def main ():
     rulematch = RuleMatch.RuleMatch(cfg['Redirect'],cfg['Modify'])
     ProxyHandler.rulehandler = rulematch
   
-    server_address = (socket.gethostbyname (local_hostname), port)
+    #server_address = (socket.gethostbyname (local_hostname), port)
+    server_address = ('127.0.0.1', port)
     ProxyHandler.protocol = "HTTP/1.0"
     httpd = ThreadingHTTPServer (server_address, ProxyHandler, logger)
     sa = httpd.socket.getsockname ()
