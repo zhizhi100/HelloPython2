@@ -105,7 +105,7 @@ class RuleMatch():
         l_headers = copy.copy(reqheaders)
         if l_headers.has_key('if-modified-since'): del l_headers['if-modified-since']
         if l_headers.has_key('If-None-Match'): del l_headers['If-None-Match']
-        print l_headers
+        #print l_headers
         idoc = ''
         code = ''
         errmsg = ''
