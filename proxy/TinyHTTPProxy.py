@@ -260,7 +260,7 @@ def daemonize (logger):
 '''  
 def main ():
     cfgfile = 'config.json'
-    logfile = None
+    logfile = 'proxy.log'
     daemon  = False
     max_log_size = 20
     port = 8000
