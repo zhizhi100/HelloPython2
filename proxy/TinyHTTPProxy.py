@@ -186,6 +186,7 @@ class ThreadingHTTPServer (SocketServer.ThreadingMixIn,
 def logSetup (filename, log_size, daemon):
     logger = logging.getLogger ("Golden Proxy")
     logger.setLevel (logging.INFO)
+
     if not filename:
         if not daemon:
             # display to the screen
@@ -200,10 +201,16 @@ def logSetup (filename, log_size, daemon):
                                                         backupCount=5)
     fmt = logging.Formatter ("[%(asctime)-12s.%(msecs)03d] "
                              "%(levelname)-8s {%(name)s %(threadName)s}"
-                             " %(message)s",
+                             " %(message)s" "%(funcName)s" "%(lineno)d",
                              "%Y-%m-%d %H:%M:%S")
     handler.setFormatter (fmt)
+    
+    console = logging.StreamHandler()
+    console.setLevel(logging.DEBUG)
+    console.setFormatter (fmt)
+    logger.addHandler(console)
   
+    handler.setLevel(logging.WARNING)
     logger.addHandler (handler)
     return logger
   
