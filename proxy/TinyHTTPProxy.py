@@ -10,7 +10,7 @@ This is modified based of TinyHTTPProxy version 0.3.1.
   
 2015/10/30 - Modified by zhongping
              * Delete FTP support
-             * Modify logfile support windows(unfinished)
+             * Delete daemon support
 """
   
 __version__ = "0.4.0"
@@ -25,7 +25,6 @@ import signal
 import threading
 from types import FrameType, CodeType
 from time import sleep
-import ftplib
 import ProxyConfig
 import RuleMatch
   
@@ -47,7 +46,8 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
         else:
             try:self.__base_handle()
             except Exception as e:
-                print e 
+                self.server.logger.log(logging.ERROR,'Exception happened during processing of request from ['+self.path+\
+                                       '],error info:'+e.errmsg) 
   
     def _connect_to(self, netloc, soc):
         i = netloc.find(':')
@@ -118,7 +118,7 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
                         if ismodified:
                             self._write_modifiedtext(resp)
                         else:
-                            if not(errmsg ==''):self.server.logger.log (logging.ERROR,'Error occuced in Modify work,path is:['\
+                            if not(errmsg ==''):self.server.logger.log (logging.ERROR,'Exception happened during of Modify ['\
                                                                         + self.path + '],error msg:'+errmsg)
                             self._read_write(soc)
                     else:
@@ -223,41 +223,7 @@ def handler (signo, frame):
                 frame.f_locals["run_event"].set ()
                 return
         frame = frame.f_back
-'''  
-def daemonize (logger):
-    class DevNull (object):
-        def __init__ (self): self.fd = os.open ("/dev/null", os.O_WRONLY)
-        def write (self, *args, **kwargs): return 0
-        def read (self, *args, **kwargs): return 0
-        def fileno (self): return self.fd
-        def close (self): os.close (self.fd)
-    class ErrorLog:
-        def __init__ (self, obj): self.obj = obj
-        def write (self, string): self.obj.log (logging.ERROR, string)
-        def read (self, *args, **kwargs): return 0
-        def close (self): pass
-  
-    if os.fork() != 0:
-        ## allow the child pid to instanciate the server
-        ## class
-        sleep (1)
-        sys.exit (0)
-    os.setsid()
-    fd = os.open ('/dev/null', os.O_RDONLY)
-    if fd != 0:
-        os.dup2 (fd, 0)
-        os.close (fd)
-    null = DevNull ()
-    log = ErrorLog (logger)
-    sys.stdout = null
-    sys.stderr = log
-    sys.stdin = null
-    fd = os.open ('/dev/null', os.O_WRONLY)
-    #if fd != 1: os.dup2 (fd, 1)
-    os.dup2 (sys.stdout.fileno (), 1)
-    if fd != 2: os.dup2 (fd, 2)
-    if fd not in (1, 2): os.close (fd)
-'''  
+
 def main ():
     cfgfile = 'config.json'
     logfile = 'proxy.log'
