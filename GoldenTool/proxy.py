@@ -88,7 +88,10 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
         else:
             accepttype = 'other'
         #1 deal with redirect rules, FTP may raise error
-        (needredirect,self.path) = self.rulehandler.redirect(self.path,accepttype)
+        (needredirect,redirectedpath) = self.rulehandler.redirect(self.path,accepttype)
+        if needredirect:
+            self.server.logger.log(logging.WARN,'Reditrected!From['+self.path+'] to ['+redirectedpath +']')
+            self.path = redirectedpath
         #finished the redirect
         
         (scm, netloc, path, params, query, fragment) = urlparse.urlparse(
@@ -116,6 +119,7 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
                     if not(needredirect):
                         (ismodified,errmsg,resp) = self.rulehandler.modify(self.path,accepttype,self.headers)
                         if ismodified:
+                            self.server.logger.log(logging.WARN,'Modified! path:['+self.path+']')
                             self._write_modifiedtext(resp)
                         else:
                             if not(errmsg ==''):self.server.logger.log (logging.ERROR,'Exception happened during of Modify ['\
