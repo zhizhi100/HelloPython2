@@ -46,9 +46,12 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
             if self.parse_request(): self.send_error(403)
         else:
             try:self.__base_handle()
-            except Exception as e:
-                self.server.logger.log(logging.ERROR,'Exception happened during processing of request from ['+self.path+\
-                                       '],error info:'+e.errmsg) 
+            except socket.error, arg:
+                try: msg = arg[1]
+                except: msg = arg
+                self.send_error(404, msg)
+                self.server.logger.log(logging.ERROR,'Exception happened during processing'+\
+                                       ',error info:'+msg) 
   
     def _connect_to(self, netloc, soc):
         i = netloc.find(':')
@@ -206,7 +209,7 @@ def logSetup (filename, log_size, daemon):
                                                         backupCount=5)
     fmt = logging.Formatter ("[%(asctime)-12s.%(msecs)03d] "
                              "%(levelname)-8s {%(name)s %(threadName)s}"
-                             " %(message)s" "%(funcName)s" "%(lineno)d",
+                             " %(message)s",
                              "%Y-%m-%d %H:%M:%S")
     handler.setFormatter (fmt)
     
