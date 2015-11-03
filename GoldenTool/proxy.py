@@ -237,7 +237,6 @@ def handler (signo, frame):
         frame = frame.f_back
 
 def main ():
-    nativeweb.startweb()
     
     cfgfile = 'config.json'
     logfile = 'proxy.log'
@@ -308,6 +307,7 @@ def main ():
             else:
                 logger.log (logging.CRITICAL, "Errno: %d - %s", e[0], e[1])
     logger.log (logging.INFO, "Server shutdown")
+    
     return 0
   
 if __name__ == '__main__':

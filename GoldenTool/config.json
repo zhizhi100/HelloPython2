@@ -5,7 +5,7 @@
 				"Action" : "AppendHTML",
 				"Content" : "<script>alert(\"Hello!\");</script>",
 				"MatchMode" : "StartWith",
-				"MatchContent" : "http://127.0.0.1/testpage",
+				"MatchContent" : "http://127.0.0.1/testpage2",
 				"Type" : "html",
 				"Comment" : ""
 			}, {
@@ -26,20 +26,13 @@
 		]
 	},
 	"Redirect" : {
-		"Type" : ["js"],
+		"Type" : ["*"],
 		"Rules" : [{
-				"Action" : "AppendHTML",
-				"Content" : "<script>alert(\"Hello!\");</script>",
+				"Action" : "Change",
+				"Content" : "http://127.0.0.1:8001/static/hello.html",
 				"MatchMode" : "StartWith",
-				"MatchContent" : "dddl",
-				"Type" : "html",
-				"Comment" : ""
-			}, {
-				"Action" : "AppendHTML",
-				"Content" : "<script>alert(\"Hello!\");</script>",
-				"MatchMode" : "Regex",
-				"MatchContent" : "dddl",
-				"Type" : "html",
+				"MatchContent" : "http://127.0.0.1/testpage",
+				"Type" : "js",
 				"Comment" : ""
 			}
 		]
