@@ -29,9 +29,9 @@
 		"Type" : ["*"],
 		"Rules" : [{
 				"Action" : "Change",
-				"Content" : "http://127.0.0.1:8001/static/hello.html",
+				"Content" : "http://localhost:8001/static/hello.html",
 				"MatchMode" : "StartWith",
-				"MatchContent" : "http://127.0.0.1/testpage",
+				"MatchContent" : "http://localhost/testpage",
 				"Type" : "js",
 				"Comment" : ""
 			}
