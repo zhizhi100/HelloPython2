@@ -4,7 +4,12 @@ Created on 2015年11月3日
 
 @author: ZhongPing
 '''
-
+__doc__ = """Golden Proxy.
+  
+This is the main entrance of the Golden Proxy.
+  
+2015/11/05 - Created
+"""
 import proxy
 import nativeweb
 import threading

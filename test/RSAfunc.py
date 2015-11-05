@@ -1,0 +1,33 @@
+# encoding: utf-8
+'''
+Created on 2015年11月5日
+
+@author: ZhongPing
+'''
+import base64
+import RSALite
+
+def encrypt(message, n, e):
+    pub_key = RSALite.PublicKey(n, e)
+    return base64.b64encode(RSALite.encrypt(message, pub_key))
+
+def decrypt(crypto, n, e, d):
+    priv_key = RSALite.PrivateKey(n, e, d)
+    return RSALite.decrypt(base64.b64decode(crypto), priv_key)
+
+if __name__=="__main__":
+    message = "睡个午觉好咯睡个午觉好咯睡个午觉好咯睡个午觉"
+    n = 110945963084729473086130203053960579550327729658653847757740988437942109564961023146972997505984588276879603057313266311940033330197319153582130175907476828376116030185974931539273268251822428164938194795044377834219803829324792738562530352716088675074468303811597376036491268631231669325065321536138026294537
+    e = 65537
+    d = 30172114989382080333461992600069264832468546404415635878758832978766837340377196324953838816991368491978960973045674130303602759419973744210053956165203764840228493876500545273584837106269531589946013642765942133471280266654547841324173913630308073510056590061826558556761211357514740191416959593086511172993
+    crypto = encrypt(message, n, e)
+    print "A :", message
+    print "B :", crypto
+    print "A~:", decrypt(crypto, n, e, d)
+    print len(encrypt('1', n, e))
+    print len(encrypt('1234', n, e))
+    print len(encrypt('1234567890', n, e))
+    print len(encrypt('12345678901234567890', n, e))
+    priv_key =RSALite.PrivateKey(n, e, d)
+    print priv_key
+    print RSALite.PublicKey(n, e)

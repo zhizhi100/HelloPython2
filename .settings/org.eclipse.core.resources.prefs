@@ -1,3 +1,12 @@
 eclipse.preferences.version=1
+encoding//GoldenTool/ProxyConfig.py=utf-8
+encoding//GoldenTool/main.py=utf-8
+encoding//GoldenTool/nativeweb.py=utf-8
 encoding//proxy/ProxyConfig.py=utf-8
+encoding//proxy/jsontest.py=utf-8
 encoding//proxy/test.py=utf-8
+encoding//test/RSALite.py=utf-8
+encoding//test/RSAfunc.py=utf-8
+encoding//test/licmgr.py=utf-8
+encoding//test/t.py=utf-8
+encoding//test/web.py=utf-8
