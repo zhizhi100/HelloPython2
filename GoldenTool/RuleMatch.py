@@ -4,6 +4,10 @@ Created on 2015年10月27日
 
 @author: ZhongPing
 '''
+'''
+2015-11-6 open url via null proxy
+'''
+
 import re
 import urllib2
 from urllib2 import Request, urlopen, URLError, HTTPError 
