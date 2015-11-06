@@ -5,6 +5,7 @@ Created on 2015年10月27日
 @author: ZhongPing
 '''
 import re
+import urllib2
 from urllib2 import Request, urlopen, URLError, HTTPError 
 import gzip
 from StringIO import StringIO
@@ -112,6 +113,9 @@ class RuleMatch():
         receive_header = {}
         req = Request(path,headers=l_headers)
         try:
+            proxyhandler = urllib2.ProxyHandler({})
+            opener = urllib2.build_opener(proxyhandler)
+            urllib2.install_opener(opener)            
             r = urlopen(req)
             idoc = r.read()
             code = r.getcode()
