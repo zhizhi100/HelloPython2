@@ -295,7 +295,7 @@ def main ():
     ProxyHandler.protocol = "HTTP/1.0"
     httpd = ThreadingHTTPServer (server_address, ProxyHandler, logger)
     sa = httpd.socket.getsockname ()
-    print "Servering HTTP on", sa[0], "port", sa[1]
+    print "Servering HTTP Proxy on", sa[0], "port", sa[1]
     req_count = 0
     while not run_event.isSet ():
         try:
