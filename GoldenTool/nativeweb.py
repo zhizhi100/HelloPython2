@@ -1,4 +1,5 @@
 # encoding: utf-8
+#define INCLUDE_SHELL
 '''
 Created on 2015年11月3日
 
@@ -11,45 +12,43 @@ import logging
 import time
 import signal
 from tornado.options import define, options 
-from cookielib import logger
-
-
 
 DEFAULT_LOG_FILENAME = "nativeweb.log"
 
 def logSetup (filename, log_size, daemon):
     logger = logging.getLogger ("Golden NativeWeb")
-    logger.setLevel (logging.INFO)
+    logger.setLevel (-10000)
 
-    if not filename:
-        if not daemon:
-            # display to the screen
-            handler = logging.StreamHandler ()
-        else:
-            handler = logging.handlers.RotatingFileHandler (DEFAULT_LOG_FILENAME,
-                                                            maxBytes=(log_size*(1<<20)),
-                                                            backupCount=5)
-    else:
-        handler = logging.handlers.RotatingFileHandler (filename,
-                                                        maxBytes=(log_size*(1<<20)),
-                                                        backupCount=5)
+    handler = logging.handlers.RotatingFileHandler (filename,
+                                                    maxBytes=(log_size*(1<<20)),
+                                                    backupCount=5)
     fmt = logging.Formatter ("[%(asctime)-12s.%(msecs)03d] "
-                             "%(levelname)-8s {%(name)s %(threadName)s}"
+                             "%(levelname)-8s"
                              " %(message)s",
                              "%Y-%m-%d %H:%M:%S")
     handler.setFormatter (fmt)
     
     console = logging.StreamHandler()
-    console.setLevel(logging.DEBUG)
-    console.setFormatter (fmt)
+    console.setLevel(-10000)
     logger.addHandler(console)
   
-    handler.setLevel(logging.WARNING)
     logger.addHandler (handler)
+    
+    accesslog = logging.getLogger("tornado.access")
+    accesslog.addHandler(handler)
+    accesslog.addHandler(console)
+    
+    generallog = logging.getLogger("tornado.general")
+    generallog.addHandler(handler)   
+    
+    applicationlog = logging.getLogger("tornado.application")
+    applicationlog.addHandler(handler)
+    
     return logger
 
 def sig_handler(sig, frame):
-    logging.warning('Caught signal: %s', sig)
+    global logger
+    logger.warning('Caught signal: %s', sig)
     tornado.ioloop.IOLoop.instance().add_callback(shutdown)
     
 def shutdown():
@@ -94,12 +93,18 @@ def startweb():
     http_server.listen(8001)
     logger.log(logging.INFO,"Servering HTTP on localhost port:%s",8001)
     
-    signal.signal(signal.SIGTERM, sig_handler)
-    signal.signal(signal.SIGINT, sig_handler)
+    #signal never work in windows system
+    #signal.signal(signal.SIGTERM, sig_handler)
+    #signal.signal(signal.SIGINT, sig_handler)
     try:
         tornado.ioloop.IOLoop.instance().start()
-    except KeyboardInterrupt:
-        shutdown()
+    #KeyboardInterrupt never work
+    #except KeyboardInterrupt:
+    #    logger.log(logging.INFO,"KeyboardInterrupt")
+    #    shutdown()
+    except Exception as e:
+        print e
+        logger.log(logging.INFO,"exception")
 
 if __name__ == '__main__':
     startweb()
