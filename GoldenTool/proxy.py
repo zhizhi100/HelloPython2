@@ -27,7 +27,6 @@ from types import FrameType, CodeType
 from time import sleep
 import ProxyConfig
 import RuleMatch
-import nativeweb
   
 DEFAULT_LOG_FILENAME = "proxy.log"
   
