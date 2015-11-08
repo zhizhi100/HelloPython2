@@ -17,7 +17,7 @@ DEFAULT_LOG_FILENAME = "nativeweb.log"
 
 def logSetup (filename, log_size, daemon):
     logger = logging.getLogger ("Golden NativeWeb")
-    logger.setLevel (-10000)
+    logger.setLevel (-1000)
 
     handler = logging.handlers.RotatingFileHandler (filename,
                                                     maxBytes=(log_size*(1<<20)),
@@ -29,14 +29,14 @@ def logSetup (filename, log_size, daemon):
     handler.setFormatter (fmt)
     
     console = logging.StreamHandler()
-    console.setLevel(-10000)
+    console.setLevel(-1000)
     logger.addHandler(console)
   
     logger.addHandler (handler)
     
     accesslog = logging.getLogger("tornado.access")
     accesslog.addHandler(handler)
-    accesslog.addHandler(console)
+    #accesslog.addHandler(console)
     
     generallog = logging.getLogger("tornado.general")
     generallog.addHandler(handler)   
@@ -76,6 +76,9 @@ class Hello(tornado.web.RequestHandler):
         self.write("hello world")
         
 def startweb():
+    #parse_command_line is very important
+    tornado.options.parse_command_line()
+    #print tornado.options.options.as_dict()
     logfile = DEFAULT_LOG_FILENAME
     daemon  = False
     max_log_size = 20
