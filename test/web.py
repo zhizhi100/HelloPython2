@@ -8,6 +8,7 @@ import os
 import tornado.httpserver
 import tornado.ioloop
 import tornado.web
+from tornado.options import define, options 
 
 class Hello(tornado.web.RequestHandler):
     def get(self):
@@ -22,7 +23,8 @@ app = tornado.web.Application([
     ],**settings)
 
 if __name__ == '__main__':
+    tornado.options.parse_command_line()
     http_server = tornado.httpserver.HTTPServer(app)
-    http_server.listen(8888)
+    http_server.listen(8001)
     tornado.ioloop.IOLoop.instance().start()
 
