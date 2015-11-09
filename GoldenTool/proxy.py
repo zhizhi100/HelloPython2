@@ -279,7 +279,7 @@ def main ():
             logger.log (logging.INFO, "Accept: %s (%s)" % (client, name))
         ProxyHandler.allowed_clients = allowed
     else:
-        logger.log (logging.INFO, "Any clients will be served...")
+        logger.log (logging.WARNING, "Any clients will be served...")
         
     cfgcls = ProxyConfig.config(cfgfile)
     cfg = {}
@@ -294,7 +294,7 @@ def main ():
     ProxyHandler.protocol = "HTTP/1.0"
     httpd = ThreadingHTTPServer (server_address, ProxyHandler, logger)
     sa = httpd.socket.getsockname ()
-    logger.info("Servering HTTP Proxy on %s port %s", sa[0], sa[1])
+    logger.warning("Servering HTTP Proxy on %s port %s", sa[0], sa[1])
     req_count = 0
     while not run_event.isSet ():
         try:
@@ -308,7 +308,7 @@ def main ():
             if e[0] == 4 and run_event.isSet (): pass
             else:
                 logger.log (logging.CRITICAL, "Errno: %d - %s", e[0], e[1])
-    logger.log (logging.INFO, "Server shutdown")
+    logger.log (logging.WARNING, "Server shutdown")
     
     return 0
   
