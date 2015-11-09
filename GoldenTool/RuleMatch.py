@@ -168,7 +168,7 @@ class RuleMatch():
         for j in self.mdfrules:
             if self.matchpath(j, path):
                 (responsecode,html,receive_header,errormsg) = self.getdoc(path, headers)
-                if not(errormsg == ''):
+                if not(errormsg == '' and responsecode == '200'):
                     return (True,errormsg,None)
                 else:
                     resp = {}
