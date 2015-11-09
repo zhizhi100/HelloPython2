@@ -93,7 +93,7 @@ class RuleMatch():
         return path
     
     def redirect(self,path,accepttype):
-        self.realtimeloadcfg()
+        #self.realtimeloadcfg()
         need = False
         if not(self.allredirect):
             for i in self.redirecttype:
@@ -163,7 +163,7 @@ class RuleMatch():
             return None               
     
     def modify(self,path,accepttype,headers):
-        self.realtimeloadcfg()
+        #self.realtimeloadcfg()
         need = False
         for j in self.mdfrules:
             if self.matchpath(j, path):
