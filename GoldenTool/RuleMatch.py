@@ -93,6 +93,7 @@ class RuleMatch():
         return path
     
     def redirect(self,path,accepttype):
+        self.realtimeloadcfg()
         need = False
         if not(self.allredirect):
             for i in self.redirecttype:
@@ -162,6 +163,7 @@ class RuleMatch():
             return None               
     
     def modify(self,path,accepttype,headers):
+        self.realtimeloadcfg()
         need = False
         for j in self.mdfrules:
             if self.matchpath(j, path):
@@ -178,5 +180,14 @@ class RuleMatch():
                 need = False
         if not(need): return (False,'',None)#do not need modify html
         
+    def realtimeloadcfg(self):
+        #return 
+        import ProxyConfig
+        cfgfile = 'config.json'
+        cfgcls = ProxyConfig.config(cfgfile)
+        (rdtrules,mdfrules) = cfgcls.read()
+        self.mdfrules = mdfrules['Rules']
+        self.redirectrules = rdtrules['Rules']
+          
 if __name__ == '__main__':
     print 'json'
