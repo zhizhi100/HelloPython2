@@ -163,23 +163,19 @@ class RuleMatch():
     
     def modify(self,path,accepttype,headers):
         need = False
-        for i in self.modifytype:
-            if (i == accepttype):
-                need = True
-                for j in self.mdfrules:
-                    if self.matchpath(j, path):
-                        (responsecode,html,receive_header,errormsg) = self.getdoc(path, headers)
-                        if not(errormsg == ''):
-                            return (True,errormsg,None)
-                        else:
-                            resp = {}
-                            resp['code'] = responsecode
-                            resp['html'] = self.modifyhtml(j, html)
-                            resp['header'] = receive_header
-                            return (True,'',resp)
-                    else:
-                        need = False
-                break
+        for j in self.mdfrules:
+            if self.matchpath(j, path):
+                (responsecode,html,receive_header,errormsg) = self.getdoc(path, headers)
+                if not(errormsg == ''):
+                    return (True,errormsg,None)
+                else:
+                    resp = {}
+                    resp['code'] = responsecode
+                    resp['html'] = self.modifyhtml(j, html)
+                    resp['header'] = receive_header
+                    return (True,'',resp)
+            else:
+                need = False
         if not(need): return (False,'',None)#do not need modify html
         
 if __name__ == '__main__':
