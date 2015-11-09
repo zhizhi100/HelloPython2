@@ -171,6 +171,11 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
         self.wfile.write(html)
       
     def do_POST(self):      
+        (needredirect,redirectedpath) = self.rulehandler.redirect(self.path,'*')
+        if needredirect:
+            self.server.logger.log(logging.WARN,'Reditrected!From['+self.path+'] to ['+redirectedpath +']')
+            self.path = redirectedpath
+        
         (scm, netloc, path, params, query, fragment) = urlparse.urlparse(
             self.path, 'http')
         #do not support ftp protecl
