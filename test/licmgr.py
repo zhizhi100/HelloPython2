@@ -15,7 +15,7 @@ import time
 import random
 import string
 import socket,struct
-import rsa
+import rsa,base64
 
 def iptoint(ip):
     return str(socket.ntohl(struct.unpack('I',socket.inet_aton(ip))[0]))
@@ -44,33 +44,41 @@ def encrpt(d,ip):
     if not(checkds(d)):return ''
     if not(checkip(ip)):return ''
     content = ''
-    for i in range(1,101):
-        content = content + string.join(random.sample('abcdefghijklmnopqrstuvwxyz!@#$%^&*()`~,./;[]<>?:"{}', 10)).replace(' ','')        
-    pass
+    with open('public.key') as publickfile:
+        p = publickfile.read()
+        pubkey = rsa.PublicKey.load_pkcs1(p)
+    randomstr = string.join(random.sample('abcdefghijklmnopqrstuvwxyz', 8)).replace(' ','')
+    content = base64.encodestring(rsa.encrypt(randomstr,pubkey))
+    dstr = base64.encodestring(rsa.encrypt(d,pubkey))
+    content = content + dstr
+    randomstr = string.join(random.sample('abcdefghijklmnopqrstuvwxyz', 8)).replace(' ','')
+    content = content + base64.encodestring(rsa.encrypt(randomstr,pubkey))
+    content = content + base64.encodestring(rsa.encrypt(ip,pubkey))
+    randomstr = string.join(random.sample('abcdefghijklmnopqrstuvwxyz', 8)).replace(' ','')
+    content = content + base64.encodestring(rsa.encrypt(randomstr,pubkey))
+    return content
 
-def decrept():
-    pass
+def decrpt(content):
+    with open('private.key') as privatefile:
+        p = privatefile.read()
+        privkey = rsa.PrivateKey.load_pkcs1(p)
+    d = content[693:1385]
+    d = rsa.decrypt(base64.decodestring(d), privkey)
+    ip = content[2079:2771]
+    ip = rsa.decrypt(base64.decodestring(ip), privkey)
+    return(d,ip)
 
 def test():
-    
+    str = '0123456789'
+    print str[0:3] #截取第一位到第三位的字符
     if checkip('127.0.0.1'): print iptoint('127.0.0.1')
     t = 'localhost'
     if checkip(t): print iptoint(t)
-    '''
     now = datetime.datetime.now()
     today = now.strftime("%Y%m%d")
-    print today
-    print datetime.date.today()
-    print random.sample('zyxwvutsrqponmlkjihgfedcba',5)
-    print string.join(random.sample('abcdefghijklmnopqrstuvwxyz!@#$%^&*()`~,./;[]<>?:"{}', 10)).replace(' ','')
-    content = ''
-    for i in range(1,100):
-        content = content + string.join(random.sample('abcdefghijklmnopqrstuvwxyz!@#$%^&*()`~,./;[]<>?:"{}', 10)).replace(' ','')        
-    print content
-    for i in range(1,5):
-        print i
-    if checkds("20151105"): print time.strptime("20151105", "%Y%m%d")          
-    '''     
+    #print today
+    t = encrpt('20161230', '149.16.19.20')
+    decrpt(t)
 
 if __name__ == '__main__':
     test()
