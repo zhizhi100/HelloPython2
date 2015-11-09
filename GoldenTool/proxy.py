@@ -170,8 +170,39 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
         html = r['html'] 
         self.wfile.write(html)
       
+    def do_POST(self):      
+        (scm, netloc, path, params, query, fragment) = urlparse.urlparse(
+            self.path, 'http')
+        #do not support ftp protecl
+        if scm not in ('http', 'noftp') or fragment or not netloc:
+            self.send_error(400, "bad url %s" % self.path)
+            return
+        #print self.headers
+        soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            if scm == 'http':
+                if self._connect_to(netloc, soc) :
+                    #self.log_request()
+                    soc.send("%s %s %s\r\n" % (self.command,
+                                               urlparse.urlunparse(('', '', path,
+                                                                    params, query,
+                                                                    '')),
+                                               self.request_version))
+                    self.headers['Connection'] = 'close'
+                    del self.headers['Proxy-Connection']
+                    for key_val in self.headers.items():
+                        soc.send("%s: %s\r\n" % key_val)
+                    soc.send("\r\n")
+                    self._read_write(soc)
+            elif scm == 'ftp':
+                # fish out user and password information
+                pass
+        finally:
+            soc.close()
+            self.connection.close()
+    
     do_HEAD = do_GET
-    do_POST = do_GET
+    #do_POST = do_GET
     do_PUT  = do_GET
     do_DELETE=do_GET
   
