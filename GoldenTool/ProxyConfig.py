@@ -12,6 +12,7 @@ class config():
     cfgfile = ''
     redirectcfg = {}
     modifycfg = {}
+    repostcfg = {}
     
     def __init__(self,file):
         self.cfgfile = file
@@ -32,6 +33,7 @@ class config():
     def check(self):
         self._check(self.redirectcfg)
         self._check(self.modifycfg)
+        self._check(self.repostcfg)
         
     def read(self):
         if os.path.isfile(self.cfgfile):
@@ -41,14 +43,17 @@ class config():
                 self.redirectcfg = j['Redirect']
             if j.has_key('Modify'):
                 self.modifycfg = j['Modify']
+            if j.has_key('Repost'):
+                self.repostcfg = j['Repost']                
         self.check()
-        return (self.redirectcfg,self.modifycfg)
+        return (self.redirectcfg,self.modifycfg,self.repostcfg)
     
     def writ(self):
         if os.path.isfile(self.cfgfile):
             j = {}
             j['Redirect'] = self.redirectcfg
             j['Modify'] = self.modifycfg
+            j['Repost'] = self.repostcfg
             s = json.dumps(j,sort_keys=True,indent=4)
             f = file(self.cfgfile,'w+')
             f.write(s)

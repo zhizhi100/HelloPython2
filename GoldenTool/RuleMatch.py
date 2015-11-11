@@ -22,14 +22,15 @@ class RuleMatch():
     modifyall = False
     modifytype = []
     modifyrules = None
+    repostrules = []
     
-    def __init__(self,rdtrules,mdfrules):
+    def __init__(self,rdtrules,mdfrules,repostrules):
         if rdtrules.has_key('Type'):#不为空
             redirecttype = rdtrules['Type']
             for i in redirecttype:
                 if i == '*' :
                     self.allredirect = True
-                    break       
+                    break
         
         if rdtrules.has_key('Rules'):#有转发规则
             self.redirectrules = rdtrules['Rules']    
@@ -40,7 +41,10 @@ class RuleMatch():
                 if i== '*':modifyall = True
         
         if mdfrules.has_key('Rules'):#有改写规则
-            self.mdfrules = mdfrules['Rules']    
+            self.mdfrules = mdfrules['Rules']
+            
+        if repostrules.has_key('Rules'):#Repost规则
+            self.repostrules =  repostrules['Rules']
     
     #match mode:StartWith,HasKeyword,Regex,Equal,EndWith
     def matchpath(self,rule,path):
@@ -180,14 +184,22 @@ class RuleMatch():
                 need = False
         if not(need): return (False,'',None)#do not need modify html
         
+    def repost(self,path,accepttype):
+        self.realtimeloadcfg()
+        for r in self.repostrules:
+            if self.matchpath(r, path):
+                return (True,self.redirectpath(r, path))
+        return (False,path)
+    
     def realtimeloadcfg(self):
         #return 
         import ProxyConfig
         cfgfile = 'config.json'
         cfgcls = ProxyConfig.config(cfgfile)
-        (rdtrules,mdfrules) = cfgcls.read()
+        (rdtrules,mdfrules,repostrules) = cfgcls.read()
         self.mdfrules = mdfrules['Rules']
         self.redirectrules = rdtrules['Rules']
+        self.repostrules =  repostrules['Rules']
           
 if __name__ == '__main__':
     print 'json'

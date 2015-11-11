@@ -171,11 +171,11 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
         self.wfile.write(html)
       
     def do_POST(self):      
-        (needredirect,redirectedpath) = self.rulehandler.redirect(self.path,'*')
-        if needredirect:
-            self.server.logger.log(logging.WARN,'Reditrected!From['+self.path+'] to ['+redirectedpath +']')
-            self.path = redirectedpath
-        
+        oldpath = self.path
+        (needrepost,repostpath) = self.rulehandler.repost(self.path,'*')
+        if needrepost:  
+            self.server.logger.log(logging.WARN,'Reposted!From['+self.path+'] to ['+repostpath +']')
+            self.path = repostpath
         (scm, netloc, path, params, query, fragment) = urlparse.urlparse(
             self.path, 'http')
         #do not support ftp protecl
@@ -194,6 +194,8 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
                                                                     '')),
                                                self.request_version))
                     self.headers['Connection'] = 'close'
+                    if needrepost:
+                        self.headers['Gtool_url'] = oldpath             
                     del self.headers['Proxy-Connection']
                     for key_val in self.headers.items():
                         soc.send("%s: %s\r\n" % key_val)
@@ -319,10 +321,10 @@ def main ():
         
     cfgcls = ProxyConfig.config(cfgfile)
     cfg = {}
-    (cfg['Redirect'],cfg['Modify']) = cfgcls.read()
+    (cfg['Redirect'],cfg['Modify'],cfg['Repost']) = cfgcls.read()
     ProxyHandler.config = cfg
     
-    rulematch = RuleMatch.RuleMatch(cfg['Redirect'],cfg['Modify'])
+    rulematch = RuleMatch.RuleMatch(cfg['Redirect'],cfg['Modify'],cfg['Repost'])
     ProxyHandler.rulehandler = rulematch
   
     #server_address = (socket.gethostbyname (local_hostname), port)

@@ -22,7 +22,7 @@
 				"MatchContent" : "http://127.0.0.1/Equal.html",
 				"Type" : "html",
 				"Comment" : ""
-			},{
+			}, {
 				"Action" : "ChangeKeyword",
 				"Content" : "</html>|<script src='js/gtool_jquery-1.9.0.min.js'></script><script>var jq=jQuery.noConflict();</script><script src='js/gtool_test.js'></script></html>",
 				"MatchMode" : "HasKeyword",
@@ -41,32 +41,51 @@
 				"MatchContent" : "http://localhost/testpage",
 				"Type" : "js",
 				"Comment" : ""
-			},{
+			}, {
 				"Action" : "Change",
 				"Content" : "http://localhost:80/static/gtool_welcome.js",
 				"MatchMode" : "HasKeyword",
 				"MatchContent" : "gtool_welcome",
 				"Type" : "js",
 				"Comment" : ""
-			},{
+			}, {
 				"Action" : "Change",
 				"Content" : "http://localhost:80/static/store.js",
 				"MatchMode" : "HasKeyword",
 				"MatchContent" : "gtool_store.js",
 				"Type" : "js",
 				"Comment" : ""
-			},{
+			}, {
 				"Action" : "Change",
 				"Content" : "http://localhost:80/static/gtool_test.js",
 				"MatchMode" : "HasKeyword",
 				"MatchContent" : "gtool_test.js",
 				"Type" : "js",
 				"Comment" : ""
-			},{
+			}, {
 				"Action" : "Change",
 				"Content" : "http://localhost:80/static/jquery-1.9.0.min.js",
 				"MatchMode" : "HasKeyword",
 				"MatchContent" : "jquery-1.9.0.min.js",
+				"Type" : "js",
+				"Comment" : ""
+			}
+		]
+	},
+	"Repost" : {
+		"Type" : ["*"],
+		"Rules" : [{
+				"Action" : "Change",
+				"Content" : "http://localhost:8001/repost",
+				"MatchMode" : "HasKeyword",
+				"MatchContent" : "hello.php",
+				"Type" : "js",
+				"Comment" : ""
+			}, {
+				"Action" : "Change",
+				"Content" : "http://localhost:80/static/gtool_welcome.js",
+				"MatchMode" : "HasKeyword",
+				"MatchContent" : "gtool_welcome",
 				"Type" : "js",
 				"Comment" : ""
 			}

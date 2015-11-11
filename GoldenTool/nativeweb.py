@@ -11,7 +11,8 @@ import tornado.web
 import logging
 import time
 import signal
-from tornado.options import define, options 
+from tornado.options import define, options
+from reposthandler import Repost
 
 DEFAULT_LOG_FILENAME = "nativeweb.log"
 
@@ -73,7 +74,7 @@ def shutdown():
 
 class Hello(tornado.web.RequestHandler):
     def get(self):
-        self.write("hello world")
+        self.write("hello world")     
         
 def startweb():
     #parse_command_line is very important
@@ -90,6 +91,8 @@ def startweb():
 
     app = tornado.web.Application([
         (r"/", Hello),
+        (r"/hello", Hello),
+        (r"/repost", Repost),
         ],**settings)
     
     http_server = tornado.httpserver.HTTPServer(app)
