@@ -24,8 +24,8 @@ class Repost(tornado.web.RequestHandler):
             del headers['Gtool_url']
         else:
             raise HTTPError(500)
-        print headers
-        print self.request.body 
+        #print headers
+        #print self.request.body 
         try:
             AsyncHTTPClient().fetch(
                 HTTPRequest(url=url,
@@ -50,7 +50,21 @@ class Repost(tornado.web.RequestHandler):
                 v = response.headers.get(header)
                 if v:
                     self.set_header(header, v)
-            print response.body
+            #print response.body
             if response.body:
                 self.write(response.body)
+            self._on_success(response)
             self.finish()
+            
+    def _on_success(self,response):
+        pass
+    
+class Test(Repost):
+    def _on_success(self,response):
+        if response.body:
+            print response.body
+            
+class Querynsr(Repost):
+    def _on_success(self,response):
+        if response.body:
+            pass
