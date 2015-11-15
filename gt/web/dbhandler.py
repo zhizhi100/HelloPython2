@@ -48,7 +48,7 @@ class Querynsr(AjaxHandler):
         if succ:
             return succ,'',data
         else:
-            return succ,data,None        
+            return succ,data,None
            
 if __name__ == '__main__':
     n = Nsr()
