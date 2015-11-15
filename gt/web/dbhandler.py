@@ -6,7 +6,7 @@ Created on 2015年11月15日
 '''
 import tornado.web
 import json
-from GoldenTool.gtcore.nsr import Nsr
+from gt.gtcore.nsr import Nsr
         
 class AjaxHandler(tornado.web.RequestHandler):
     def work(self):
@@ -31,6 +31,24 @@ class AjaxHandler(tornado.web.RequestHandler):
         
     def post(self):
         self._work()
+        
+class Querynsr(AjaxHandler):
+    def work(self):
+        nsrmc=self.get_argument('name')
+        if len(nsrmc) == 0:
+            return False,'缺少关键参数！',None
+        page = self.get_argument('page',1)
+        size = self.get_argument('pagesize', 50)
+        p={}
+        p['name']=nsrmc
+        p['page']=page
+        p['pagesize']=size
+        n = Nsr()
+        succ,data = n.getmany(p)
+        if succ:
+            return succ,'',data
+        else:
+            return succ,data,None        
            
 if __name__ == '__main__':
     n = Nsr()

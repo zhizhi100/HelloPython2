@@ -194,9 +194,9 @@ class RuleMatch():
     def realtimeloadcfg(self):
         #return 
         import ProxyConfig
-         from GoldenTool.proxy import ProxyConfigson'
+        cfgfile = 'config.json'
         cfgcls = ProxyConfig.config(cfgfile)
-ProxyConfigtrules,mdfrules,repostrules) = cfgcls.read()
+        (rdtrules,mdfrules,repostrules) = cfgcls.read()
         self.mdfrules = mdfrules['Rules']
         self.redirectrules = rdtrules['Rules']
         self.repostrules =  repostrules['Rules']

@@ -4,7 +4,7 @@ Created on 2015年11月15日
 
 @author: ZhongPing
 '''
-from GoldenTool.gtcore.nsr import Nsr
+from gt.gtcore.nsr import Nsr
 
 if __name__ == '__main__':
     n = Nsr()

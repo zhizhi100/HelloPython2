@@ -6,7 +6,7 @@ Created on 2015年11月12日
 '''
 import json
 import datetime
-from GoldenTool.util.gtdao import Dao
+from gt.util.gtdao import Dao
 from copy import copy,deepcopy
 
 class Nsr(object):

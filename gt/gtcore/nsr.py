@@ -6,7 +6,7 @@ Created on 2015年11月12日
 '''
 import json
 import datetime
-from GoldenTool.util.gtdao import Dao
+from gt.util.gtdao import Dao
 from copy import copy,deepcopy
 
 class Nsr(object):
@@ -22,7 +22,7 @@ class Nsr(object):
         Constructor
         '''
         sql = self._create_tb_sql()
-        self.dao = Dao('../gtcore/gtnsr.db',sql)
+        self.dao = Dao('gtnsr.db',sql)
         #cols_str pk is nsrsbh,must be end with nsrsbh
         cols_str = 'ygznsrlxDm|hsfsDm|wjcyrs|djrq|whsyjsfjfxxdjbz|bsrdzxx|djzclxDm|cwfzrsfzjhm|gdghlxDm|fddbrdzxx|zcdz|nsrztDm|zzjglxDm|nsrzgswjgxxList|zgswjmc|shxydm|scjydlxdh|scjyqxq|fddbrxm|jyfw|scjyqxz|bsrsfzjhm|zzlxDm|cwfzrsfzjzlDm|wztzbl|zcdzxzqhszDm|djxh|zcdzxzqhszmc|bsrsfzjzlDm|swdlrmc|zczb|fddbryddh|hymc|fddbrsfzjlxmc|fddbrgddh|kjzdzzDm|hjszd|scjydz|fddbrsfzjhm|swdlrlxdh|jdxzDm|wz|gykglxDm|pzsljgDm|scjydyzbm|bzfsDm|kqccsztdjbz|zgswjg|cwfzrdzxx|tzze|hyDm|zfjglxDm|fddbrsfzjlxDm|dwlsgxDm|djjgDm|zzhm|gdgrs|gytzbl|lrrq|pzsljglxDm|lsswdjyxqz|wcjyhdssglzmbh|cyrs|lsswdjyxqq|zzjgDm|bsryddh|ggrs|cwfzrgddh|swdlrnsrsbh|bsrxm|kzztdjlxmc|jdxzmc|ssdabh|nsrmc|pzsljgmc|scjydzxzqhszmc|zrrtzbl|scjydzxzqhszDm|zzsqylxDm|hhrs|lrrDm|zgswskfjDm|bsrgddh|kyslrq|kzztdjlxDm|zcdyzbm|zgswskfjmc|nsrfyhyxxList|ssglyDm|nsrbm|pzzmhwjh|zgswjDm|zsxmcxbzDm|cwfzryddh|swdjblbz|djzclxmc|nsrztmc|zzsjylb|yhsjnfsDm|gdslxDm|ssglymc|zcdlxdh|fjmqybz|swdlrdzxx|gjhdqszDm|cwfzrxm|logtime|nsrsbh'
         self.cols = cols_str.split('|')
@@ -86,7 +86,7 @@ class Nsr(object):
         sql = 'select '+ ",".join(self.cols) +' from gt_nsr where 1'
         data = []
         if params.has_key('name'):
-            print params['name']
+            #print params['name']
             sql=sql+' and nsrmc like ? '
             data.append('%'+params['name']+'%')
         sql = sql + ' order by zgswskfjmc,ssglymc,nsrmc'            
@@ -127,7 +127,7 @@ class Nsr(object):
     def save(self,info):
         dm = self._info('nsrsbh')
         needsave = self.needsave(dm)
-        if not needsave:return
+        if not needsave:return None
         isnew = not self._isexsits(dm)
         reps = '?'
         k = 2 #do not need logtime and nsrsbh

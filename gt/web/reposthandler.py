@@ -64,7 +64,7 @@ class Test(Repost):
         if response.body:
             print response.body
             
-class Querynsr(Repost):
+class Loadnsr(Repost):
     def _on_success(self,response):
         if response.body:
             pass
