@@ -7,6 +7,7 @@ Created on 2015年11月12日
 import json
 import datetime
 from GoldenTool.util.gtdao import Dao
+from copy import copy,deepcopy
 
 class Nsr(object):
     '''
@@ -80,6 +81,35 @@ class Nsr(object):
             return self.info   
         else:
             return None
+        
+    def getmany(self,params):
+        sql = 'select '+ ",".join(self.cols) +' from gt_nsr where 1'
+        data = []
+        if params.has_key('name'):
+            print params['name']
+            sql=sql+' and nsrmc like ? '
+            data.append('%'+params['name']+'%')
+        sql = sql + ' order by zgswskfjmc,ssglymc,nsrmc'            
+        if params.has_key('pagesize'):
+            sql = sql+' limit ?'
+            data.append(params['pagesize'])
+        if params.has_key('page'):
+            sql = sql+ ' OFFSET ?'
+            j = params['page'] - 1
+            data.append(j)
+        succ,msg,res = self.dao.getmany(sql, data)
+        if succ:
+            l = []
+            for r in res:
+                info = {}
+                k = 0
+                for i in self.cols:
+                    info[i]= r[k]
+                    k = k + 1                
+                l.append(info)
+            return True,l
+        else:
+            return False,msg
         
     def needsave(self,dm):
         sql = 'select date(logtime) from gt_nsr where nsrsbh=?'
@@ -170,19 +200,27 @@ class Nsr(object):
         return {sql,sql2,sql3}
     
 if __name__ == '__main__':
+    '''
     f = open('nsrxx.txt')
     try:
         js = f.read()
     finally:
         f.close()
-    nsr = Nsr()
-    r = nsr.getxxfromquery(js)
+    '''
+    n = Nsr()
+    #r = nsr.getxxfromquery(js)
     #r = nsr.getxxfromdao('430111351684870')
-    nsr.save(r)
-    nsr.savetrace(r)
+    #nsr.save(r)
+    #nsr.savetrace(r)
+    p = {}
+    p['name']='长沙'
+    p['pagesize']=3
+    p['page']=1
+    a,b = n.getmany(p)
+    print b
     #print "=?,".join(nsr.cols)
-    print nsr._info('nsrsbh')
-    print nsr._info('nsrmc')
+    #print n._info('nsrsbh')
+    #print n._info('nsrmc')
     #d =  nsr.getxxfromdao('430111351684870')
     #print nsr
     '''

@@ -12,8 +12,9 @@ import logging
 import time
 import signal
 from tornado.options import define, options
-from reposthandler import Repost
-from jobhandler import Job,ThreadJob
+from GoldenTool.web.reposthandler import Repost
+from GoldenTool.web.jobhandler import Job,ThreadJob
+from GoldenTool.web.dbhandler import Querynsr
 
 DEFAULT_LOG_FILENAME = "nativeweb.log"
 
@@ -96,6 +97,7 @@ def startweb():
         (r"/repost", Repost),
         (r"/job", Job),
         (r"/testjob", ThreadJob),
+        (r"/querynsr", Querynsr),
         ],**settings)
     
     http_server = tornado.httpserver.HTTPServer(app)

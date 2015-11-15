@@ -83,7 +83,7 @@ class Dao(object):
                     k = 0
                     for i in data:
                         k = k + 1
-                        d = (i,)
+                        d = tuple(i)
                         cu.execute(sql,d)
                         if k % count == 0:
                             conn.commit()
@@ -103,7 +103,7 @@ class Dao(object):
                 conn = self.get_conn()
                 cu = self.get_cursor(conn)
                 if data is not None:
-                    d = (data,)
+                    d = tuple(data)
                     cu.execute(sql,d)
                 else:
                     cu.execute(sql)
@@ -111,6 +111,7 @@ class Dao(object):
                     res = cu.fetchall()
                 else:
                     res = cu.fetchone()
+                print res
                 self.close(conn, cu)
                 return True,'',res
             except sqlite3.Error,e: 
