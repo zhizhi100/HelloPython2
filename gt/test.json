@@ -1,0 +1,68 @@
+{
+	"Modify" : {
+		"Type" : ["html"],
+		"Rules" : [{
+				"Action" : "AppendHTML",
+				"Content" : "<script>alert(\"Hello!\");</script>",
+				"MatchMode" : "StartWith",
+				"MatchContent" : "http://127.0.0.1/testpage",
+				"Type" : "html",
+				"Comment" : ""
+			}, {
+				"Action" : "ChangeKeyword",
+				"Content" : "test|changedkeyword",
+				"MatchMode" : "Regex",
+				"MatchContent" : "\\S+Regex\\S+",
+				"Type" : "html",
+				"Comment" : ""
+			}, {
+				"Action" : "RegexChange",
+				"Content" : "test|changedRegexword",
+				"MatchMode" : "Equal",
+				"MatchContent" : "http://127.0.0.1/Equal.html",
+				"Type" : "html",
+				"Comment" : ""
+			}
+		]
+	},
+	"Redirect" : {
+		"Type" : ["*"],
+		"Rules" : [{
+				"Action" : "Change",
+				"Content" : "http://www.hao123.com/changed.js",
+				"MatchMode" : "StartWith",
+				"MatchContent" : "http://www.hao123.com/test",
+				"Type" : "js",
+				"Comment" : ""
+			}, {
+				"Action" : "ChangeKeyword",
+				"Content" : "test|changedkeyword",
+				"MatchMode" : "HasKeyword",
+				"MatchContent" : "www.HasKeyword.com",
+				"Type" : "js",
+				"Comment" : ""
+			}, {
+				"Action" : "RegexChange",
+				"Content" : "test|RegexChange",
+				"MatchMode" : "Regex",
+				"MatchContent" : "\\S+www.RegexChange.com\\S+",
+				"Type" : "js",
+				"Comment" : ""
+			}, {
+				"Action" : "Change",
+				"Content" : "http://www.hao123.com/changed.js",
+				"MatchMode" : "Equal",
+				"MatchContent" : "http://www.Equal.com/test.js",
+				"Type" : "js",
+				"Comment" : ""
+			}, {
+				"Action" : "Change",
+				"Content" : "http://www.hao123.com/changed.js",
+				"MatchMode" : "EndWith",
+				"MatchContent" : "/EndWith.js",
+				"Type" : "js",
+				"Comment" : ""
+			}
+		]
+	}
+}

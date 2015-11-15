@@ -22,7 +22,7 @@ class Nsr(object):
         Constructor
         '''
         sql = self._create_tb_sql()
-        self.dao = Dao('../gtcore/gtnsr.db',sql)
+        self.dao = Dao('gtnsr.db',sql)
         #cols_str pk is nsrsbh,must be end with nsrsbh
         cols_str = 'ygznsrlxDm|hsfsDm|wjcyrs|djrq|whsyjsfjfxxdjbz|bsrdzxx|djzclxDm|cwfzrsfzjhm|gdghlxDm|fddbrdzxx|zcdz|nsrztDm|zzjglxDm|nsrzgswjgxxList|zgswjmc|shxydm|scjydlxdh|scjyqxq|fddbrxm|jyfw|scjyqxz|bsrsfzjhm|zzlxDm|cwfzrsfzjzlDm|wztzbl|zcdzxzqhszDm|djxh|zcdzxzqhszmc|bsrsfzjzlDm|swdlrmc|zczb|fddbryddh|hymc|fddbrsfzjlxmc|fddbrgddh|kjzdzzDm|hjszd|scjydz|fddbrsfzjhm|swdlrlxdh|jdxzDm|wz|gykglxDm|pzsljgDm|scjydyzbm|bzfsDm|kqccsztdjbz|zgswjg|cwfzrdzxx|tzze|hyDm|zfjglxDm|fddbrsfzjlxDm|dwlsgxDm|djjgDm|zzhm|gdgrs|gytzbl|lrrq|pzsljglxDm|lsswdjyxqz|wcjyhdssglzmbh|cyrs|lsswdjyxqq|zzjgDm|bsryddh|ggrs|cwfzrgddh|swdlrnsrsbh|bsrxm|kzztdjlxmc|jdxzmc|ssdabh|nsrmc|pzsljgmc|scjydzxzqhszmc|zrrtzbl|scjydzxzqhszDm|zzsqylxDm|hhrs|lrrDm|zgswskfjDm|bsrgddh|kyslrq|kzztdjlxDm|zcdyzbm|zgswskfjmc|nsrfyhyxxList|ssglyDm|nsrbm|pzzmhwjh|zgswjDm|zsxmcxbzDm|cwfzryddh|swdjblbz|djzclxmc|nsrztmc|zzsjylb|yhsjnfsDm|gdslxDm|ssglymc|zcdlxdh|fjmqybz|swdlrdzxx|gjhdqszDm|cwfzrxm|logtime|nsrsbh'
         self.cols = cols_str.split('|')

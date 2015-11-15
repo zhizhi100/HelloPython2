@@ -18,11 +18,3 @@ if __name__ == '__main__':
     p['page']=1
     a,b = n.getmany(p)
     print b
-    
-    conn = sqlite3.connect('test.db')
-    print "Opened database successfully";
-    
-    cursor = conn.execute("SELECT *  from gt_nsr")
-    
-    print "Operation done successfully";
-    conn.close()
