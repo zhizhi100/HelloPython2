@@ -116,7 +116,7 @@ class Dao(object):
                     res = cu.fetchall()
                 else:
                     res = cu.fetchone()
-                print res
+                #print res
                 self.close(conn, cu)
                 return True,'',res
             except sqlite3.Error,e: 
