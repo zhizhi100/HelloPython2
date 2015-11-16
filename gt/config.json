@@ -40,7 +40,7 @@
 				"MatchMode" : "Regex",
 				"MatchContent" : "^http.*?_gtool_.*",
 				"Type" : "js",
-				"Comment" : ""
+				"Comment" : "redirect to local static pages"
 			},{
 				"Action" : "Change",
 				"Content" : "http://localhost:80/static/hello.html",

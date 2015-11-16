@@ -1,5 +1,5 @@
 var gthelp = function () {
-	alert('hello')
+	alert('hello,world!')
 }
 
 jq(document).ready(function () {
