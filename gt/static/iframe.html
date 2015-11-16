@@ -2,6 +2,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Hello,World!</title>
+<script src="/swordweb/domain.js"></script>
 <script src="jquery-1.9.0.min.js"></script>
 </head>
 <body>
@@ -9,22 +10,13 @@
 <input type="text" id="inputa">
 <button id="testbtn" onclick="callparent()">test</button>
 <script>
-document.domain="tax.cn";
-window.onhelp = new Function("return false;");
-$("#inputa").val(100);
-$("#inputa").bind("onhelp", function () {
-	alert(1);
-	return false;
-})
-
-$("#inputa").keydown(function (e) {
-	if (e.keyCode == 112) {
-		alert(3);
-		e.returnValue = false;
-	}
-});
 function callparent() {
-	window.parent.test("I'm from the iframe")
+//	alert(1)
+//	document.parentWindow.parent.test=function(){
+//	   alert(1050)
+//	}
+//	document.parentWindow.parent.test()
+	parent.test("I\'m from the iframe")
 }
 </script
 </body>
