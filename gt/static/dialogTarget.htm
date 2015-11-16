@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+        <link href="../../lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" />
+    <script src="../../lib/jquery/jquery-1.9.0.min.js" type="text/javascript"></script>
+    <script src="../../lib/ligerUI/js/core/base.js" type="text/javascript"></script>
+    <script src="../../lib/ligerUI/js/plugins/ligerDrag.js" type="text/javascript"></script> 
+    <script src="../../lib/ligerUI/js/plugins/ligerDialog.js" type="text/javascript"></script>
+    <script src="../../lib/ligerUI/js/plugins/ligerComboBox.js" type="text/javascript"></script>
+    <script src="../../lib/ligerUI/js/plugins/ligerDateEditor.js" type="text/javascript"></script>
+<style type="text/css">
+*{margin: 0;padding:0;font-family: "微软雅黑";-web-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}
+img{width: 580px;height: 380px;}body{background: url(./img/bg.gif);}p{width:800px;margin: 10px auto;}::selection{background: #f00;color: #fff;}span{cursor: pointer;text-decoration: underline;color: blue;}
+.wrapper{max-width: 800px;height: 400px;margin: 10px auto;background: #fff;box-shadow: 0 2px 2px #f2f2f2;position: relative;}
+#tab{width: 200px;height:400px;}
+#tab_left,#tab_con{margin: 10px;background: #fff;} #tab,#tab_con{float: left;}
+#tab_left{width:180px;height:380px;}
+#tab_left .li{list-style-type: none;font-size: 20px;text-align: center;border-top: 1px solid #ccc;}
+#tab_left .li a{color: #000;text-decoration: none;line-height: 94px;width: 180px;height: 94px;display: block;background: #fff;text-shadow:1px 1px 2px #ccc;border-left: 1px solid #ccc;}
+#tab_left .li a:hover{background: #f1f1f1;text-decoration: none;border-left: 1px solid #f00;opacity: 0.4;color: #f00;text-shadow:1px 1px 2px #ccc;}
+#tab_con{width: 580px;height: 380px;overflow: hidden;}
+
+</style>
+     <script type="text/javascript">
+	 $(document).ready(function () {
+	 	$("#test").bind("click", function () {
+	 		//alert(1);
+	 		$("#sl1").ligerComboBox();
+	 		$("#d1").ligerDateEditor();
+	 		$.ligerDialog.open({
+	 			target : $("#target1"),
+	 			width : 850,
+	 			height : 480,
+	 			isResize : true,
+	 			allowClose : true,
+	 			showMax : true,
+	 			showToggle : false
+	 		});
+	 		$(function () {
+	 			$("#tab_left_1").bind("click",function () {
+	 				$("#tab_con_2").hide();
+	 				$("#tab_con_3").hide();
+	 				$("#tab_con_4").hide();
+	 				$("#tab_con_1").fadeIn(600);
+	 			});
+	 			$("#tab_left_2").bind("click",function () {
+	 				$("#tab_con_1").hide();
+	 				$("#tab_con_3").hide();
+	 				$("#tab_con_4").hide();
+	 				$("#tab_con_2").fadeIn(600);
+	 			});
+	 			$("#tab_left_3").bind("click",function () {
+	 				$("#tab_con_2").hide();
+	 				$("#tab_con_1").hide();
+	 				$("#tab_con_4").hide();
+	 				$("#tab_con_3").fadeIn(600);
+	 			});
+	 			$("#tab_left_4").bind("click",function () {
+	 				$("#tab_con_1").hide();
+	 				$("#tab_con_2").hide();
+	 				$("#tab_con_3").hide();
+	 				$("#tab_con_4").fadeIn(600);
+	 			});
+
+	 		});
+	 	});
+	 });
+	function hiden(){
+		$("#divObj").hide();
+	}
+
+     </script>
+	 <script language="javascript">
+	function showGGColseButton()
+	{
+		$(".colseGG").show();
+	}
+	$(document).ready(function(){   
+	 setTimeout (showGGColseButton, 15000);   
+	});  
+	</script>
+
+<script type="text/javascript">
+	$(function(){
+		$("#tab_left_1").bind("click",function(){
+			$("#tab_con_2").hide();
+			$("#tab_con_3").hide();
+			$("#tab_con_4").hide();		
+			$("#tab_con_1").fadeIn(200);
+		});
+		$("#tab_left_2").bind("click",function(){
+			$("#tab_con_1").hide();
+			$("#tab_con_3").hide();
+			$("#tab_con_4").hide();
+			$("#tab_con_2").fadeIn(200);
+		});
+		$("#tab_left_3").bind("click",function(){
+			$("#tab_con_2").hide();
+			$("#tab_con_1").hide();
+			$("#tab_con_4").hide();
+			$("#tab_con_3").fadeIn(200);
+		});
+		$("#tab_left_4").bind("click",function(){
+			$("#tab_con_1").hide();
+			$("#tab_con_2").hide();
+			$("#tab_con_3").hide();
+			$("#tab_con_4").fadeIn(200);
+		});
+
+	});
+</script>
+</head>
+<body style="padding:10px;  height:800px;">
+<button type="button" id="test">test</button>
+	<div class="wrapper">
+		<div id="tab">
+			<ul id="tab_left">
+				<li id="tab_left_1" class="li"><a href="#">Tab1</a></li>
+				<li id="tab_left_2" class="li"><a href="#">Tab2</a></li>
+				<li id="tab_left_3" class="li"><a href="#">Tab3</a></li>
+				<li id="tab_left_4"  class="li" style="border-bottom:1px solid #ccc;"><a href="#">Tab4</a></li>
+			</ul>
+		</div>
+		<div id="tab_con" style="float:left;">
+			<div id="tab_con_1"><h1>1</h1></div>
+			<div id="tab_con_2"><h1>2</h1></div>
+			<div id="tab_con_3"><h1>3</h1></div>
+			<div id="tab_con_4"><h1>4</h1></div>
+		</div>
+	</div>
+ <div id="target1" style="width:820px; margin:3px;display:none ">
+    
+
+
+    </div>
+
+     
+</body>
+</html>
+    
