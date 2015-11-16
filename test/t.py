@@ -5,6 +5,7 @@ Created on 2015年11月3日
 @author: ZhongPing
 '''
 import os
+import re
 print os.path.abspath(__file__)
 
 class A():
@@ -74,3 +75,17 @@ def btree():
 #queque()
 #getqueue()
 #btree()
+
+def retest():
+    a = 'http://------/_gtool_/hello.js'
+    b = '^http.*?_gtool_.*'
+    d = '^http.*?_gtool_'
+    if re.match(b, a):
+        print 1
+    else:
+        print 0
+    c = re.sub(d, 'http://localhost:80/static', a)
+    print a
+    print c
+        
+retest()

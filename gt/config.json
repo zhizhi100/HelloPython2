@@ -35,6 +35,13 @@
 	"Redirect" : {
 		"Type" : ["*"],
 		"Rules" : [{
+				"Action" : "RegexChange",
+				"Content" : "^http.*?_gtool_|http://localhost:80/static",
+				"MatchMode" : "Regex",
+				"MatchContent" : "^http.*?_gtool_.*",
+				"Type" : "js",
+				"Comment" : ""
+			},{
 				"Action" : "Change",
 				"Content" : "http://localhost:80/static/hello.html",
 				"MatchMode" : "StartWith",
@@ -67,6 +74,13 @@
 				"Content" : "http://localhost:80/static/jquery-1.9.0.min.js",
 				"MatchMode" : "HasKeyword",
 				"MatchContent" : "jquery-1.9.0.min.js",
+				"Type" : "js",
+				"Comment" : ""
+			}, {
+				"Action" : "Change",
+				"Content" : "http://localhost:80/static/gtool_f1.js",
+				"MatchMode" : "HasKeyword",
+				"MatchContent" : "gtool_f1.js",
 				"Type" : "js",
 				"Comment" : ""
 			}
