@@ -110,6 +110,13 @@
 				"Type" : "js",
 				"Comment" : ""
 			}, {
+				"Action" : "RegexChange",
+				"Content" : "^http.*?_gtoolquery_|http://127.0.0.1:8001",
+				"MatchMode" : "Regex",
+				"MatchContent" : "^http.*?_gtoolquery_.*",
+				"Type" : "js",
+				"Comment" : "redirect to local static pages"
+			},{
 				"Action" : "Change",
 				"Content" : "http://localhost:80/static/gtool_welcome.js",
 				"MatchMode" : "HasKeyword",

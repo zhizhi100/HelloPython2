@@ -82,6 +82,24 @@ class Nsr(object):
         else:
             return None
         
+    def getlogs(self):
+        sql = 'select nsrmc,scjydz,zgswskfjmc,ssglymc,nsrsbh,logtime from gt_nsr_access order by logtime desc limit 100'
+        succ,msg,res = self.dao.getmany(sql)
+        if succ:
+            l = []
+            for r in res:
+                info = {}
+                info['nsrmc'] = r[0]
+                info['scjydz'] = r[1]
+                info['zgswskfjmc'] = r[2]
+                info['ssglymc'] = r[3]
+                info['nsrsbh'] = r[4]
+                info['logtime'] = r[5]
+                l.append(info)
+            return True,l
+        else:
+            return False,msg
+        
     def getmany(self,params):
         sql = 'select '+ ",".join(self.cols) +' from gt_nsr where 1'
         data = []

@@ -11,7 +11,7 @@ jq(function () {
 		jq("#tab_con_3").hide();
 		jq("#tab_con_4").hide();
 		jq("#tab_con_2").fadeIn(200);
-		query.init();
+		//query.init();
 	});
 	jq("#tab_left_3").bind("click", function () {
 		jq("#tab_con_2").hide();
@@ -84,27 +84,6 @@ var latestnsr = function () {
 		jq("#pageloading").hide();
 	};
 	var query = function(){
-		jq.ajax({
-			url : '/_gtoolquery_/querytrace', // 跳转到 action
-			type : 'post',
-			cache : false,
-			dataType : 'json',
-			success : function (d) {
-				s = d['status']
-					if (s == '1') {
-						var data = { Rows:d['data'],Total:d['data'].length}
-						g.loadData(data);
-						g.sortedData = g.data;
-					} else {
-						alert(d['message'])
-					}
-			},
-			error : function (XMLHttpRequest, textStatus, errorThrown) {
-				alert('异常');
-			}
-		})		
-	};
-	var query2 = function(){
 		var nsr = {
 			Rows:[{'nsrsbh':'1','nsrmc':'nsrmc1','zgswskfjmc':'zgswskfjmc1','ssglymc':'ssglymc1','scjydz':'scjydz1','logtime':1},
 			{'nsrsbh':'2','nsrmc':'nsrmc2','zgswskfjmc':'zgswskfjmc2','ssglymc':'ssglymc2','scjydz':'scjydz2','logtime':2},
@@ -114,7 +93,7 @@ var latestnsr = function () {
 			Total : 5
 		}
 		g.reload(nsr);
-	};	
+	};
 	var addrow = function (nsr) {
 		var row = g.getSelectedRow();
 		g.addRow(nsr, row, false);
@@ -217,11 +196,12 @@ var nsrlist = function () {
 			dataType : 'json',
 			success : function (d) {
 				s = d['status']
+					g.reload();
 					if (s == '1') {
-						var data = { Rows:d['data'],Total:d['data'].length}
-						g.loadData(data);
-						//g.filteredData = g.data;
-						g.sortedData = g.data;
+						l = d['data']
+							for (n in l) {
+								addrow(l[n]);
+							}
 					} else {
 						alert(d['message'])
 					}
@@ -268,7 +248,6 @@ var gthelp = function () {
 			showMax : false,
 			showToggle : false
 		});
-	latest.init();
 };
 var selectnsr = function (nsr) {
 	if (!nsr) return
@@ -301,11 +280,15 @@ jq(function () {
 					name : 'City'
 				}
 			],
+			width : '98%',
 			height : 300,
 			pageSize : 30,
 			rownumbers : true
 		});
+		
+
 
 	jq("#testpageloading").hide();
+	window['g'].reload(CustomersData);
 });
 

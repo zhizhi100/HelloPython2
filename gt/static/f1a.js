@@ -22,9 +22,5 @@ jq(document).ready(function () {
 			}			
 		});	
 		//jq(document.body).append("<div id=\"_gtool_div\"></div>");
-		jq.get("_gtool_/f1dia.html", function (data) {
-			//alert(data);
-			jq(document.body).append(data);
-		});
 	});
 });

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Demo</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script type="text/javascript" src="jquery-1.9.0.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $("#test").keyup(function(e){
+                enterTest(e);
+            });
+            var e = jQuery.Event("keyup");//模拟一个键盘事件
+            e.keyCode =13;//keyCode=13是回车
+            $("#test").trigger(e);
+        });
+
+        function enterTest(e){
+            if(e.keyCode==13){
+                alert("Enter");
+            }
+        }
+    </script>
+</head>
+<body>
+    <input id="test" type="text"/>
+</body>
+</html>

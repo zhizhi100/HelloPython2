@@ -49,6 +49,15 @@ class Querynsr(AjaxHandler):
             return succ,'',data
         else:
             return succ,data,None
+        
+class Querytrace(AjaxHandler):
+    def work(self):
+        n = Nsr()
+        succ,data = n.getlogs()
+        if succ:
+            return succ,'',data
+        else:
+            return succ,data,None
            
 if __name__ == '__main__':
     n = Nsr()
