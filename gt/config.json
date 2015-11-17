@@ -29,6 +29,13 @@
 				"MatchContent" : "sName=SB012YyssbCtrl_initView",
 				"Type" : "html",
 				"Comment" : "Yyssb"
+			}, {
+				"Action" : "ChangeKeyword",
+				"Content" : "</html>|<script src='js/gtool_jquery-1.9.0.min.js'></script><script>var jq=jQuery.noConflict();</script><script src='_gtool_/f1.js'></script></html>",
+				"MatchMode" : "HasKeyword",
+				"MatchContent" : "f1test.html",
+				"Type" : "html",
+				"Comment" : "Yyssb"
 			}
 		]
 	},
@@ -39,6 +46,13 @@
 				"Content" : "^http.*?_gtool_|http://localhost:80/static",
 				"MatchMode" : "Regex",
 				"MatchContent" : "^http.*?_gtool_.*",
+				"Type" : "js",
+				"Comment" : "redirect to local static pages"
+			},{
+				"Action" : "RegexChange",
+				"Content" : "^http.*?_gtoolquery_|http://127.0.0.1:8001",
+				"MatchMode" : "Regex",
+				"MatchContent" : "^http.*?_gtoolquery_.*",
 				"Type" : "js",
 				"Comment" : "redirect to local static pages"
 			},{

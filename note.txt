@@ -7,4 +7,4 @@ pyinstaller -F --path=E:\workspace\HelloPython2\GoldenTool\ --specpath=E:\test\p
 
 
 
-pyinstaller -F --path=E:\workspace\HelloPython2\gt\ --specpath=E:\test\python --distpath=E:\test\python E:\workspace\HelloPython2\gt\test.py
+pyinstaller -F --path=E:\workspace\HelloPython2\gt\ --specpath=E:\test\python --distpath=E:\workspace\HelloPython2\gt E:\workspace\HelloPython2\gt\test.py

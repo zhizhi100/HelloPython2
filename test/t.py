@@ -87,5 +87,16 @@ def retest():
     c = re.sub(d, 'http://localhost:80/static', a)
     print a
     print c
+    
+    a = 'http://127.0.0.1/_gtool_query_/querynsr'
+    b = '^http.*?_gtool_query_.*'
+    d = '^http.*?_gtool_query_'
+    if re.match(b, a):
+        print 1
+    else:
+        print 0
+    c = re.sub(d, 'http://127.0.0.1:80', a)
+    print a
+    print c    
         
 retest()

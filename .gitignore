@@ -2,3 +2,5 @@
 *.log
 *.lic
 *.db
+*.exe
+/gt/static/ligerUI/skins
