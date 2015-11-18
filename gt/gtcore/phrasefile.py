@@ -9,7 +9,6 @@ from nsr import Nsr
 import logging
 import os
 import re
-from _ssl import txt2obj
 
 class Worker(object):
     
@@ -51,8 +50,8 @@ class Htmlworker(Worker):
         row = re.findall('<t.+?</t>', str)
         if len(row)== 69:
             if row[0].find('纳税人') > -1:
-                for k in row:
-                    print k
+                #for k in row:
+                #   print k
                 return #标题栏
             for k in range(69):
                 i = row[k]
@@ -83,11 +82,11 @@ class Htmlworker(Worker):
                 str = self.getrows(str)
                 #print len(str)
         finally:
-            print str
+            #print str
             f.close()
 
 def testhtmlwork():
-    hw =  Htmlworker('nsrlist.txt')
+    hw =  Htmlworker('test.txt')
     hw.work()
     
     

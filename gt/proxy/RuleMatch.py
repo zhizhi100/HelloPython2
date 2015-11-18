@@ -178,6 +178,8 @@ class RuleMatch():
                     resp = {}
                     resp['code'] = responsecode
                     resp['html'] = self.modifyhtml(j, html)
+                    del receive_header['content-length']
+                    del receive_header['content-le2ngth']
                     resp['header'] = receive_header
                     return (True,'',resp)
             else:

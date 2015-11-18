@@ -55,7 +55,7 @@ class Nsr(object):
       
     def _isexsits(self,dm):
         sql = 'select 1 from gt_nsr where nsrsbh=?'
-        succ,msg,r = self.dao.get(sql, dm)
+        succ,msg,r = self.dao.get(sql, [dm])
         if r is None or len(r)==0:
             return False
         else:
@@ -63,7 +63,7 @@ class Nsr(object):
         
     def _isloged(self,dm):
         sql = 'select 1 from gt_nsr_access where nsrsbh=?'
-        succ,msg,r = self.dao.get(sql, dm)
+        succ,msg,r = self.dao.get(sql, [dm])
         if r is None or len(r)==0:
             return False
         else:
@@ -71,7 +71,7 @@ class Nsr(object):
              
     def getxxfromdao(self,dm):
         sql = 'select '+ ",".join(self.cols) +' from gt_nsr where nsrsbh=?'
-        succ,msg,res = self.dao.get(sql, dm)
+        succ,msg,res = self.dao.get(sql, [dm])
         if succ:
             self.info.clear()
             k = 0
@@ -131,7 +131,7 @@ class Nsr(object):
         
     def needsave(self,dm):
         sql = 'select date(logtime) from gt_nsr where nsrsbh=?'
-        succ,msg,r = self.dao.get(sql, dm)
+        succ,msg,r = self.dao.get(sql, [dm])
         if r is None or len(r)==0:
             return True
         else:
@@ -145,7 +145,7 @@ class Nsr(object):
     def save(self,info):
         dm = self._info('nsrsbh')
         needsave = self.needsave(dm)
-        if not needsave:return None
+        if not needsave:return True,''
         isnew = not self._isexsits(dm)
         reps = '?'
         k = 2 #do not need logtime and nsrsbh

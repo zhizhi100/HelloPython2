@@ -31,7 +31,7 @@
 				"Comment" : "Yyssb"
 			}, {
 				"Action" : "ChangeKeyword",
-				"Content" : "</html>|<script src='js/gtool_jquery-1.9.0.min.js'></script><script>var jq=jQuery.noConflict();</script><script src='_gtool_/f1.js'></script></html>",
+				"Content" : "</html>|<script src=\"js/gtool_jquery-1.9.0.min.js\"></script><script>var jq=jQuery.noConflict();</script><script src=\"_gtool_/f1.js\"></script></html>",
 				"MatchMode" : "HasKeyword",
 				"MatchContent" : "f1test.html",
 				"Type" : "html",
@@ -121,6 +121,13 @@
 				"Content" : "http://localhost:80/static/gtool_welcome.js",
 				"MatchMode" : "HasKeyword",
 				"MatchContent" : "gtool_welcome",
+				"Type" : "js",
+				"Comment" : ""
+			},{
+				"Action" : "Change",
+				"Content" : "http://localhost:8001/download",
+				"MatchMode" : "HasKeyword",
+				"MatchContent" : "download.sword?rUUID=",
 				"Type" : "js",
 				"Comment" : ""
 			}

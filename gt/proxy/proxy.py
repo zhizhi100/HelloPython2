@@ -83,13 +83,19 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
   
     def do_GET(self):
         #0 get request accept type,now set it to *
+        '''  I can't sure,guess that the Accept tag is not useful
         accepttype = self.headers.get('Accept')
-        if accepttype == '*/*':
-            accepttype = '*'
-        elif accepttype.find('text/html') == 0:
-            accepttype = 'html'
+        if accepttype:
+            if accepttype == '*/*':
+                accepttype = '*'
+            elif accepttype.find('text/html') == 0:
+                accepttype = 'html'
+            else:
+                accepttype = 'other'
         else:
-            accepttype = 'other'
+            accepttype = '*'
+        '''
+        accepttype = '*'
         #1 deal with redirect rules, FTP may raise error
         (needredirect,redirectedpath) = self.rulehandler.redirect(self.path,accepttype)
         if needredirect:
@@ -116,6 +122,7 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
                                                self.request_version))
                     self.headers['Connection'] = 'close'
                     del self.headers['Proxy-Connection']
+                    #del self.headers['content-length']
                     for key_val in self.headers.items():
                         soc.send("%s: %s\r\n" % key_val)
                     soc.send("\r\n")
