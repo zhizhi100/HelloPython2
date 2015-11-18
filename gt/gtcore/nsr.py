@@ -143,7 +143,8 @@ class Nsr(object):
                 return False  
       
     def save(self,info):
-        dm = self._info('nsrsbh')
+        if info is None:info = self.info
+        dm = info['nsrsbh']
         needsave = self.needsave(dm)
         if not needsave:return True,''
         isnew = not self._isexsits(dm)
@@ -167,9 +168,42 @@ class Nsr(object):
         return self.dao.save(sql, data)
     
     def savemany(self,infos):
+        inserts = []
+        updates = []
         for info in infos:
-            self.save(info)
-    
+            dm = info['nsrsbh']
+            needsave = self.needsave(dm)
+            if not needsave:continue
+            #now need save
+            data = self._getinfodata(info)
+            isexists = self._isexsits(dm)
+            if isexists:
+                updates.append(data)
+            else:
+                inserts.append(data)
+             
+        if len(inserts)>0:
+            k = 2 #do not need logtime and nsrsbh
+            reps = '?'
+            j = len(self.cols)
+            while k<j:
+                reps = reps+',?'
+                k = k + 1               
+            s = ",".join(self.cols)
+            s = s.replace(',logtime', '')
+            sql = 'INSERT INTO gt_nsr('+s+")values("+reps+")"
+            succ,message = self.dao.savemany(sql, inserts)
+            if not succ:return succ,message
+        
+        if len(updates)>0:
+            s = "=?,".join(self.cols)
+            #print s
+            s = s.replace(',logtime=?,nsrsbh', '')
+            sql = "UPDATE gt_nsr set logtime=datetime('now', 'localtime'),"+s+' WHERE nsrsbh=?'
+            return self.dao.savemany(sql, updates)   
+            
+        return True,''
+            
     def savetrace(self,info):
         dm = self._info('nsrsbh')
         isnew = not self._isloged(dm)

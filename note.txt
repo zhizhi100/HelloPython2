@@ -8,3 +8,9 @@ pyinstaller -F --path=E:\workspace\HelloPython2\GoldenTool\ --specpath=E:\test\p
 
 
 pyinstaller -F --path=E:\workspace\HelloPython2\gt\ --specpath=E:\test\python --distpath=E:\workspace\HelloPython2\gt E:\workspace\HelloPython2\gt\test.py
+
+
+1、弹出对话框在IE8环境下的调试
+2、插入的优化
+3、授权文件内容的读取及应用
+4、服务注册启动界面

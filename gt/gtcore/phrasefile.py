@@ -9,6 +9,7 @@ from nsr import Nsr
 import logging
 import os
 import re
+from copy import deepcopy
 
 class Worker(object):
     
@@ -19,6 +20,7 @@ class Htmlworker(Worker):
     file = ''
     bfsize = 1024
     cols = []
+    nsrlist = []
     
     def __init__(self,path='download.tmp'):
         str = 'nsrsbh|nsrmc|nsrztmc|kzztdjlxmc|djzclxmc|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed|hymc|NotConfirmed|scjydz|fddbrxm|fddbrsfzjlxmc|fddbrsfzjhm|djrq|NotConfirmed|zgswskfjmc|ssglymc|jdxzmc|jyfw|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed|zcdlxdh|scjydlxdh|fddbrgddh|fddbryddh|bsrxm|bsrgddh|bsryddh|cwfzrxm|cwfzrgddh|cwfzryddh|fjmqybz|kqccsztdjbz|NotConfirmed|NotConfirmed|lrrq|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed|shxydm|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed|NotConfirmed'
@@ -34,13 +36,25 @@ class Htmlworker(Worker):
         str = info.sub('',str)
         return str
     
+    def savensrlist(self,info,forced = False):
+        if info is not None:
+            data = deepcopy(info)
+            self.nsrlist.append(data)
+
+        if len(self.nsrlist) > 100 or forced:           
+            nsr = Nsr()
+            succ,msg = nsr.savemany(self.nsrlist)
+            if not succ:logging.info(msg)
+            self.nsrlist = []
+    
     def dealnsr(self,data):
         nsr = Nsr()
         info = nsr.getinfo()
         for i in range(len(data)):
             info[self.cols[i]]=data[i]
-        succ,msg = nsr.save(info)
-        if not succ:logging.warn(msg)
+        self.savensrlist(info)
+        #succ,msg = nsr.save(info)
+        #if not succ:logging.warn(msg)
     
     def phraserow(self,str):
         str = str.replace('<tr>', '')
@@ -84,10 +98,22 @@ class Htmlworker(Worker):
         finally:
             #print str
             f.close()
+            self.savensrlist(None, True)
 
 def testhtmlwork():
+    logger = logging.getLogger ("")
+    logger.setLevel(-1000)
+    fmt = logging.Formatter ("[%(asctime)-12s.%(msecs)03d] "
+                             "%(levelname)-8s"
+                             " %(message)s",
+                             "%Y-%m-%d %H:%M:%S")
+    handler = logging.StreamHandler()    
+    handler.setFormatter (fmt)
+    logger.addHandler(handler)
+    logger.info('begin')
     hw =  Htmlworker('test.txt')
     hw.work()
+    logger.info('end')
     
     
 def cut(str):

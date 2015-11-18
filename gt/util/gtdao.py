@@ -73,7 +73,7 @@ class Dao(object):
     def save(self,sql,data=None):
         return self._exec(sql=sql,trans=True, data=data)
     
-    def savemany(self,sql,data=None,count=5):
+    def savemany(self,sql,data=None,count=20):
         if count is None or count < 0:count=5
         if sql is not None and sql != '':
             try:
