@@ -71,7 +71,7 @@ var latestnsr = function () {
 				pageSize : 20,
 				sortName : 'CustomerID',
 				width : '98%',
-				height : 390,
+				height : 360,
 				checkbox : false,
 				rownumbers : true,
 				colDraggable : true,
@@ -189,7 +189,7 @@ var nsrlist = function () {
 				pageSize : 20,
 				sortName : 'CustomerID',
 				width : '98%',
-				height : 360,
+				height : 330,
 				checkbox : false,
 				rownumbers : true,
 				colDraggable : true,
@@ -259,15 +259,22 @@ var latest = latestnsr();
 var query = nsrlist();
 var dialog;
 var gthelp = function () {
+	//h = window.screen.availHeight;
+	w = window.screen.availWidth;
+	w = parseInt((w - 1000 ) / 2);
 	dialog = jq.ligerDialog.open({
 			target : jq("#target1"),
+			left: w,
+			top : 100,
+			modal : true,
 			width : 1000,
-			height : 510,
+			height : 530,
 			isResize : true,
 			allowClose : true,
 			showMax : false,
 			showToggle : false
 		});
+	//jq(".l-window-mask").height(h);
 	latest.init();
 };
 var selectnsr = function (nsr) {

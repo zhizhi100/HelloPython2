@@ -648,6 +648,9 @@
             {
                 if (!liger.win.windowMask) return;
                 var h = $(window).height() + $(window).scrollTop();
+				if (h == 0){
+					h = document.body.scrollHeight
+				}
                 liger.win.windowMask.height(h);
             }
             if (!this.windowMask)
