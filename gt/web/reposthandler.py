@@ -81,6 +81,15 @@ class Loadnsr(Repost):
         if response.body:
             pass
         
+class GetNsrDetail(Repost):
+    def _on_success(self, response):
+        if response.body:
+            from gt.gtcore.nsr import Nsr
+            nsr = Nsr()
+            info = nsr.getxxfromquery(response.body)
+            nsr.savetrace(info)
+            nsr.save(info)
+        
 class Downloader(Repost):
     def test(self):
         from time import ctime,sleep

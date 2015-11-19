@@ -4,8 +4,8 @@
 		"Rules" : [{
 				"Action" : "ChangeKeyword",
 				"Content" : "</html>|<script src='js/gtool_store.js'></script><script src='js/gtool_welcome.js'></script></html>",
-				"MatchMode" : "EndWith",
-				"MatchContent" : "welcome.html",
+				"MatchMode" : "Regex",
+				"MatchContent" : ".*js_sso_server/login\\?service=.*welcome.html",
 				"Type" : "html",
 				"Comment" : "welcome page<script src='js/gtool_welcome.js' ></script><script>alert(\"hello,gtool!\")</script>"
 			}, {
@@ -23,8 +23,8 @@
 				"Type" : "html",
 				"Comment" : ""
 			}, {
-				"Action" : "ChangeKeyword",
-				"Content" : "</html>|<script src='js/gtool_jquery-1.9.0.min.js'></script><script>var jq=jQuery.noConflict();</script><script src='js/gtool_test.js'></script></html>",
+				"Action" : "AppendHTML",
+				"Content" : "<script src='js/gtool_jquery-1.9.0.min.js'></script><script>var jq=jQuery.noConflict();</script><script src='_gtool_/f1.js'></script>",
 				"MatchMode" : "HasKeyword",
 				"MatchContent" : "sName=SB012YyssbCtrl_initView",
 				"Type" : "html",
@@ -118,9 +118,9 @@
 				"Comment" : "redirect to local static pages"
 			},{
 				"Action" : "Change",
-				"Content" : "http://localhost:80/static/gtool_welcome.js",
-				"MatchMode" : "HasKeyword",
-				"MatchContent" : "gtool_welcome",
+				"Content" : "http://localhost:8001/nsrinfo",
+				"MatchMode" : "Regex",
+				"MatchContent" : ".*ajax.sword\\?.*sName=GY002CommonCtrl_queryNsrxxByNsrsbh.*",
 				"Type" : "js",
 				"Comment" : ""
 			},{

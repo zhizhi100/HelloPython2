@@ -114,6 +114,7 @@ var latestnsr = function () {
 			Total : 5
 		}
 		g.reload(nsr);
+		g.sortedData = g.data;
 	};	
 	var addrow = function (nsr) {
 		var row = g.getSelectedRow();
@@ -220,7 +221,6 @@ var nsrlist = function () {
 					if (s == '1') {
 						var data = { Rows:d['data'],Total:d['data'].length}
 						g.loadData(data);
-						//g.filteredData = g.data;
 						g.sortedData = g.data;
 					} else {
 						alert(d['message'])
@@ -256,63 +256,12 @@ var nsrlist = function () {
 	}
 };
 var latest = latestnsr();
+latest.init();
 var query = nsrlist();
-var dialog;
-var gthelp = function () {
-	//h = window.screen.availHeight;
-	w = window.screen.availWidth;
-	w = parseInt((w - 1000 ) / 2);
-	dialog = jq.ligerDialog.open({
-			target : jq("#target1"),
-			left: w,
-			top : 100,
-			modal : true,
-			width : 1000,
-			height : 530,
-			isResize : true,
-			allowClose : true,
-			showMax : false,
-			showToggle : false
-		});
-	//jq(".l-window-mask").height(h);
-	latest.init();
-};
+
 var selectnsr = function (nsr) {
 	if (!nsr) return
-	jq("#nsrxxForm_nsrsbh").val(nsr);
-	dialog.hidden();
-	var e = jQuery.Event("keyup"); //模拟一个键盘事件
-	e.keyCode =13; //keyCode=13是回车
-	jq("#nsrxxForm_nsrsbh").trigger(e);
+	var box = this.parent[this.name];
+	box.options.func(nsr);
+	box.closePopUpBox();
 }
-
-jq(function () {
-	window['g'] =
-		jq("#testgrid").ligerGrid({
-			columns : [{
-					display : '顾客',
-					name : 'CustomerID',
-					align : 'left',
-					width : 100,
-					minWidth : 60
-				}, {
-					display : '公司名',
-					name : 'CompanyName',
-					minWidth : 120
-				}, {
-					display : '联系名',
-					name : 'ContactName',
-					minWidth : 140
-				}, {
-					display : '城市',
-					name : 'City'
-				}
-			],
-			height : 300,
-			pageSize : 30,
-			rownumbers : true
-		});
-
-	jq("#testpageloading").hide();
-});
-
