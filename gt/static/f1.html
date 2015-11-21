@@ -2,12 +2,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <script language="javascript" type="text/javascript" src="/swordweb/core/jsimport/Sword.js" ></script>
-<link href="./ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="./easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="./easyui/themes/icon.css">
 <script src="jquery-1.9.0.min.js"></script><script>var jq=jQuery.noConflict();</script>
-    <script src="./ligerUI/js/core/base.js" type="text/javascript"></script>
-	<script src="./ligerUI/js/plugins/ligerGrid.js" type="text/javascript"></script>
-    <script src="./ligerUI/js/plugins/ligerResizable.js" type="text/javascript"></script>
-    <script src="./ligerUI/js/plugins/ligerDrag.js" type="text/javascript"></script> 
+<script type="text/javascript" src="./easyui/jquery.easyui.min.js"></script>
 <style type="text/css">
 *{margin: 0;padding:0;font-family: "微软雅黑";-web-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;} 
  .gtool_wrapper{max-width: 960px;height: 400px;margin: 0px auto;background: #fff;box-shadow: 0 2px 2px #f2f2f2;position: relative;}
@@ -37,28 +35,51 @@
 		</div>
 		<div id="tab_con" style="float:left;">
 			<div id="tab_con_1">   <div style="padding: 0px; overflow: hidden"> 
-				<div class="l-loading" style="display: block" id="pageloading">
-				</div> 
-				<div id="maingrid4" style="margin: 0; padding: 0">
-				</div>
-				<div style="display: none;">
-				</div> </div>
-				<div style="padding: 5px 0px; zoom: 1;float:right;width:229px;">
-				<input type="button" class="l-button" style="width:100px;height:30px;float:rigth; margin-left:10px;" onclick="onselQx()" value="取消"></input>
-				<input type="button" class="l-button" style="width:100px;height:30px;float:rigth; margin-left:10px;" onclick="selectnsr(latest.selected());" value="确定"></input>
+				<div style="margin:1px 0;"></div>
+				<table id="t1" class="easyui-datagrid" title="最近查询的纳税人" style="height:360px"
+						data-options="rownumbers:true,singleSelect:true,remoteSort:false">
+					<thead data-options="frozen:true">
+						<tr>
+							<th data-options="field:'nsrsbh',width:150" sortable="true">纳税人识别号</th>
+							<th data-options="field:'nsrmc',width:200" sortable="true">纳税人名称</th>
+						</tr>
+					</thead>
+					<thead>
+						<tr>
+							<th data-options="field:'zgswskfjmc',width:250,align:'left'" sortable="true">主管税务科所分局</th>
+							<th data-options="field:'ssglymc',width:60,align:'left'" sortable="true">税管员</th>
+							<th data-options="field:'scjydz',width:500" sortable="true">注册经营地址</th>
+							<th data-options="field:'logtime',width:200,align:'center'" sortable="true">更新时间</th>
+						</tr>
+					</thead>
+				</table>
+					<div style="padding:2px;align:right;"><a href="#" class="easyui-linkbutton" data-options="icon:'icon-ok'" onclick="selectnsr(latest.selected());">确定</a>
+					<a href="#" class="easyui-linkbutton" data-options="icon:'icon-cancel'" onclick="onselQx();">取消</a></div>
 				</div>
 			</div>
 			<div id="tab_con_2" style="display:none"><div style="padding: 0px; overflow: hidden"> 
-				<div style="font-size:14px;padding-bottom: 4px;padding-left: 4px;">纳税人名称：<input type="text" name="mc" id="gtoolmc" style="height: 25px; width: 200px;"><input type="button" class="l-button" style="width:100px;height:25px;float:rigth; margin-left:10px;" onclick="query.list(jq('#gtoolmc').val());" value="查找"></input></div>
-				<div class="l-loading" style="display: block" id="listloading">
-				</div> 
-				<div id="maingrid_list" style="margin: 0; padding: 0">
-				</div>
-				<div style="display: none;">
-				</div> </div>
-				<div style="padding: 5px 0px; zoom: 1;float:right;width:229px;">
-				<input type="button" class="l-button" style="width:100px;height:30px;float:rigth; margin-left:10px;" onclick="onselQx()" value="取消"></input>
-				<input type="button" class="l-button" style="width:100px;height:30px;float:rigth; margin-left:10px;" onclick="selectnsr(query.selected());" value="确定"></input>
+				<div style="margin:1px 0;"></div>
+				<div><span style="font-size: 14px;">纳税人名称：</span><input type="text" name="mc" style="width:200" id="mc">
+				<a href="#" class="easyui-linkbutton" data-options="icon:'icon-cancel'" onclick="query.list(jq('#mc').val())">查询</a></div>
+				<table id="t2" class="easyui-datagrid" title="按名称查询纳税人" style="height:330px"
+						data-options="rownumbers:true,singleSelect:true,remoteSort:false">
+					<thead data-options="frozen:true">
+						<tr>
+							<th data-options="field:'nsrsbh',width:150" sortable="true">纳税人识别号</th>
+							<th data-options="field:'nsrmc',width:200" sortable="true">纳税人名称</th>
+						</tr>
+					</thead>
+					<thead>
+						<tr>
+							<th data-options="field:'zgswskfjmc',width:250,align:'left'" sortable="true">主管税务科所分局</th>
+							<th data-options="field:'ssglymc',width:60,align:'left'" sortable="true">税管员</th>
+							<th data-options="field:'scjydz',width:500" sortable="true">注册经营地址</th>
+							<th data-options="field:'logtime',width:200,align:'center'" sortable="true">更新时间</th>
+						</tr>
+					</thead>
+				</table>
+					<div style="padding:2px;align:right;"><a href="#" class="easyui-linkbutton" data-options="icon:'icon-ok'" onclick="selectnsr(query.selected());">确定</a>
+					<a href="#" class="easyui-linkbutton" data-options="icon:'icon-cancel'" onclick="onselQx();">取消</a></div>
 				</div>
 			</div>
 			<div id="tab_con_3" style="display:none"> 

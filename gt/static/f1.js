@@ -1,3 +1,9 @@
+window.console = window.console || (function(){
+	c = {};
+	c.log = function(){};
+	return c;
+})();
+
 var gthelp = function () {
 	var _func = function(a,b){
 		jq("#nsrxxForm_nsrsbh").val(a);
@@ -11,6 +17,7 @@ var gthelp = function () {
 	}
 	var _funcQx = function(){
 		//alert('cancel')
+		//console.log('cancel')
 	}
 	//alert('hello,world!')
 	var submitBtn = pc.create('SwordSubmit');
@@ -28,9 +35,14 @@ var gthelp = function () {
 }
 
 var intid;
+var findtimes = 0
 var initf1 = function () {
 	if (!document.getElementById("nsrxxForm_nsrsbh")) {
 		console.log('not inited')
+		findtimes ++ 
+		if (findtimes >= 5){
+			self.clearInterval(intid);
+		}
 		return;
 	}
 	self.clearInterval(intid);
