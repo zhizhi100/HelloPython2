@@ -1,3 +1,9 @@
+window.console = window.console || (function(){
+	c = {};
+	c.log = function(){};
+	return c;
+})();
+
 jq(function () {
 	jq("#tab_left_1").bind("click", function () {
 		jq("#tab_con_2").hide();
@@ -30,58 +36,9 @@ var latestnsr = function () {
 	var inited = false;
 	var g;
 	var init_grid = function () {
-		g = jq("#maingrid4").ligerGrid({
-				columns : [{
-						display : '纳税人识别号',
-						name : 'nsrsbh',
-						align : 'left',
-						width : 150,
-						frozen : true
-					}, {
-						display : '纳税人名称',
-						name : 'nsrmc',
-						minWidth : 200,
-						frozen : true
-					}, {
-						display : '主管税务科所分局',
-						name : 'zgswskfjmc',
-						width : 250,
-						align : 'left',
-						frozen : false
-					}, {
-						display : '税管员',
-						name : 'ssglymc',
-						width : 60,
-						align : 'left'
-					}, {
-						display : '注册经营地址',
-						name : 'scjydz',
-						width : 500,
-						align : 'left'
-					}, {
-						display : '更新时间',
-						name : 'logtime',
-						type : 'date',
-						format : 'yyyy-MM-dd hh:mm:ss',
-						width : 200,
-						align : 'left',
-						frozen : false
-					}
-				],
-				pageSize : 20,
-				sortName : 'CustomerID',
-				width : '98%',
-				height : 360,
-				checkbox : false,
-				rownumbers : true,
-				colDraggable : true,
-				hideLoadButton : true,
-				fixedCellHeight : false,
-				onDblClickRow : function (data, rowindex, rowobj){
-					selectnsr(data.nsrsbh)
-				}
-			});
-		jq("#pageloading").hide();
+		g = jq('#t1').datagrid({ onDblClickRow :function(rowIndex,rowData){
+			   selectnsr(rowData.nsrsbh);
+			  }});
 	};
 	var query = function(){
 		jq.ajax({
@@ -92,9 +49,8 @@ var latestnsr = function () {
 			success : function (d) {
 				s = d['status']
 					if (s == '1') {
-						var data = { Rows:d['data'],Total:d['data'].length}
-						g.loadData(data);
-						g.sortedData = g.data;
+						var data = { rows:d['data'],total:d['data'].length}
+						jq("#t1").datagrid('loadData', data);
 					} else {
 						alert(d['message'])
 					}
@@ -105,29 +61,31 @@ var latestnsr = function () {
 		})		
 	};
 	var query2 = function(){
-		var nsr = {
-			Rows:[{'nsrsbh':'1','nsrmc':'nsrmc1','zgswskfjmc':'zgswskfjmc1','ssglymc':'ssglymc1','scjydz':'scjydz1','logtime':1},
+		var rs = [{'nsrsbh':'1','nsrmc':'nsrmc1','zgswskfjmc':'zgswskfjmc1','ssglymc':'ssglymc1','scjydz':'scjydz1','logtime':1},
 			{'nsrsbh':'2','nsrmc':'nsrmc2','zgswskfjmc':'zgswskfjmc2','ssglymc':'ssglymc2','scjydz':'scjydz2','logtime':2},
 			{'nsrsbh':'3','nsrmc':'nsrmc3','zgswskfjmc':'zgswskfjmc3','ssglymc':'ssglymc3','scjydz':'scjydz3','logtime':3},
 			{'nsrsbh':'4','nsrmc':'nsrmc4','zgswskfjmc':'zgswskfjmc4','ssglymc':'ssglymc4','scjydz':'scjydz4','logtime':4},
-			{'nsrsbh':'5','nsrmc':'nsrmc5','zgswskfjmc':'zgswskfjmc5','ssglymc':'ssglymc5','scjydz':'scjydz5','logtime':5}],
-			Total : 5
+			{'nsrsbh':'5','nsrmc':'nsrmc5','zgswskfjmc':'zgswskfjmc5','ssglymc':'ssglymc5','scjydz':'scjydz5','logtime':5}];
+		var nsr = {
+			rows:rs,
+			total : 5
 		}
-		g.reload(nsr);
+		jq("#t1").datagrid('loadData', nsr);
 	};	
 	var addrow = function (nsr) {
 		var row = g.getSelectedRow();
 		g.addRow(nsr, row, false);
 	};
 	var getselected = function () {
-		row = g.getSelectedRow();
+		row = jq("#t1").datagrid('getSelected');
 		if (!row) { alert('请点击表格选择纳税人'); return false; }
-		return row['nsrsbh']
+		return row.nsrsbh
 	};	
 	return {
 		init : function () {
 			if (!inited) {
 				init_grid();
+				console.log('init the latestnsr grid')
 			}
 			query();
 			inited = true
@@ -145,62 +103,9 @@ var nsrlist = function () {
 	var inited = false;
 	var g;
 	var init_grid = function () {
-		g = jq("#maingrid_list").ligerGrid({
-				columns : [{
-						display : '纳税人识别号',
-						name : 'nsrsbh',
-						align : 'left',
-						isSort : true,
-						type : 'text',
-						width : 150,
-						frozen : true
-					}, {
-						display : '纳税人名称',
-						name : 'nsrmc',
-						minWidth : 200,
-						type : 'text',
-						frozen : true
-					}, {
-						display : '主管税务科所分局',
-						name : 'zgswskfjmc',
-						width : 250,
-						align : 'left',
-						frozen : false
-					}, {
-						display : '税管员',
-						name : 'ssglymc',
-						width : 60,
-						align : 'left'
-					}, {
-						display : '注册经营地址',
-						name : 'scjydz',
-						width : 500,
-						align : 'left'
-					}, {
-						display : '更新时间',
-						name : 'logtime',
-						type : 'date',
-						format : 'yyyy-MM-dd hh:mm:ss',
-						width : 200,
-						align : 'left',
-						frozen : false
-					}
-				],
-				pageSize : 20,
-				sortName : 'CustomerID',
-				width : '98%',
-				height : 330,
-				checkbox : false,
-				rownumbers : true,
-				colDraggable : true,
-				hideLoadButton : true,
-				fixedCellHeight : false,
-				enabledSort : true,
-				onDblClickRow : function (data, rowindex, rowobj){
-					selectnsr(data.nsrsbh)
-				}
-			});
-		jq("#listloading").hide();
+		jq("#t2").datagrid({ onDblClickRow :function(rowIndex,rowData){
+		   selectnsr(rowData.nsrsbh);
+		  }});
 	};
 	var addrow = function (nsr) {
 		var row = g.getSelectedRow();
@@ -218,10 +123,9 @@ var nsrlist = function () {
 			success : function (d) {
 				s = d['status']
 					if (s == '1') {
-						var data = { Rows:d['data'],Total:d['data'].length}
-						g.loadData(data);
-						//g.filteredData = g.data;
-						g.sortedData = g.data;
+						alert('querymc');
+						var data = { rows:d['data'],total:d['data'].length}
+						jq("#t2").datagrid('loadData', data);
 					} else {
 						alert(d['message'])
 					}
@@ -232,9 +136,9 @@ var nsrlist = function () {
 		})
 	};
 	var getselected = function () {
-		row = g.getSelectedRow();
+		row = jq("#t2").datagrid('getSelected');
 		if (!row) { alert('请点击表格选择纳税人'); return false; }
-		return row['nsrsbh']
+		return row.nsrsbh
 	};
 	return {
 		init : function () {
@@ -247,6 +151,7 @@ var nsrlist = function () {
 			addrow(nsr)
 		},
 		list : function (mc) {
+			alert(mc)
 			query(mc)
 		},
 		selected : function () {
@@ -255,64 +160,15 @@ var nsrlist = function () {
 		}
 	}
 };
-var latest = latestnsr();
-var query = nsrlist();
-var dialog;
-var gthelp = function () {
-	//h = window.screen.availHeight;
-	w = window.screen.availWidth;
-	w = parseInt((w - 1000 ) / 2);
-	dialog = jq.ligerDialog.open({
-			target : jq("#target1"),
-			left: w,
-			top : 100,
-			modal : true,
-			width : 1000,
-			height : 530,
-			isResize : true,
-			allowClose : true,
-			showMax : false,
-			showToggle : false
-		});
-	//jq(".l-window-mask").height(h);
-	latest.init();
-};
+
 var selectnsr = function (nsr) {
 	if (!nsr) return
-	jq("#nsrxxForm_nsrsbh").val(nsr);
-	dialog.hidden();
-	var e = jQuery.Event("keyup"); //模拟一个键盘事件
-	e.keyCode =13; //keyCode=13是回车
-	jq("#nsrxxForm_nsrsbh").trigger(e);
+	alert(nsr)
+	var box = this.parent[this.name];
+	box.options.func(nsr);
+	box.closePopUpBox();
 }
 
-jq(function () {
-	window['g'] =
-		jq("#testgrid").ligerGrid({
-			columns : [{
-					display : '顾客',
-					name : 'CustomerID',
-					align : 'left',
-					width : 100,
-					minWidth : 60
-				}, {
-					display : '公司名',
-					name : 'CompanyName',
-					minWidth : 120
-				}, {
-					display : '联系名',
-					name : 'ContactName',
-					minWidth : 140
-				}, {
-					display : '城市',
-					name : 'City'
-				}
-			],
-			height : 300,
-			pageSize : 30,
-			rownumbers : true
-		});
-
-	jq("#testpageloading").hide();
-});
-
+var latest = latestnsr();
+var query = nsrlist();
+latest.init();

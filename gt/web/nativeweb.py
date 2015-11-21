@@ -12,7 +12,7 @@ import logging
 import time
 import signal
 from tornado.options import define, options
-from reposthandler import Repost,Downloader
+from reposthandler import Repost,Downloader,GetNsrDetail
 from jobhandler import Job,ThreadJob,ImoportNsr
 from dbhandler import Querynsr,Querytrace
 
@@ -100,7 +100,8 @@ def startweb():
         (r"/querynsr", Querynsr),
         (r"/querytrace", Querytrace),
         (r"/download",Downloader),
-        (r"/importnsr",ImoportNsr)
+        (r"/importnsr",ImoportNsr),
+        (r"/nsrinfo",GetNsrDetail)
         ],**settings)
     
     http_server = tornado.httpserver.HTTPServer(app)
