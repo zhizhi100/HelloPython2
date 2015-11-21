@@ -29,6 +29,7 @@ import ProxyConfig
 import RuleMatch
   
 DEFAULT_LOG_FILENAME = "proxy.log"
+RUNNING = True
   
 class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
     __base = BaseHTTPServer.BaseHTTPRequestHandler
@@ -82,6 +83,17 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
             self.connection.close()
   
     def do_GET(self):
+        if self.path=='http://www.gtool.com/stopproxy?key=79798798':
+            #self.server.close()
+            print self.path
+            self.server.logger.info('your proxy server to be closed soon')
+            self.wfile.write('your proxy server to be closed soon')
+            global RUNNING
+            RUNNING = False
+            self.server.close_connection = True
+            #self.server.shutdown()
+            #self.server.stop()
+            return
         #0 get request accept type,now set it to *
         '''  I can't sure,guess that the Accept tag is not useful
         accepttype = self.headers.get('Accept')
@@ -341,7 +353,7 @@ def main ():
     sa = httpd.socket.getsockname ()
     logger.warning("Servering HTTP Proxy on %s port %s", sa[0], sa[1])
     req_count = 0
-    while not run_event.isSet ():
+    while (not run_event.isSet ()) and RUNNING:
         try:
             httpd.handle_request ()
             req_count += 1
@@ -349,6 +361,8 @@ def main ():
                 logger.log (logging.INFO, "Number of active threads: %s",
                             threading.activeCount ())
                 req_count = 0
+            if not RUNNING:
+                httpd.__is_shut_down = True
         except select.error, e:
             if e[0] == 4 and run_event.isSet (): pass
             else:
@@ -358,4 +372,5 @@ def main ():
     return 0
   
 if __name__ == '__main__':
-    sys.exit (main ())
+    #sys.exit (main ())
+    main()
