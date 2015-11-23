@@ -83,7 +83,7 @@ if __name__=='__main__':
         try:
             evtsrc_dll = os.path.abspath(servicemanager.__file__)
             servicemanager.PrepareToHostSingle(PythonService)
-            servicemanager.Initialize('PythonService', evtsrc_dll)
+            servicemanager.Initialize('TestServiceA', evtsrc_dll)
             servicemanager.StartServiceCtrlDispatcher()
         except win32service.error, details:
             if details[0] == winerror.ERROR_FAILED_SERVICE_CONTROLLER_CONNECT:

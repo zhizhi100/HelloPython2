@@ -1,3 +1,4 @@
+# encoding: utf-8
 '''
 Created on 2015年11月22日
 
@@ -15,7 +16,7 @@ import win32service
 import win32serviceutil
 import win32event
 import win32evtlogutil
-import win32traceutil
+#import win32traceutil
 import servicemanager
 import winerror
 import time
@@ -23,8 +24,8 @@ import sys
 import os
 
 class aservice(win32serviceutil.ServiceFramework):
-    _svc_name_ = "testservc"
-    _svc_display_name_ = "testservc"
+    _svc_name_ = "aservice"
+    _svc_display_name_ = "aservice - It Does nothing"
     _svc_deps_ = ["EventLog"]
 
     def __init__(self,args):
