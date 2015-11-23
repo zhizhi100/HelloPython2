@@ -5,3 +5,5 @@
 *.exe
 /gt/static/ligerUI/skins
 /gt/static/jquery-easyui-1.3.5
+/test/serv/build
+/test/serv/dist

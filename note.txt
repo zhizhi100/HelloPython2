@@ -27,3 +27,7 @@ pyinstaller -F --path=E:\workspace\HelloPython2\gt\ --specpath=E:\test\python --
 				}
                 liger.win.windowMask.height(h);
             }
+            
+sc create MyPythonServer binPath= f:\desktop\dist\WindowsService.exe
+
+sc start MyPythonServer            
