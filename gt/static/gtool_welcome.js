@@ -1,5 +1,5 @@
 $(document).ready(function () {
-	$(".loginbtn").each(function () {
+	$(".loginbtn:first").each(function () {
 		$(".loginbtn").parent().append("<label><input name='saveuser' id='saveuser' type='checkbox'>保存账号密码</label>");
 
 		save = store.get("save");
@@ -14,8 +14,8 @@ $(document).ready(function () {
 		$("form").submit(function (e) {
 			user = $("#username").val();
 			pwd = $("#password").val();
-			save = $("#saveuser").attr("checked")
-				store.set("save", save);
+			save = $("#saveuser").attr("checked");
+			store.set("save", save);
 			store.set("pwd", pwd);
 			store.set("user", user);
 			//alert(save)

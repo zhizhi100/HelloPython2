@@ -22,7 +22,7 @@ var gthelp = function () {
 	//alert('hello,world!')
 	var submitBtn = pc.create('SwordSubmit');
 	var t = swordAlertIframe("_gtool_/f1.html", {
-			titleName : '请确',
+			titleName : '查询纳税人       powered by Golden Tool v1.2.1',
 			width : 970,
 			height : 460,
 			param : window,
@@ -49,7 +49,7 @@ var initf1 = function () {
 	jq("#nsrxxForm_nsrsbh").each(function () {
 		var nsr = jq(this)
 			nsr.css("width", "80%");
-		nsr.parent().append("<a id='golabel' href='javascript:void(0)' onclick='gthelp()'>go</a>");
+		nsr.parent().append("<a style='font-Size:14px;' id='golabel' href='javascript:void(0)' onclick='gthelp()'>&nbsp;查询&nbsp;</a>");
 		window.onhelp = new Function("return false;");
 		nsr.bind("keyup", function (e) {
 			if (e.keyCode == 112) {

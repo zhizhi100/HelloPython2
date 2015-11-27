@@ -6,6 +6,7 @@
 <link rel="stylesheet" type="text/css" href="./easyui/themes/icon.css">
 <script src="jquery-1.9.0.min.js"></script><script>var jq=jQuery.noConflict();</script>
 <script type="text/javascript" src="./easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="store+json2.min.js"></script>
 <style type="text/css">
 *{margin: 0;padding:0;font-family: "微软雅黑";-web-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;} 
  .gtool_wrapper{max-width: 960px;height: 400px;margin: 0px auto;background: #fff;box-shadow: 0 2px 2px #f2f2f2;position: relative;}
@@ -19,7 +20,7 @@
 #tab_left .li a:hover{background: #f1f1f1;text-decoration: none;border-left: 1px solid #f00;opacity: 0.4;color: #f00;text-shadow:1px 1px 2px #ccc;}
 #tab_con{width: 758px;height: 400px;overflow: hidden;} 
 </style>
-<title>Hello!</title>
+<title>Hello,Golden Tool User!</title>
 
 </head>
 <body>  
@@ -29,7 +30,7 @@
 			<ul id="tab_left">
 				<li id="tab_left_1" class="li"><a href="#">最近纳税人</a></li>
 				<li id="tab_left_2" class="li"><a href="#">按名称查找</a></li>
-				<li id="tab_left_3" class="li"><a href="#">数据设置</a></li>
+				<li id="tab_left_3" class="li"><a href="#">本地数据</a></li>
 				<li id="tab_left_4"  class="li" style="border-bottom:1px solid #ccc;"><a href="#">关于</a></li>
 			</ul>
 		</div>
@@ -53,14 +54,14 @@
 						</tr>
 					</thead>
 				</table>
-					<div style="padding:2px;align:right;"><a href="#" class="easyui-linkbutton" data-options="icon:'icon-ok'" onclick="selectnsr(latest.selected());">确定</a>
-					<a href="#" class="easyui-linkbutton" data-options="icon:'icon-cancel'" onclick="onselQx();">取消</a></div>
+					<div style="padding:2px;align:right;" align="right"><a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="selectnsr(latest.selected());">确定</a>
+					<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="onselQx();">取消</a></div>
 				</div>
 			</div>
 			<div id="tab_con_2" style="display:none"><div style="padding: 0px; overflow: hidden"> 
 				<div style="margin:1px 0;"></div>
 				<div><span style="font-size: 14px;">纳税人名称：</span><input type="text" name="mc" style="width:200" id="mc">
-				<a href="#" class="easyui-linkbutton" data-options="icon:'icon-cancel'" onclick="query.list(jq('#mc').val())">查询</a></div>
+				<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="query.list(jq('#mc').val());words.add(jq('#mc').val());jq('#keywords').html(words.listhtml());">查询</a><span id="keywords"></span></div>
 				<table id="t2" class="easyui-datagrid" title="按名称查询纳税人" style="height:330px"
 						data-options="rownumbers:true,singleSelect:true,remoteSort:false">
 					<thead data-options="frozen:true">
@@ -71,21 +72,33 @@
 					</thead>
 					<thead>
 						<tr>
+							<th data-options="field:'nsrztmc',width:60,align:'left'" sortable="true">状态</th>
 							<th data-options="field:'zgswskfjmc',width:250,align:'left'" sortable="true">主管税务科所分局</th>
 							<th data-options="field:'ssglymc',width:60,align:'left'" sortable="true">税管员</th>
+							<th data-options="field:'kzztdjlxmc',width:150,align:'left'" sortable="true">登记类型</th>							
+							<th data-options="field:'fddbrxm',width:80,align:'left'" sortable="true">法定代表人</th>
 							<th data-options="field:'scjydz',width:500" sortable="true">注册经营地址</th>
 							<th data-options="field:'logtime',width:200,align:'center'" sortable="true">更新时间</th>
 						</tr>
 					</thead>
 				</table>
-					<div style="padding:2px;align:right;"><a href="#" class="easyui-linkbutton" data-options="icon:'icon-ok'" onclick="selectnsr(query.selected());">确定</a>
-					<a href="#" class="easyui-linkbutton" data-options="icon:'icon-cancel'" onclick="onselQx();">取消</a></div>
+					<div style="padding:2px;align:right;" align="right"><a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="selectnsr(query.selected());">确定</a>
+					<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="onselQx();">取消</a>
+					<a href="#" style="display:none" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="teststore();">test</a></div>
 				</div>
 			</div>
 			<div id="tab_con_3" style="display:none"> 
+				<div style="padding:10px;" align="center">
 				<h1>3</h1>
+				</div>
 			</div>
-			<div id="tab_con_4" style="display:none"><h1>4</h1></div>
+			<div id="tab_con_4" style="display:none">
+				<div style="padding:10px;" align="center"><h1>&nbsp;</h1><h1>&nbsp;</h1>
+				<h1>Golden Tool</h1><h1>&nbsp;</h1>
+				<h3>V1.2.1</h3><h1>&nbsp;</h1>
+				<h3>Copyright@2015</h3><h1>&nbsp;</h1>
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -109,8 +122,20 @@ function onselQx() {
 	}
 	box.closePopUpBox();
 }
+
+function teststore(){
+	if (!store.enabled){
+		alert('disabled');
+		return;
+	}
+	try{
+		//__storejs__.set("keywords","a|C");
+		store.set("pwda", "apwd");
+	}catch(e){
+		alert(e.message);
+	}
+}
 </script>
 
- 
  <script src="./f1dia.js" type="text/javascript"></script>
 </body>
