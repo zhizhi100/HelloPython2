@@ -206,7 +206,7 @@ class Nsr(object):
             
     def savetrace(self,info):
         if info is None:info=self.info
-        dm = info('nsrsbh')
+        dm = info['nsrsbh']
         isnew = not self._isloged(dm)
         if isnew: #primary key get the last position
             sql = 'INSERT INTO gt_nsr_access(nsrmc,scjydz,zgswskfjmc,ssglymc,nsrsbh)values(?,?,?,?,?)'
