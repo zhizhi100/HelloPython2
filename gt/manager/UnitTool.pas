@@ -2,7 +2,7 @@ unit UnitTool;
 
 interface
 
-uses Windows, Messages, Classes, SysUtils,WinSvc;
+uses Windows, Messages, Classes, SysUtils,WinSvc,IniFiles;
 
 function GetServiceStatusString(sServiceName: string): string;
 function StartService(AServName: string): Boolean; //use WinSvc
@@ -234,6 +234,59 @@ begin
   CloseHandle(pi.hProcess);
 end;
 
+procedure addtmplog(log:string);
+var
+  iniFile:TiniFile;
+  p,tmplog : string;
+  F: TextFile;
+  FileHandle: Integer ;
+begin
+  p := ExtractFileDir(ParamStr(0))+'\service.ini';
+  iniFile := TiniFile.Create(p);
+  tmplog := iniFile.ReadString('log','tmp','tmp');
+  inifile.free();
+  tmplog := ExtractFileDir(ParamStr(0))+'\' + tmplog;
+  if not FileExists(tmplog) then
+  begin
+    FileHandle:= FileCreate(tmplog);
+    FileClose(FileHandle);
+  end;
+  AssignFile(F,tmplog);
+  Append(F);
+  Writeln(F,FormatdateTime('c',now));
+  Writeln(F,log);
+  Writeln(F,'--------------------------------');
+  Writeln(F,'');
+  CloseFile(F);
+end;
+
+procedure addcmdlog(cmd,ret:string);
+var
+  iniFile:TiniFile;
+  p,tmplog : string;
+  F: TextFile;
+  FileHandle: Integer ;
+begin
+  p := ExtractFileDir(ParamStr(0))+'\service.ini';
+  iniFile := TiniFile.Create(p);
+  tmplog := iniFile.ReadString('log','tmp','tmp');
+  inifile.free();
+  tmplog := ExtractFileDir(ParamStr(0))+'\' + tmplog;
+  if not FileExists(tmplog) then
+  begin
+    FileHandle:= FileCreate(tmplog);
+    FileClose(FileHandle);
+  end;
+  AssignFile(F,tmplog);
+  Append(F);
+  Writeln(F,FormatdateTime('c',now));
+  Writeln(F,cmd);
+  Writeln(F,ret);
+  Writeln(F,'--------------------------------');
+  Writeln(F,'');
+  CloseFile(F);
+end;
+
 function RunDosCommand(Command: string): string;
 var
   hReadPipe: THandle;
@@ -306,6 +359,7 @@ begin
     CloseHandle(hReadPipe);
     CloseHandle(hWritePipe);
   end;
+  //addtmplog(Result);
 end;
 
 function phrease_serv_state(s:string):Integer;
@@ -362,6 +416,7 @@ begin
   begin
     cmd := 'sc create '+serv+ '  start= auto binPath= '+filename;
     ret := RunDosCommand(cmd);
+    addcmdlog(cmd,ret);
     Sleep(500);
     cmd := 'sc query '+serv;
     ret := RunDosCommand(cmd);
@@ -387,6 +442,7 @@ begin
   Sleep(200);
   cmd := 'sc delete '+serv;
   ret := RunDosCommand(cmd);
+  addcmdlog(cmd,ret);
   Sleep(200);
   cmd := 'sc query '+serv;
   ret := RunDosCommand(cmd);
@@ -408,6 +464,7 @@ var
 begin
   cmd := 'sc start '+serv;
   ret := RunDosCommand(cmd);
+  addcmdlog(cmd,ret);
   Sleep(200);
   cmd := 'sc query '+serv;
   ret := RunDosCommand(cmd);
@@ -429,6 +486,7 @@ var
 begin
   cmd := 'sc stop '+serv;
   ret := RunDosCommand(cmd);
+  addcmdlog(cmd,ret);
   Sleep(200);
   cmd := 'sc query '+serv;
   ret := RunDosCommand(cmd);

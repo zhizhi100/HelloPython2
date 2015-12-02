@@ -1,6 +1,6 @@
 object AboutBox: TAboutBox
-  Left = 469
-  Top = 464
+  Left = 769
+  Top = 688
   BorderStyle = bsDialog
   Caption = 'About'
   ClientHeight = 213
@@ -4951,18 +4951,18 @@ object AboutBox: TAboutBox
     object ProductName: TLabel
       Left = 76
       Top = 112
-      Width = 129
+      Width = 104
       Height = 13
       Alignment = taCenter
-      Caption = 'Golden Tool'#31649#29702#24037#20855
+      Caption = #37329#19977#21161#25163#31649#29702#24037#20855
       IsControl = True
     end
     object Version: TLabel
       Left = 43
       Top = 136
-      Width = 196
+      Width = 294
       Height = 13
-      Caption = 'Version 1.1 Copyright @ 2015'
+      Caption = 'Golden Helper Version 1.1 Copyright @ 2015'
       IsControl = True
     end
   end

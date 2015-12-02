@@ -4,7 +4,7 @@ object FormMain: TFormMain
   Width = 454
   Height = 357
   BorderIcons = [biSystemMenu]
-  Caption = 'Golden Tool'#31649#29702#24037#20855
+  Caption = #37329#19977#21161#25163#31649#29702#24037#20855' Golden Helper Manager'
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -4657,12 +4657,13 @@ object FormMain: TFormMain
     Height = 201
     Caption = #26085#24535#20449#24687
     TabOrder = 2
-    object RadioButton1: TRadioButton
+    object rbtmp: TRadioButton
       Left = 8
       Top = 24
       Width = 73
       Height = 17
       Caption = #31649#29702#26085#24535
+      Checked = True
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -12
@@ -4670,8 +4671,10 @@ object FormMain: TFormMain
       Font.Style = []
       ParentFont = False
       TabOrder = 0
+      TabStop = True
+      OnMouseUp = rbtmpMouseUp
     end
-    object RadioButton2: TRadioButton
+    object rbproxy: TRadioButton
       Left = 119
       Top = 24
       Width = 73
@@ -4684,8 +4687,9 @@ object FormMain: TFormMain
       Font.Style = []
       ParentFont = False
       TabOrder = 1
+      OnMouseUp = rbtmpMouseUp
     end
-    object RadioButton3: TRadioButton
+    object rbweb: TRadioButton
       Left = 230
       Top = 24
       Width = 73
@@ -4698,8 +4702,9 @@ object FormMain: TFormMain
       Font.Style = []
       ParentFont = False
       TabOrder = 2
+      OnMouseUp = rbtmpMouseUp
     end
-    object Memo1: TMemo
+    object mmolog: TMemo
       Left = 8
       Top = 48
       Width = 291

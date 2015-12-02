@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Buttons, Menus, UnitAbout, IniFiles, UnitTool, 
-  ExtCtrls, shellapi, Unitlic;
+  ExtCtrls, shellapi, DateUtils, UnitLic;
 
 type
   TFormMain = class(TForm)
@@ -24,10 +24,10 @@ type
     btnremove: TButton;
     btnmore: TBitBtn;
     chkagree: TCheckBox;
-    RadioButton1: TRadioButton;
-    RadioButton2: TRadioButton;
-    RadioButton3: TRadioButton;
-    Memo1: TMemo;
+    rbtmp: TRadioButton;
+    rbproxy: TRadioButton;
+    rbweb: TRadioButton;
+    mmolog: TMemo;
     pm1: TPopupMenu;
     N1: TMenuItem;
     lbl1: TLabel;
@@ -61,6 +61,8 @@ type
     procedure chkagreeMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure N11Click(Sender: TObject);
+    procedure rbtmpMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
     { Private declarations }
     proxyserv : string;
@@ -88,6 +90,30 @@ var
 implementation
 
 {$R *.dfm}
+function readlog(f:string):string;
+var
+  iFileHandle: Integer;
+  Buffer: PChar;
+  i : Integer;
+  size: Integer;
+begin
+  size := 4096;
+  Result := '';
+  if FileExists(f) then
+  begin
+    try
+      iFileHandle := FileOpen(f, fmOpenRead);
+      i := FileSeek(iFileHandle, (0- size), 2);
+      Buffer := PChar(AllocMem(size));
+      i := FileRead(iFileHandle, Buffer^, size);
+      FileClose(iFileHandle);
+      Result := strPas(Buffer);
+    finally
+      FreeMem(Buffer);
+    end;
+  end;
+end;
+
 procedure TFormMain.queryinstalnation();
 var
   a,b:Boolean;
@@ -216,6 +242,9 @@ procedure TFormMain.FormShow(Sender: TObject);
 var
   msg : string;
   installed : Boolean;
+  p: string;
+  f: string;
+  log: string;  
 begin
   msg := 'Hello!';
   //ShowMessage(msg);
@@ -234,6 +263,11 @@ begin
     ShowMessage('服务尚未注册，请点击【注册服务】按钮以确保Golden Tool正常工作！');
     showunregisted();
   end;
+  p := ExtractFileDir(Application.Exename);
+  f := p + '\' + tmplog;
+    log := readlog(f);
+    mmolog.Lines.Clear;
+    mmolog.Lines.Add(log);
 end;
 
 procedure TFormMain.N7Click(Sender: TObject);
@@ -268,9 +302,47 @@ begin
   queryinstalnation();
 end;
 
-procedure TFormMain.tmr1Timer(Sender: TObject);
+function needreload(f:string):Boolean;
+var
+  age : TDateTime;
+  i : Int64;
 begin
-  if registed then querystate();
+  Result := True;
+  if FileExists(f) then
+  begin
+    age := FileDateToDateTime(FileAge(f));
+    i := SecondsBetween(now, age);
+    if i > 10 then
+      Result := False;
+  end
+  else
+    Result := False;
+end;
+
+procedure TFormMain.tmr1Timer(Sender: TObject);
+var
+  p: string;
+  f: string;
+  log: string;
+begin
+  if registed then
+  begin
+    querystate();
+    if rbtmp.Checked then
+      f := tmplog;
+    if rbproxy.Checked then
+      f := proxylog;
+    if rbweb.Checked then
+      f := weblog;
+    p := ExtractFileDir(Application.Exename);
+    f := p + '\' + f;
+    if needreload(f) then
+    begin
+      log := readlog(f);
+      mmolog.Lines.Clear;
+      mmolog.Lines.Add(log);
+    end;
+  end;
 end;
 
 procedure TFormMain.btnremoveClick(Sender: TObject);
@@ -375,9 +447,28 @@ begin
 end;
 
 procedure TFormMain.N11Click(Sender: TObject);
-
 begin
   frmlic.ShowModal;
+end;
+
+procedure TFormMain.rbtmpMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+var
+  p: string;
+  f: string;
+  log: string;
+begin
+  if rbtmp.Checked then
+    f := tmplog;
+  if rbproxy.Checked then
+    f := proxylog;
+  if rbweb.Checked then
+    f := weblog;
+  p := ExtractFileDir(Application.Exename);
+  f := p + '\' + f;
+  log := readlog(f);
+  mmolog.Lines.Clear;
+  mmolog.Lines.Add(log);
 end;
 
 end.

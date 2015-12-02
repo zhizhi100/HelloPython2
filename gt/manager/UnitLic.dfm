@@ -69,7 +69,7 @@ object frmlic: Tfrmlic
     Top = 208
     Width = 129
     Height = 33
-    Caption = #20351#29992#27491#24335#25480#26435
+    Caption = #36141#20080#27491#24335#25480#26435
     TabOrder = 3
   end
   object btn2: TButton
