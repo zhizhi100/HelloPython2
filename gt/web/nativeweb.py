@@ -5,6 +5,7 @@ Created on 2015年11月3日
 
 @author: ZhongPing
 '''
+import sys,os
 import tornado.httpserver
 import tornado.ioloop
 import tornado.web
@@ -82,7 +83,10 @@ def startweb():
     #parse_command_line is very important
     tornado.options.parse_command_line()
     #print tornado.options.options.as_dict()
-    logfile = DEFAULT_LOG_FILENAME
+    path = sys.path[0]
+    if os.path.isfile(path):
+        path = os.path.dirname(path)
+    logfile = path + '/' + DEFAULT_LOG_FILENAME
     daemon  = False
     max_log_size = 20
     logger = logSetup (logfile, max_log_size, daemon)

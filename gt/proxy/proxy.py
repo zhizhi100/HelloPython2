@@ -296,9 +296,11 @@ def handler (signo, frame):
         frame = frame.f_back
 
 def main ():
-    
-    cfgfile = 'config.json'
-    logfile = 'proxy.log'
+    path = sys.path[0]
+    if os.path.isfile(path):
+        path = os.path.dirname(path)    
+    cfgfile = path + '/config.json'
+    logfile = path + '/proxy.log'
     daemon  = False
     max_log_size = 20
     port = 8000
