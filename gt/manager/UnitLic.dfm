@@ -1,6 +1,6 @@
 object frmlic: Tfrmlic
-  Left = 305
-  Top = 506
+  Left = 288
+  Top = 596
   Width = 432
   Height = 291
   BorderIcons = [biSystemMenu]
@@ -41,8 +41,9 @@ object frmlic: Tfrmlic
     Left = 20
     Top = 32
     Width = 381
-    Height = 27
+    Height = 24
     Color = cl3DLight
+    ImeName = #20013#25991'('#31616#20307') - '#25628#29399#25340#38899#36755#20837#27861
     ReadOnly = True
     TabOrder = 0
   end
@@ -50,7 +51,8 @@ object frmlic: Tfrmlic
     Left = 20
     Top = 88
     Width = 309
-    Height = 28
+    Height = 24
+    ImeName = #20013#25991'('#31616#20307') - '#25628#29399#25340#38899#36755#20837#27861
     TabOrder = 1
   end
   object btngetkey: TButton

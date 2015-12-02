@@ -20,6 +20,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure btngetkeyClick(Sender: TObject);
     procedure btn2Click(Sender: TObject);
+    procedure btn3Click(Sender: TObject);
   private
     { Private declarations }
     feature : string;
@@ -163,7 +164,10 @@ var
    f : string;
    FileHandle : Integer;
    F1 : TextFile;
+   FSetting : TFormatSettings;
+   valid : Boolean;
 begin
+  valid := False;
   asm
      push eax
      push ebx
@@ -190,23 +194,28 @@ begin
    MD5String(t,@md5);
    t := MD5DigestToStr(md5);
    key := edtkey.Text;
-   if Length(key) > 9 then
+   if Length(key) > 5 then
    begin
      key1 := copy(key,0,4);
-     key2 := Copy(key,4,3);
-     days := StringToHex(key2);
-     days := days mod 100;
-     a:=StrToDateTime('2015-01-11 00:00:00');
+     key2 := Copy(key,5,3);
+     days := HexToInt(key2);
+     days := days mod 1000;
+      //FSetting := TFormatSettings.Create(LOCALE_USER_DEFAULT);
+      FSetting.ShortDateFormat:='yyyy-MM-dd';
+      FSetting.DateSeparator:='-';
+      //FSetting.TimeSeparator:=':';
+      FSetting.LongTimeFormat:='hh:mm:ss.zzz';
+     a:=StrToDateTime('2015-01-01 00:00:00.000', FSetting);
      a := a + days;
-     s := FormatDateTime(a,'yyyymmdd');
+     s := FormatDateTime('yyyymmdd',a);
      s := t + s;
-     MD5String(t,@md5);
+     MD5String(s,@md5);
      t := MD5DigestToStr(md5);
-     s := t[0] + t[8] + t[16] + t[24];
+     s := '' + t[1] + t[9] + t[17] + t[25];
      if (key1 = s) then
      begin
        p := ExtractFileDir(Application.Exename);
-       f := p + '\trialkey.lic';
+       f := p + '\key.triallic';
        if not(FileExists(f)) then
        begin
          FileHandle := FileCreate(f);
@@ -217,8 +226,42 @@ begin
        write(f1,key);
        CloseFile(f1);
        //显示授权内容
+       valid := True;
+       pnl1.Caption := '试用期限：'+ FormatDateTime('yyyy-mm-dd',a);
      end;
    end;
+   if not valid then
+   begin
+     ShowMessage('您输入的试用密钥不可用！');
+   end;
+end;
+
+procedure Tfrmlic.btn3Click(Sender: TObject);
+var
+  id : string;
+  d:Integer;
+  a:TDateTime;
+  s,key1,key2,key:string;
+  md5: TMD5Digest;
+  FSetting : TFormatSettings;
+begin
+  //FSetting := TFormatSettings.Create(LOCALE_USER_DEFAULT);
+  FSetting.ShortDateFormat:='yyyy-MM-dd';
+  FSetting.DateSeparator:='-';
+  //FSetting.TimeSeparator:=':';
+  FSetting.LongTimeFormat:='hh:mm:ss.zzz';
+  id := '554EDC5A89BCE95177CBCAB199BFBA5C';
+  d := 30;
+  key2 := IntToHex(30 + 1000,0);
+  a:=StrToDateTime('2015-01-01 00:00:00.000', FSetting);
+  a := a + d;
+  s := FormatDateTime('yyyymmdd',a);
+  s := id + s;
+  MD5String(s,@md5);
+  s := MD5DigestToStr(md5);
+  key1 := '' + s[1] + s[9] + s[17] + s[25];
+  key := key1 + key2;
+  edtkey.Text := key;
 end;
 
 end.
