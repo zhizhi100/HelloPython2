@@ -99,4 +99,12 @@ def retest():
     print a
     print c    
         
-retest()
+#retest()
+
+id ='BFEBFBFF000306A9'
+import hashlib   
+
+m2 = hashlib.md5()   
+m2.update(id)   
+print m2.hexdigest()
+print m2.digest()   
