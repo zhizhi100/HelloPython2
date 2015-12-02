@@ -10,12 +10,12 @@ pyinstaller -F --path=E:\workspace\HelloPython2\GoldenTool\ --specpath=E:\test\p
 pyinstaller -F --path=E:\workspace\HelloPython2\gt\ --specpath=E:\test\python --distpath=E:\workspace\HelloPython2\gt E:\workspace\HelloPython2\gt\test.py
 
 
-1¡¢µ¯³ö¶Ô»°¿òÔÚIE8»·¾³ÏÂµÄµ÷ÊÔ
-2¡¢²åÈëµÄÓÅ»¯ ³õ²½Íê³É´ı²âÊÔ
-3¡¢ÊÚÈ¨ÎÄ¼şÄÚÈİµÄ¶ÁÈ¡¼°Ó¦ÓÃ
-4¡¢·şÎñ×¢²áÆô¶¯½çÃæ
+1ã€å¼¹å‡ºå¯¹è¯æ¡†åœ¨IE8ç¯å¢ƒä¸‹çš„è°ƒè¯•
+2ã€æ’å…¥çš„ä¼˜åŒ– åˆæ­¥å®Œæˆå¾…æµ‹è¯•
+3ã€æˆæƒæ–‡ä»¶å†…å®¹çš„è¯»å–åŠåº”ç”¨
+4ã€æœåŠ¡æ³¨å†Œå¯åŠ¨ç•Œé¢
 
-ĞŞ¸ÄligeruiÖĞ base.jsÔÚ ie8»·¾³ÏÂ²»¼æÈİµÄÎÊÌâ
+ä¿®æ”¹ligeruiä¸­ base.jsåœ¨ ie8ç¯å¢ƒä¸‹ä¸å…¼å®¹çš„é—®é¢˜
         mask: function (win)
         {
             function setHeight()
@@ -32,4 +32,12 @@ sc create MyPythonServer binPath= f:\desktop\dist\WindowsService.exe
 
 sc start MyPythonServer    
 
-sc create gtlocalserver binPath= E:\workspace\HelloPython2\gt\serv\dist\webservice.exe start= auto        
+sc create gtlocalserver binPath= E:\workspace\HelloPython2\gt\serv\dist\webservice.exe start= auto  
+
+ligeruiå·²ç»åºŸé™¤ï¼Œè¯•ç”¨easyui
+
+1ã€æ›´åé‡‘ä¸‰åŠ©æ‰‹ï¼ŒGolden Helperï¼Œé¡µé¢ä¿®æ”¹
+2ã€è¯•ç”¨ç‰ˆã€æ­£å¼ç‰ˆlicenseç®¡ç†
+3ã€ç”³è¯·è¯•ç”¨å¯†é’¥çš„PHP Server
+4ã€è”æœºæŸ¥è¯¢
+5ã€æœ¬åœ°æ•°æ®å…±äº«
