@@ -71,6 +71,7 @@ object frmlic: Tfrmlic
     Height = 33
     Caption = #36141#20080#27491#24335#25480#26435
     TabOrder = 3
+    OnClick = btn1Click
   end
   object btn2: TButton
     Left = 334

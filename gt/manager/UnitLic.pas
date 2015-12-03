@@ -21,6 +21,7 @@ type
     procedure btngetkeyClick(Sender: TObject);
     procedure btn2Click(Sender: TObject);
     procedure btn3Click(Sender: TObject);
+    procedure btn1Click(Sender: TObject);
   private
     { Private declarations }
     feature : string;
@@ -108,38 +109,84 @@ end;
 
 procedure Tfrmlic.FormShow(Sender: TObject);
 var
-   _eax, _ebx, _ecx, _edx: Longword;
-   s, s1, s2,result: string;
-   md5: TMD5Digest;
-   t : string;
+  _eax, _ebx, _ecx, _edx: Longword;
+  s, s1, s2, result: string;
+  md5: TMD5Digest;
+  t: string;
+  p: string;
+  fn: string;
+  key, key1, key2: string;
+  F: TextFile;
+  days: Integer;
+  a: TDateTime;
+  FSetting: TFormatSettings;
+  valid: Boolean;
 begin
+
   asm
-     push eax
-     push ebx
-     push ecx
-     push edx
-     mov eax,1
-     db $0F,$A2
-     mov _eax,eax
-     mov _ebx,ebx
-     mov _ecx,ecx
-     mov _edx,edx
-     pop edx
-     pop ecx
-     pop ebx
-     pop eax
-    end;
-   s := IntToHex(_eax, 8);
-   s1 := IntToHex(_edx, 8);
-   s2 := IntToHex(_ecx, 8);
+        push    eax
+        push    ebx
+        push    ecx
+        push    edx
+        mov     eax, 1
+        db      $0F, $A2
+        mov     _eax, eax
+        mov     _ebx, ebx
+        mov     _ecx, ecx
+        mov     _edx, edx
+        pop     edx
+        pop     ecx
+        pop     ebx
+        pop     eax
+  end;
+  s := IntToHex(_eax, 8);
+  s1 := IntToHex(_edx, 8);
+  s2 := IntToHex(_ecx, 8);
    //result:=s+'|'+s1+'|'+s2;
-   result := s1+s;
+  result := s1 + s;
    //edtfeature.Text := s1 + s;
-   t := s1 + s;
-   feature := t;
-   MD5String(t,@md5);
+  t := s1 + s;
+  feature := t;
+  MD5String(t, @md5);
    //edit1.Text:=MD5DigestToStr(md5);
-   edtfeature.Text := MD5DigestToStr(md5);
+  edtfeature.Text := MD5DigestToStr(md5);
+  t := edtfeature.Text;
+  feature := t;
+  p := ExtractFileDir(Application.Exename);
+  fn := p + '\key.triallic';
+  if not FileExists(fn) then
+    Exit;
+  AssignFile(F, fn); { File selected in dialog }
+  Reset(F);
+  Readln(F, S);                        { Read first line of file }
+  key := s;
+  CloseFile(F);
+  if Length(key) > 5 then
+  begin
+    key1 := copy(key, 0, 4);
+    key2 := Copy(key, 5, 3);
+    days := HexToInt(key2);
+    days := days mod 1000;
+      //FSetting := TFormatSettings.Create(LOCALE_USER_DEFAULT);
+    FSetting.ShortDateFormat := 'yyyy-MM-dd';
+    FSetting.DateSeparator := '-';
+      //FSetting.TimeSeparator:=':';
+    FSetting.LongTimeFormat := 'hh:mm:ss.zzz';
+    a := StrToDateTime('2015-01-01 00:00:00.000', FSetting);
+    a := a + days;
+    s := FormatDateTime('yyyymmdd', a);
+    s := t + s;
+    MD5String(s, @md5);
+    t := MD5DigestToStr(md5);
+    s := '' + t[1] + t[9] + t[17] + t[25];
+    if (key1 = s) then
+    begin
+       //显示授权内容
+      valid := True;
+      edtkey.Text := key;
+      pnl1.Caption := '试用期限：' + FormatDateTime('yyyy-mm-dd', a);
+    end;
+  end;
 end;
 
 procedure Tfrmlic.btngetkeyClick(Sender: TObject);
@@ -262,6 +309,14 @@ begin
   key1 := '' + s[1] + s[9] + s[17] + s[25];
   key := key1 + key2;
   edtkey.Text := key;
+end;
+
+procedure Tfrmlic.btn1Click(Sender: TObject);
+var
+  url : string;
+begin
+  url := 'http://127.0.0.1:8001/pay.html';
+  ShellExecute(Handle, 'open', 'IExplore.EXE', PChar(url), nil, SW_SHOWNORMAL);
 end;
 
 end.

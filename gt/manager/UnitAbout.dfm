@@ -4965,7 +4965,7 @@ object AboutBox: TAboutBox
     end
     object Version: TLabel
       Left = 18
-      Top = 136
+      Top = 129
       Width = 245
       Height = 13
       Caption = 'Copyright @ 2015 Golden Tool Studio'
