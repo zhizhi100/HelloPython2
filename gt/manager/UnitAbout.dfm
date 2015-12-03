@@ -1,6 +1,6 @@
 object AboutBox: TAboutBox
-  Left = 769
-  Top = 688
+  Left = 744
+  Top = 441
   BorderStyle = bsDialog
   Caption = 'About'
   ClientHeight = 213
@@ -4537,8 +4537,8 @@ object AboutBox: TAboutBox
     ParentColor = True
     TabOrder = 0
     object ProgramIcon: TImage
-      Left = 108
-      Top = 32
+      Left = 23
+      Top = 35
       Width = 65
       Height = 65
       Picture.Data = {
@@ -4949,20 +4949,42 @@ object AboutBox: TAboutBox
       IsControl = True
     end
     object ProductName: TLabel
-      Left = 76
-      Top = 112
-      Width = 104
-      Height = 13
+      Left = 100
+      Top = 31
+      Width = 128
+      Height = 22
       Alignment = taCenter
       Caption = #37329#19977#21161#25163#31649#29702#24037#20855
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clRed
+      Font.Height = -16
+      Font.Name = #24494#36719#38597#40657
+      Font.Style = [fsBold]
+      ParentFont = False
       IsControl = True
     end
     object Version: TLabel
-      Left = 43
+      Left = 18
       Top = 136
-      Width = 294
+      Width = 245
       Height = 13
-      Caption = 'Golden Helper Version 1.1 Copyright @ 2015'
+      Caption = 'Copyright @ 2015 Golden Tool Studio'
+      IsControl = True
+    end
+    object lbl1: TLabel
+      Left = 100
+      Top = 63
+      Width = 98
+      Height = 13
+      Caption = 'Golden Manager'
+      IsControl = True
+    end
+    object lbl2: TLabel
+      Left = 100
+      Top = 86
+      Width = 77
+      Height = 13
+      Caption = 'Version 1.1'
       IsControl = True
     end
   end

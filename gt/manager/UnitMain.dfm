@@ -4,7 +4,7 @@ object FormMain: TFormMain
   Width = 454
   Height = 357
   BorderIcons = [biSystemMenu]
-  Caption = #37329#19977#21161#25163#31649#29702#24037#20855' Golden Helper Manager'
+  Caption = #37329#19977#21161#25163#31649#29702#24037#20855' Golden Manager'
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -4802,10 +4802,6 @@ object FormMain: TFormMain
       Visible = False
       OnClick = N7Click
     end
-    object N11: TMenuItem
-      Caption = #25480#26435#20449#24687
-      OnClick = N11Click
-    end
     object IE1: TMenuItem
       Caption = #37197#32622'IE'
     end
@@ -4819,6 +4815,10 @@ object FormMain: TFormMain
     end
     object N10: TMenuItem
       Caption = '-'
+    end
+    object N11: TMenuItem
+      Caption = #25480#26435#20449#24687
+      OnClick = N11Click
     end
     object N1: TMenuItem
       Caption = #20851#20110'...'

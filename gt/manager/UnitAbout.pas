@@ -12,6 +12,8 @@ type
     ProductName: TLabel;
     Version: TLabel;
     OKButton: TButton;
+    lbl1: TLabel;
+    lbl2: TLabel;
   private
     { Private declarations }
   public
