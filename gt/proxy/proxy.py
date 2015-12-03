@@ -3,6 +3,7 @@ Created on 2015-10-12
 
 @author: ZhongPing
 '''
+from datetime import date
  
 __doc__ = """Golden Proxy.
   
@@ -27,6 +28,8 @@ from types import FrameType, CodeType
 from time import sleep
 import ProxyConfig
 import RuleMatch
+import gt.license.auth as auth
+import gt.license.trial as trial
   
 DEFAULT_LOG_FILENAME = "proxy.log"
 RUNNING = True
@@ -324,6 +327,13 @@ def main ():
   
     # setup the log file
     logger = logSetup (logfile, max_log_size, daemon)
+    
+    licdays,licdate = trial.haskey()
+    if licdays == 0 or (licdate - date.today()).days < 0:
+        licdays,licdate = auth.haslic()
+        if licdays == 0 or (licdate - date.today()).days < 0:
+            logger.info('试用授权到期或没有正式授权文件，系统启动失败！')
+            return 0
   
     if daemon:
         pass
