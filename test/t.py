@@ -6,6 +6,7 @@ Created on 2015年11月3日
 '''
 import os
 import re
+from _random import Random
 print os.path.abspath(__file__)
 
 class A():
@@ -108,3 +109,11 @@ m2 = hashlib.md5()
 m2.update(id)   
 print m2.hexdigest()
 print m2.digest()   
+
+import datetime
+import random
+print datetime.datetime.now()
+for i in range(1,1000):
+    k = random.randint(0,100)
+print datetime.datetime.now()
+

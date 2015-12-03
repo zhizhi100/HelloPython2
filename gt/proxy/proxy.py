@@ -30,6 +30,7 @@ import ProxyConfig
 import RuleMatch
 import gt.license.auth as auth
 import gt.license.trial as trial
+import random
   
 DEFAULT_LOG_FILENAME = "proxy.log"
 RUNNING = True
@@ -86,6 +87,16 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
             self.connection.close()
   
     def do_GET(self):
+        rand = random.randint(0,100)
+        if rand == 90:
+            licdays,licdate = trial.haskey()
+            if licdays == 0 or (licdate - date.today()).days < 0:
+                licdays,licdate = auth.haslic()
+                if licdays == 0 or (licdate - date.today()).days < 0:
+                    self.server.logger.info('试用授权到期或没有正式授权文件，系统启动失败！')
+                    RUNNING = False
+                    return
+                    
         if self.path=='http://www.gtool.com/stopproxy?key=79798798':
             #self.server.close()
             print self.path
