@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>申请试用金三助手</title>
+<script src="__PUBLIC__/jquery-1.9.0.min.js"></script>
+</head>
+<body>
+<h1>申请试用金三助手</h1>
+<span>特征码</span>
+<input type="text" id="id" name="id" value="{$value}">
+<button onclick="getkey()">申请</button>
+<p>
+<span>您的试用密钥是：</span>
+<p>
+<span id="key"></span>
+<script type="text/javascript">
+function getkey() {
+	id = $("#id").val();
+	if (id.length == 32) {
+		$.ajax({
+			type : 'POST',
+			url : '__CONTROLLER__/gentrail',
+			data : {
+				id : id
+			},
+			success : function (data) {
+				$("#key").html(data);
+			},
+			error : function () {
+				// view("异常！");
+				alert("异常！");
+			}
+		});
+	} else {
+		alert('特征码输入不正确，请确认！');
+	}
+};
+</script>
+</body>
+</html>
