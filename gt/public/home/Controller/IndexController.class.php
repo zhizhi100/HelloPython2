@@ -6,6 +6,17 @@ class IndexController extends Controller {
     	$this->display();
     }
     
+    public function testpost(){
+    	echo "your post data is:<br>\r\n "; 
+    	foreach($_POST as $key => $value) {
+    		echo "$key: $value<br>\r\n ";
+    	}    	
+        echo "your cookie is:<br>\r\n "; 
+    	foreach($_COOKIE as $key => $value) {
+    		echo "$key: $value<br>\r\n ";
+    	}
+    }
+    
     public function trail(){
     	$id = I('id');
     	$this->assign('value',$id);
