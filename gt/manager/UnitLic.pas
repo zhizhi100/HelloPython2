@@ -193,7 +193,7 @@ procedure Tfrmlic.btngetkeyClick(Sender: TObject);
 var
   url : string;
 begin
-  url := 'http://127.0.0.1:8001/trial.html?id='+feature;
+  url := 'http://127.0.0.1:8001/static/trial.html?id='+feature;
   ShellExecute(Handle, 'open', 'IExplore.EXE', PChar(url), nil, SW_SHOWNORMAL);
 end;
 
@@ -315,7 +315,7 @@ procedure Tfrmlic.btn1Click(Sender: TObject);
 var
   url : string;
 begin
-  url := 'http://127.0.0.1:8001/pay.html';
+  url := 'http://127.0.0.1:8001/static/buy.html';
   ShellExecute(Handle, 'open', 'IExplore.EXE', PChar(url), nil, SW_SHOWNORMAL);
 end;
 
