@@ -1,0 +1,32 @@
+﻿<html>
+<head>
+<title>申请试用金三助手</title>
+<script src="qrcode.js"></script>
+</head>
+<body>
+<center>
+<div style="height:100px;"></div>
+<div id="qrcode"></div>
+<h1>扫一扫申请试用【金三助手】</h1>
+</center>
+<script>
+
+function GetQueryString(name)
+{
+     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+     var r = window.location.search.substr(1).match(reg);
+     if(r!=null)return  unescape(r[2]); return null;
+}
+
+var url = "http://www.78oa.com?act=trial&id=";
+
+var id = GetQueryString("id");
+
+var qrcode = new QRCode(document.getElementById("qrcode"), {
+            width : 256,//设置宽高
+            height : 256
+        });
+qrcode.makeCode(url + id);
+</script>
+</body>
+</html>
