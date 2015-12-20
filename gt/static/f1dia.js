@@ -163,17 +163,129 @@ var nsrlist = function () {
 			cache : false,
 			dataType : 'json',
 			success : function (d) {
-				s = d['status']
-					if (s == '1') {
-						//alert('querymc');
-						var data = {
-							rows : d['data'],
-							total : d['data'].length
-						}
-						jq("#t2").datagrid('loadData', data);
-					} else {
-						alert(d['message'])
+				s = d['status'];
+				if (s == '1') {
+					//alert('querymc');
+					var data = {
+						rows : d['data'],
+						total : d['data'].length
 					}
+					jq("#t2").datagrid('loadData', data);
+				} else {
+					alert(d['message']);
+				}
+			},
+			error : function (XMLHttpRequest, textStatus, errorThrown) {
+				alert('异常');
+			}
+		})
+	};
+	var getinitparam = function (p) {
+		var key = 'queryinitparam';
+		if (!store.enabled) {
+			alert('disabled');
+			return '';
+		}
+		var param = store.get(key);
+		var dt = new Date();
+		var tag = "" + dt.getFullYear() + "" + dt.getMonth() + "" + dt.getDate() + "";
+		if (!param || typeof(param) == "undefined" || param.indexOf(tag) != 0) {
+			store.remove(key);
+			return '';
+		} else {
+			return param.substring(8);
+		}
+	};
+	var getqueryparam = function () {
+		var key = 'queryparam';
+		if (!store.enabled) {
+			alert('disabled');
+			return '';
+		}
+		var param = store.get(key);
+		var dt = new Date();
+		var tag = "" + dt.getFullYear() + "" + dt.getMonth() + "" + dt.getDate() + "";
+		if (!param || typeof(param) == "undefined" || param.indexOf(tag) != 0) {
+			store.remove(key);
+			return '';
+		} else {
+			return param.substring(8);
+		}
+	};
+	var savequery = function (nsrs) {
+		jq.ajax({
+			url : '_gtoolquery_/SaveRemoteQuery', // 跳转到 action
+			data : {
+				nsrs : JSON.stringify(nsrs)
+			},
+			type : 'post',
+			cache : false,
+			dataType : 'json'
+		})
+	};
+
+	var remotelist = function (mc) {
+		jq("#t2").datagrid('loadData', {
+			total : 0,
+			rows : []
+		});
+		if (!mc || mc.length == 0) {
+			alert('请输入纳税人名称关键字！');
+			return;
+		}
+		var param = getqueryparam();
+		var initparam = getinitparam();
+		if (param.length == 0 || initparam.length == 0) {
+			alert('系统参数错误！');
+			return;
+		}
+		var sjymc = initparam;
+		param = JSON.parse(param);
+		var path = param.path;
+		var i = path.indexOf("sword");
+		path = path.substring(0, i - 1);
+		path = path + '/download.sword?ctrl=CX302ZxcxCtrl_exequery&sjymc='
+			 + sjymc + "&limtTime="
+			 + '' + "&gwxhqs="
+			 + param.gnssgwxh + '&n=' + new Date().getTime()
+			 + "&cxlx=" + "1";
+		data = {
+			mc : mc,
+			gwssswjg1 : "24301811600",
+			sqlxh : "10010002",
+			gtool_remotelistnsr : 1
+		};
+		jq.ajax({
+			url : path, // 跳转到 action
+			data : data,
+			type : 'post',
+			cache : false,
+			dataType : 'jsonp',
+			jsonp : "callback",
+			jsonpCallback : 'jQueryGtoolremotelist',
+			success : function (strd) {
+				var d = JSON.parse(strd);
+				if (d.topics) {
+					for (i in d.topics) {
+						d.topics[i].nsrsbh = d.topics[i].NSRSBH;
+						d.topics[i].nsrmc = d.topics[i].NSRMC;
+						d.topics[i].zgswskfjmc = d.topics[i].ZGSWSKFJ_DM;
+						d.topics[i].ssglymc = d.topics[i].SSGLY_DM;
+						d.topics[i].scjydz = d.topics[i].SCJYDZ;
+						d.topics[i].nsrztmc = d.topics[i].NSRZT_DM;
+						d.topics[i].kzztdjlxmc = d.topics[i].KZZTDJLX_DM;
+						d.topics[i].fddbrxm = d.topics[i].FDDBRXM;
+					}
+					var data = {
+						rows : d.topics,
+						total : d.topics.length
+					};
+					jq("#t2").datagrid('loadData', data);
+					savequery(data.rows);
+				}
+				if (d.failmsg && d.failmsg.length > 0) {
+					alert(d.failmsg + "\r\n\r\n为确保后台查询正常工作，请首先在【查询统计（核心征管）-登记】模块下随意点击一个菜单项，然后再执行后台查询。");
+				}
 			},
 			error : function (XMLHttpRequest, textStatus, errorThrown) {
 				alert('异常');
@@ -202,6 +314,19 @@ var nsrlist = function () {
 			//alert(mc)
 			query(mc)
 		},
+		remotelist : function (mc) {
+			//alert(mc)
+			remotelist(mc)
+		},
+		getparam : function () {
+			var p = getqueryparam();
+			//var j = eval('('+p+')');
+			//getinitparam(p);
+			return p;
+		},
+		initparam : function (p) {
+			return getinitparam();
+		},
 		selected : function () {
 			i = getselected();
 			return i
@@ -214,7 +339,8 @@ var keywords = function () {
 	wordsarr = [];
 	var initarr = function () {
 		var words = store.get("gt_keywords");
-		if (words == null || words == undefined ) return;
+		if (words == null || words == undefined)
+			return;
 		wordsarr = words.split("|");
 	};
 	var storearr = function () {
@@ -228,11 +354,12 @@ var keywords = function () {
 		store.set("gt_keywords", s);
 	};
 	var addword = function (word) {
-		if (word == null || word == undefined || word == "") return;
+		if (word == null || word == undefined || word == "")
+			return;
 		l = wordsarr.length;
-		for (i = 0; i < l; i++){
-			if (word == wordsarr[i]){
-				wordsarr.splice(i,1);
+		for (i = 0; i < l; i++) {
+			if (word == wordsarr[i]) {
+				wordsarr.splice(i, 1);
 			}
 		}
 		wordsarr.push(word);
@@ -259,7 +386,7 @@ var keywords = function () {
 		listhtml : function () {
 			var s = "";
 			var arr = latests(5);
-			for (i = arr.length - 1;  i >= 0 ; i--) {
+			for (i = arr.length - 1; i >= 0; i--) {
 				s = s + "<a href='javascript:void(0);' class='keywords'>" + arr[i] + "</a>&nbsp;";
 			}
 			if (s.length == 0)
@@ -271,9 +398,9 @@ var keywords = function () {
 
 var selectnsr = function (nsr) {
 	if (!nsr)
-		return
-		//alert(nsr)
-		var box = this.parent[this.name];
+		return;
+	//alert(nsr)
+	var box = this.parent[this.name];
 	box.options.func(nsr);
 	box.closePopUpBox();
 }
@@ -282,12 +409,9 @@ var query = nsrlist();
 var words = keywords();
 jq(document).ready(function () {
 	latest.init();
+	initquery();
 	jq("#keywords").html(words.listhtml());
-	jq(document).on("click",".keywords",function(){
-		//alert(jq(this).text());
-		jq("#mc").val(jq(this).text());		
-	});
-	jq(".keywords").live("click",function(){
+	jq(document).on("click", ".keywords", function () {
 		//alert(jq(this).text());
 		jq("#mc").val(jq(this).text());
 	});
