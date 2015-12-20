@@ -143,7 +143,7 @@
 				"MatchMode" : "HasKeyword",
 				"MatchContent" : "download.sword?rUUID=",
 				"Type" : "js",
-				"Comment" : ""
+				"Comment" : "may be should delete this rule"
 			}
 		]
 	}
