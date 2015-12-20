@@ -125,6 +125,7 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
         #1 deal with redirect rules, FTP may raise error
         (needredirect,redirectedpath) = self.rulehandler.redirect(self.path,accepttype)
         if needredirect:
+            self.headers['Gtool_url'] = self.path
             self.server.logger.log(logging.WARN,'Reditrected!From['+self.path+'] to ['+redirectedpath +']')
             self.path = redirectedpath
         #finished the redirect
