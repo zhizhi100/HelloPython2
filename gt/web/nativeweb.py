@@ -13,9 +13,10 @@ import logging
 import time
 import signal
 from tornado.options import define, options
-from reposthandler import Repost,Downloader,GetNsrDetail
+from reposthandler import Repost,Downloader,GetNsrDetail,JSONP,NsrlistJsonp
 from jobhandler import Job,ThreadJob,ImoportNsr
-from dbhandler import Querynsr,Querytrace
+from dbhandler import Querynsr,Querytrace,G3info,SaveRemoteQuery
+from remotehandler import RemoteQuery
 
 DEFAULT_LOG_FILENAME = "nativeweb.log"
 
@@ -83,10 +84,7 @@ def startweb():
     #parse_command_line is very important
     tornado.options.parse_command_line()
     #print tornado.options.options.as_dict()
-    path = sys.path[0]
-    if os.path.isfile(path):
-        path = os.path.dirname(path)
-    logfile = path + '/' + DEFAULT_LOG_FILENAME
+    logfile = DEFAULT_LOG_FILENAME
     daemon  = False
     max_log_size = 20
     logger = logSetup (logfile, max_log_size, daemon)
@@ -105,6 +103,11 @@ def startweb():
         (r"/querytrace", Querytrace),
         (r"/download",Downloader),
         (r"/importnsr",ImoportNsr),
+        (r"/rquery",RemoteQuery),
+        (r"/sysinfo",G3info),
+        (r"/SaveRemoteQuery",SaveRemoteQuery),
+        (r"/jsonp",JSONP),
+        (r"/nsrlistjsonp",NsrlistJsonp),
         (r"/nsrinfo",GetNsrDetail)
         ],**settings)
     
