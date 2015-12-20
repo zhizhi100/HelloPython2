@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ExtCtrls, md5, shellapi;
+  Dialogs, StdCtrls, ExtCtrls, md5, shellapi, winsock;
 
 type
   Tfrmlic = class(TForm)
@@ -35,7 +35,56 @@ var
 implementation
 
 {$R *.dfm}
+type
+TIPList=Array of String;
+function SplitString(const source, ch: string): TStringList;
+var
+  temp, t2: string;
+  i: integer;
+begin
+  result := TStringList.Create;
+  temp := source;
+  i := pos(ch, source);
+  while i <> 0 do
+  begin
+    t2 := copy(temp, 0, i - 1);
+    if (t2 <> '') then
+      result.Add(t2);
+    delete(temp, 1, i - 1 + Length(ch));
+    i := pos(ch, temp);
+  end;
+  result.Add(temp);
+end;
 
+function getIP: TIPList;
+type
+  TaPInAddr = array [0..10] of PInAddr;
+  PaPInAddr = ^TaPInAddr;
+const
+  BufferSize=64;
+var
+  phe : PHostEnt;
+  pptr : PaPInAddr;
+  Buffer : PAnsiChar;
+  I : Integer;
+  GInitData : TWSADATA;
+begin
+  WSAStartup($101, GInitData);
+  getMem(Buffer,BufferSize);
+  GetHostName(Buffer, BufferSize);
+  phe :=GetHostByName(buffer);
+  if phe = nil then Exit;
+  pptr := PaPInAddr(Phe^.h_addr_list);
+  I := 0;
+  while pptr^[I] <> nil do begin
+     Inc(I);
+  end;
+  setLength(result,I);
+  for I := low(result) to high(result) do
+    result[i]:=StrPas(inet_ntoa(pptr^[I]^));
+  freeMem(Buffer);
+  WSACleanup;
+end;
 //-----------------------------------------------
 //16进制字符转整数,16进制字符与字符串转换中间函数
 //-----------------------------------------------
@@ -121,8 +170,17 @@ var
   a: TDateTime;
   FSetting: TFormatSettings;
   valid: Boolean;
+  ips : TIPList;
+  ipstr : string;
+  ip : TStringList;
+  i : Integer;
 begin
-
+  ips := getIP();
+  i := low(ips);
+  ipstr := ips[i];
+  ip := SplitString(ipstr,'.');
+  ipstr := IntToHex(StrToInt(ip[0])+255,0)+IntToHex(StrToInt(ip[1])+255,0)+
+      IntToHex(StrToInt(ip[2])+255,0)+IntToHex(StrToInt(ip[3])+255,0);
   asm
         push    eax
         push    ebx

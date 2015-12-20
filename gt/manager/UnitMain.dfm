@@ -4530,15 +4530,15 @@ object FormMain: TFormMain
   TextHeight = 15
   object lbl1: TLabel
     Left = 366
-    Top = 250
-    Width = 52
-    Height = 12
+    Top = 248
+    Width = 48
+    Height = 17
     Cursor = crHandPoint
     Caption = #20351#29992#21327#35758
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlue
     Font.Height = -12
-    Font.Name = #23435#20307
+    Font.Name = #24494#36719#38597#40657
     Font.Style = [fsBold, fsUnderline]
     ParentFont = False
     OnClick = lbl1Click
@@ -4552,7 +4552,7 @@ object FormMain: TFormMain
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -15
-    Font.Name = #23435#20307
+    Font.Name = #24494#36719#38597#40657
     Font.Style = []
     ParentFont = False
     TabOrder = 0
@@ -4560,12 +4560,12 @@ object FormMain: TFormMain
       Left = 16
       Top = 32
       Width = 75
-      Height = 15
+      Height = 20
       Caption = #20195#29702#26381#21153#65306
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -15
-      Font.Name = #23435#20307
+      Font.Name = #24494#36719#38597#40657
       Font.Style = []
       ParentFont = False
     end
@@ -4573,18 +4573,18 @@ object FormMain: TFormMain
       Left = 16
       Top = 64
       Width = 75
-      Height = 15
+      Height = 20
       Caption = #26412#22320#26381#21153#65306
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -15
-      Font.Name = #23435#20307
+      Font.Name = #24494#36719#38597#40657
       Font.Style = []
       ParentFont = False
     end
     object lblproxy: TLabel
       Left = 115
-      Top = 32
+      Top = 37
       Width = 15
       Height = 15
       Caption = #9608
@@ -4597,7 +4597,7 @@ object FormMain: TFormMain
     end
     object lblweb: TLabel
       Left = 115
-      Top = 64
+      Top = 69
       Width = 15
       Height = 15
       Caption = #9608
@@ -4618,7 +4618,7 @@ object FormMain: TFormMain
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -15
-    Font.Name = #23435#20307
+    Font.Name = #24494#36719#38597#40657
     Font.Style = []
     ParentFont = False
     TabOrder = 1
@@ -4656,6 +4656,12 @@ object FormMain: TFormMain
     Width = 307
     Height = 201
     Caption = #26085#24535#20449#24687
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = #24494#36719#38597#40657
+    Font.Style = []
+    ParentFont = False
     TabOrder = 2
     object rbtmp: TRadioButton
       Left = 8
@@ -4667,7 +4673,7 @@ object FormMain: TFormMain
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -12
-      Font.Name = #23435#20307
+      Font.Name = #24494#36719#38597#40657
       Font.Style = []
       ParentFont = False
       TabOrder = 0
@@ -4683,7 +4689,7 @@ object FormMain: TFormMain
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -12
-      Font.Name = #23435#20307
+      Font.Name = #24494#36719#38597#40657
       Font.Style = []
       ParentFont = False
       TabOrder = 1
@@ -4698,7 +4704,7 @@ object FormMain: TFormMain
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -12
-      Font.Name = #23435#20307
+      Font.Name = #24494#36719#38597#40657
       Font.Style = []
       ParentFont = False
       TabOrder = 2
@@ -4712,7 +4718,7 @@ object FormMain: TFormMain
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -12
-      Font.Name = #23435#20307
+      Font.Name = #24494#36719#38597#40657
       Font.Style = []
       ImeName = #20013#25991'('#31616#20307') - '#25628#29399#25340#38899#36755#20837#27861
       ParentFont = False
@@ -4727,6 +4733,12 @@ object FormMain: TFormMain
     Width = 113
     Height = 105
     Caption = #26381#21153#31649#29702
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = #24494#36719#38597#40657
+    Font.Style = []
+    ParentFont = False
     TabOrder = 3
     object btninstall: TButton
       Left = 16
@@ -4753,6 +4765,12 @@ object FormMain: TFormMain
     Width = 113
     Height = 33
     Caption = #20854#20182#36873#39033
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = #24494#36719#38597#40657
+    Font.Style = []
+    ParentFont = False
     TabOrder = 4
     OnClick = btnmoreClick
   end
@@ -4764,10 +4782,10 @@ object FormMain: TFormMain
     Caption = #21516#24847
     Checked = True
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -12
-    Font.Name = #23435#20307
-    Font.Style = []
+    Font.Name = #24494#36719#38597#40657
+    Font.Style = [fsBold, fsUnderline]
     ParentFont = False
     State = cbChecked
     TabOrder = 5
@@ -4803,7 +4821,8 @@ object FormMain: TFormMain
       OnClick = N7Click
     end
     object IE1: TMenuItem
-      Caption = #37197#32622'IE'
+      Caption = #37197#32622'IE'#20195#29702
+      OnClick = IE1Click
     end
     object N8: TMenuItem
       Caption = #27979#35797#26412#22320#26381#21153

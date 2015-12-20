@@ -9,39 +9,39 @@ object frmlic: Tfrmlic
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
   Font.Height = -16
-  Font.Name = #23435#20307
+  Font.Name = #24494#36719#38597#40657
   Font.Style = []
   OldCreateOrder = False
   Position = poScreenCenter
   OnShow = FormShow
   PixelsPerInch = 96
-  TextHeight = 16
+  TextHeight = 21
   object lbl1: TLabel
     Left = 20
     Top = 8
     Width = 48
-    Height = 16
+    Height = 21
     Caption = #29305#24449#30721
   end
   object Label1: TLabel
     Left = 20
-    Top = 69
+    Top = 64
     Width = 64
-    Height = 16
+    Height = 21
     Caption = #35797#29992#23494#38053
   end
   object lbl2: TLabel
     Left = 20
     Top = 126
     Width = 96
-    Height = 16
+    Height = 21
     Caption = #35797#29992#25480#26435#26399#38480
   end
   object edtfeature: TEdit
     Left = 20
     Top = 32
     Width = 381
-    Height = 24
+    Height = 29
     Color = cl3DLight
     ImeName = #20013#25991'('#31616#20307') - '#25628#29399#25340#38899#36755#20837#27861
     ReadOnly = True
@@ -51,7 +51,7 @@ object frmlic: Tfrmlic
     Left = 20
     Top = 88
     Width = 309
-    Height = 24
+    Height = 29
     ImeName = #20013#25991'('#31616#20307') - '#25628#29399#25340#38899#36755#20837#27861
     TabOrder = 1
   end

@@ -2,14 +2,14 @@ object AboutBox: TAboutBox
   Left = 744
   Top = 441
   BorderStyle = bsDialog
-  Caption = 'About'
+  Caption = #20851#20110#37329#19977#21161#25163#31649#29702#24037#20855
   ClientHeight = 213
   ClientWidth = 298
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
   Font.Height = -13
-  Font.Name = #23435#20307
+  Font.Name = #24494#36719#38597#40657
   Font.Style = []
   Icon.Data = {
     000001000400808000000100200028080100460000006060000001002000A894
@@ -4526,7 +4526,7 @@ object AboutBox: TAboutBox
   OldCreateOrder = True
   Position = poScreenCenter
   PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 19
   object Panel1: TPanel
     Left = 8
     Top = 8
@@ -4538,7 +4538,7 @@ object AboutBox: TAboutBox
     TabOrder = 0
     object ProgramIcon: TImage
       Left = 23
-      Top = 35
+      Top = 12
       Width = 65
       Height = 65
       Picture.Data = {
@@ -4950,7 +4950,7 @@ object AboutBox: TAboutBox
     end
     object ProductName: TLabel
       Left = 100
-      Top = 31
+      Top = 12
       Width = 128
       Height = 22
       Alignment = taCenter
@@ -4964,27 +4964,73 @@ object AboutBox: TAboutBox
       IsControl = True
     end
     object Version: TLabel
-      Left = 18
-      Top = 129
-      Width = 245
-      Height = 13
-      Caption = 'Copyright @ 2015 Golden Tool Studio'
+      Left = 88
+      Top = 137
+      Width = 105
+      Height = 17
+      Caption = 'Copyright @ 2015'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = #24494#36719#38597#40657
+      Font.Style = []
+      ParentFont = False
       IsControl = True
     end
     object lbl1: TLabel
       Left = 100
-      Top = 63
-      Width = 98
-      Height = 13
+      Top = 39
+      Width = 99
+      Height = 17
       Caption = 'Golden Manager'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = #24494#36719#38597#40657
+      Font.Style = []
+      ParentFont = False
       IsControl = True
     end
     object lbl2: TLabel
       Left = 100
-      Top = 86
-      Width = 77
-      Height = 13
+      Top = 60
+      Width = 65
+      Height = 17
       Caption = 'Version 1.1'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = #24494#36719#38597#40657
+      Font.Style = []
+      ParentFont = False
+      IsControl = True
+    end
+    object lbl3: TLabel
+      Left = 23
+      Top = 89
+      Width = 210
+      Height = 20
+      Caption = #38271#27801#28070#34913#31185#25216#20449#24687#25216#26415#26377#38480#20844#21496
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = #24494#36719#38597#40657
+      Font.Style = []
+      ParentFont = False
+      IsControl = True
+    end
+    object lbl4: TLabel
+      Left = 23
+      Top = 115
+      Width = 106
+      Height = 17
+      Caption = #30005#35805#65306'4008810731'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = #24494#36719#38597#40657
+      Font.Style = []
+      ParentFont = False
       IsControl = True
     end
   end
@@ -4993,7 +5039,7 @@ object AboutBox: TAboutBox
     Top = 180
     Width = 75
     Height = 25
-    Caption = 'OK'
+    Caption = #30830#23450'(&O)'
     Default = True
     ModalResult = 1
     TabOrder = 1

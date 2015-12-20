@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Buttons, Menus, UnitAbout, IniFiles, UnitTool, 
-  ExtCtrls, shellapi, DateUtils, UnitLic;
+  ExtCtrls, shellapi, DateUtils, UnitLic, Registry;
 
 type
   TFormMain = class(TForm)
@@ -63,6 +63,7 @@ type
     procedure N11Click(Sender: TObject);
     procedure rbtmpMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure IE1Click(Sender: TObject);
   private
     { Private declarations }
     proxyserv : string;
@@ -280,6 +281,8 @@ var
   a,b:Boolean;
   p,fa,fb : string;
 begin
+  if MessageDlg('金三助手将安装必需的系统服务，360安全卫士等杀毒软件可能会阻止。'+#13+#13+
+    '请在杀毒软件中允许服务安装，或暂时关闭杀毒软件。'+#13+#13+'是否继续安装服务？',mtconfirmation,[mbYes,mbNo],0)=mrNo then Exit;
   p := ExtractFileDir(Application.Exename);
   fa := p + '/' + proxyserv + '.exe';
   fb := p + '/' + webserv + '.exe';
@@ -469,6 +472,28 @@ begin
   log := readlog(f);
   mmolog.Lines.Clear;
   mmolog.Lines.Add(log);
+end;
+
+procedure TFormMain.IE1Click(Sender: TObject);
+var
+  path : string;
+  ARegistry : TRegistry;
+begin
+  if MessageDlg('金三助手将修改注册表，360安全卫士等杀毒软件可能会阻止。'+#13+#13+
+    '请在杀毒软件中允许服务安装，或暂时关闭杀毒软件。'+#13+#13+'是否继续安装服务？',mtconfirmation,[mbYes,mbNo],0)=mrNo then Exit;
+  path := 'file://'+ExtractFilePath(Application.Exename)+'static/gtproxy.pac';
+  ARegistry := TRegistry.Create; //建立一个TRegistry实例
+  with ARegistry do
+  begin
+    RootKey := HKEY_CURRENT_USER;
+    if OpenKey('Software\Microsoft\Windows\CurrentVersion\Internet Settings', True) then
+    begin
+      WriteString('AutoConfigURL', path);
+      ShowMessage('IE代理配置完成，请在本地代理服务测试功能中检验代理及服务是否正常工作！');
+    end;
+    CloseKey;
+    Destroy;
+  end;
 end;
 
 end.

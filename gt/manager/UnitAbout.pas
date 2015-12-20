@@ -14,6 +14,8 @@ type
     OKButton: TButton;
     lbl1: TLabel;
     lbl2: TLabel;
+    lbl3: TLabel;
+    lbl4: TLabel;
   private
     { Private declarations }
   public
