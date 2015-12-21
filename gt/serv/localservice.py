@@ -9,10 +9,15 @@ import win32service
 import win32event
 import thread
 
-class ProxyService(win32serviceutil.ServiceFramework):
+def log(message):
+        logger = file("e:\log.txt","a")
+        logger.write(message+"\r\n")
+        logger.close()
+
+class LocalService(win32serviceutil.ServiceFramework):
         #这两行必须
-        _svc_name_ = "Golden Tool Proxy Server"
-        _svc_display_name_ = "金三助手代理服务"
+        _svc_name_ = "Golden Tool Local Server"
+        _svc_display_name_ = "金三助手本地服务"
         
         def __init__(self, args):
                 win32serviceutil.ServiceFramework.__init__(self, args)
@@ -23,6 +28,6 @@ class ProxyService(win32serviceutil.ServiceFramework):
                 win32event.SetEvent(self.hWaitStop)
                 
         def SvcDoRun(self):
-                import gt.proxy.proxy
-                thread.start_new(gt.proxy.proxy.main, ())
+                import gt.web.nativeweb 
+                thread.start_new(gt.web.nativeweb.startweb, ())
                 win32event.WaitForSingleObject(self.hWaitStop, win32event.INFINITE)
