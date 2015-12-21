@@ -8,7 +8,8 @@ Created on 2015年12月3日
 import sys,os
 import wmi
 import hashlib 
-from datetime import *  
+from datetime import date
+import datetime   
 
 m2 = hashlib.md5() 
 
