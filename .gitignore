@@ -19,3 +19,6 @@ tmp.txt
 /gt/serv/build
 /gt/serv/dist
 /.settings
+/test/serv/baseweb/build
+/test/serv/baseweb/dist
+/test/serv/baseweb/tmp
