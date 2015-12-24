@@ -410,7 +410,7 @@ procedure TFormMain.N8Click(Sender: TObject);
 var
   url : string;
 begin
-  url := 'http://127.0.0.1:8001/LocalServer.html';
+  url := 'http://127.0.0.1:8001/static/LocalServer.html';
   ShellExecute(Handle, 'open', 'IExplore.EXE', PChar(url), nil, SW_SHOWNORMAL);
 end;
 
@@ -418,7 +418,7 @@ procedure TFormMain.N9Click(Sender: TObject);
 var
   url : string;
 begin
-  url := 'http://www.google.com/GoldenToolProxy.html';
+  url := 'http://www.google.com/_gtool_/GoldenToolProxy.html';
   ShellExecute(Handle, 'open', 'IExplore.EXE', PChar(url), nil, SW_SHOWNORMAL);
 end;
 

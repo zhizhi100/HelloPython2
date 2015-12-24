@@ -50,7 +50,7 @@
 		"Type" : ["*"],
 		"Rules" : [{
 				"Action" : "RegexChange",
-				"Content" : "^http.*?_gtool_|http://localhost:80/static",
+				"Content" : "^http.*?_gtool_|http://localhost:8001/static",
 				"MatchMode" : "Regex",
 				"MatchContent" : "^http.*?_gtool_.*",
 				"Type" : "js",
@@ -71,42 +71,42 @@
 				"Comment" : "redirect to local static pages"
 			},{
 				"Action" : "Change",
-				"Content" : "http://localhost:80/static/hello.html",
+				"Content" : "http://localhost:8001/static/hello.html",
 				"MatchMode" : "StartWith",
 				"MatchContent" : "http://localhost/testpage",
 				"Type" : "js",
 				"Comment" : ""
 			}, {
 				"Action" : "Change",
-				"Content" : "http://localhost:80/static/gtool_welcome.js",
+				"Content" : "http://localhost:8001/static/gtool_welcome.js",
 				"MatchMode" : "HasKeyword",
 				"MatchContent" : "gtool_welcome",
 				"Type" : "js",
 				"Comment" : ""
 			}, {
 				"Action" : "Change",
-				"Content" : "http://localhost:80/static/store.js",
+				"Content" : "http://localhost:8001/static/store.js",
 				"MatchMode" : "HasKeyword",
 				"MatchContent" : "gtool_store.js",
 				"Type" : "js",
 				"Comment" : ""
 			}, {
 				"Action" : "Change",
-				"Content" : "http://localhost:80/static/gtool_test.js",
+				"Content" : "http://localhost:8001/static/gtool_test.js",
 				"MatchMode" : "HasKeyword",
 				"MatchContent" : "gtool_test.js",
 				"Type" : "js",
 				"Comment" : ""
 			}, {
 				"Action" : "Change",
-				"Content" : "http://localhost:80/static/jquery-1.9.0.min.js",
+				"Content" : "http://localhost:8001/static/jquery-1.9.0.min.js",
 				"MatchMode" : "HasKeyword",
 				"MatchContent" : "jquery-1.9.0.min.js",
 				"Type" : "js",
 				"Comment" : ""
 			}, {
 				"Action" : "Change",
-				"Content" : "http://localhost:80/static/gtool_f1.js",
+				"Content" : "http://localhost:8001/static/gtool_f1.js",
 				"MatchMode" : "HasKeyword",
 				"MatchContent" : "gtool_f1.js",
 				"Type" : "js",
