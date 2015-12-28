@@ -96,7 +96,7 @@ class IndexController extends Controller {
     }
     
     public function showtrials(){
-    	$this->show("test");
+    	$this->show("test for list the apply ips");
     }
 
 }
