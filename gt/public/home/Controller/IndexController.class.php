@@ -94,5 +94,9 @@ class IndexController extends Controller {
     	}
     	$this->show("数据库初始化完成！");
     }
+    
+    public function showtrials(){
+    	$this->show("test");
+    }
 
 }
