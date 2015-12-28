@@ -103,9 +103,9 @@ begin
   if FileExists(f) then
   begin
     try
-      iFileHandle := FileOpen(f, fmOpenRead);
+      iFileHandle := FileOpen(f, fmShareDenyNone);
       i := FileSeek(iFileHandle, (0- size), 2);
-      Buffer := PChar(AllocMem(size));
+      Buffer := PChar(AllocMem(size + 1));
       i := FileRead(iFileHandle, Buffer^, size);
       FileClose(iFileHandle);
       Result := strPas(Buffer);
