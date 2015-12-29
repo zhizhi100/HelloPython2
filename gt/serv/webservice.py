@@ -17,7 +17,7 @@ def log(message):
 class WebService(win32serviceutil.ServiceFramework):
         #这两行必须
         _svc_name_ = "Golden Tool Local Server"
-        _svc_display_name_ = "Golden Tool 本地服务"
+        _svc_display_name_ = "金三助手本地服务"
         
         def __init__(self, args):
                 win32serviceutil.ServiceFramework.__init__(self, args)

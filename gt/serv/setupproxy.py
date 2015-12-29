@@ -14,6 +14,7 @@ options = {"py2exe":
                 "bundle_files": 1 
             }
           }     
+
 setup(service=["proxyservice"],
       options = options,  
       zipfile=None,   

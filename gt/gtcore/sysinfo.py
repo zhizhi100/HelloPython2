@@ -6,6 +6,8 @@ Created on 2015年12月8日
 '''
 import base64
 import gt.util.gtdao as mydao
+import sys,os
+import env
 
 class Sysinfo(object):
     
@@ -14,8 +16,9 @@ class Sysinfo(object):
     setsql = 'update g3server set value=? where param=?'
     
     def __init__(self):
-        
-        self.dao = mydao.Dao(path="HTTPD.dll",initsqls='')
+        myenv = env.Gtenv("")
+        dir = myenv.getpath()    
+        self.dao = mydao.Dao(path=dir + "/" + "HTTPD.dll",initsqls='')
         
     def set(self,key,val):
         succ,msg = self.dao.save(self.setsql, [val,key])

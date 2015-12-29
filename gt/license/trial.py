@@ -32,9 +32,9 @@ def getid():
 
 def haskey():
     has = 0
-    path = sys.path[0]
-    if os.path.isfile(path):
-        path = os.path.dirname(path)
+    from gt.gtcore.env import Gtenv
+    myenv = Gtenv("")
+    path = myenv.getpath()
     f = path + '/key.triallic'
     if os.path.exists(f):
         file_object = open(f)

@@ -22,3 +22,5 @@ tmp.txt
 /test/serv/baseweb/build
 /test/serv/baseweb/dist
 /test/serv/baseweb/tmp
+/.settings/org.eclipse.core.resources.prefs
+/gt/static/gtproxy.pac

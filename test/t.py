@@ -117,3 +117,9 @@ for i in range(1,1000):
     k = random.randint(0,100)
 print datetime.datetime.now()
 
+import ConfigParser
+cf = ConfigParser.ConfigParser()
+path = '.'
+cf.read(path + "/service.ini")
+logfile = cf.get("log","local")
+print logfile

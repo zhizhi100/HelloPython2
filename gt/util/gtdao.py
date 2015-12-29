@@ -16,7 +16,7 @@ class Dao(object):
         self.name = name  
         self.path = path #数据库连接参数  
         db_path = self.path[:self.path.rfind(os.sep)]  
-        if os.path.exists(db_path):  
+        if not os.path.exists(db_path):  
             os.makedirs(db_path)
         if not os.path.isfile(path):
             for i in initsqls:

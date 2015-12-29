@@ -194,9 +194,13 @@ class RuleMatch():
         return (False,path)
     
     def realtimeloadcfg(self):
-        #return 
+        return 
         import ProxyConfig
-        cfgfile = 'config.json'
+        from gt.gtcore.env import Gtenv
+        myenv = Gtenv("")
+        path = myenv.getpath()
+        print path
+        cfgfile = path + '/config.json'
         cfgcls = ProxyConfig.config(cfgfile)
         (rdtrules,mdfrules,repostrules) = cfgcls.read()
         self.mdfrules = mdfrules['Rules']

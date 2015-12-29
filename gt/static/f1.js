@@ -196,8 +196,14 @@ var gthelp = function () {
 	}
 	//alert('hello,world!')
 	var submitBtn = pc.create('SwordSubmit');
+	var s = ""
+	if (env.istrial == 0){
+		s = ""
+	}else{
+		s = "试用日期："+env.licdate
+	}
 	var t = swordAlertIframe("_gtool_/f1.html?v=" + new Date().getTime() + '', {
-			titleName : '查询纳税人       powered by 金三助手 v1.2.1',
+			titleName : '查询纳税人       powered by 金三助手 v'+env.version+s,
 			width : 970,
 			height : 460,
 			param : window,
@@ -210,6 +216,7 @@ var gthelp = function () {
 }
 
 var intid;
+var env;
 var findtimes = 0;
 var isNative = function (method) { //判定是否为原生方法
 	return !!method && (/\{\s*\[native code\]\s*\}/.test(method + "")); //这里是为了兼容opera9.x的
@@ -421,6 +428,16 @@ var initf1 = function () {
 	});
 }
 
+
+
 jq(document).ready(function () {
-	intid = self.setInterval("initf1()", 500)
+	intid = self.setInterval("initf1()", 500);
+	jq.ajax({
+		url: '_gtool_/license.js?v=2'+ new Date().getTime() + '',
+		dataType : "json",
+		type: "GET",
+		success:function(data){
+			env = data;
+		}
+	});
 });

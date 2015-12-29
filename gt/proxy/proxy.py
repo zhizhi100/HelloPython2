@@ -32,18 +32,50 @@ import RuleMatch
 import gt.license.auth as auth
 import gt.license.trial as trial
 import random
+from gt.gtcore.env import Gtenv,gtdir
+import ConfigParser
   
 DEFAULT_LOG_FILENAME = "proxy.log"
-RUNNING = True
-  
+
 class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
     __base = BaseHTTPServer.BaseHTTPRequestHandler
     __base_handle = __base.handle
   
     server_version = "GoldenProxy/" + __version__
     rbufsize = 0                        # self.rfile Be unbuffered
+    
+    def _getwebtime(self,url):
+        import urllib2
+        from datetime import datetime
+        send_header = {"If-Modified-Since":"q" }
+        req = urllib2.Request(url,headers=send_header)
+        r = urllib2.urlopen(req)
+        receive_header = r.info()
+        nowdate = datetime.strptime(receive_header["Date"], "%a, %d %b %Y %X %Z")
+        da = nowdate.strftime('%Y%m%d')
+        now = datetime.now()
+        db = now.strftime('%Y%m%d')
+        return da == db
   
     def handle(self):
+        myenv = Gtenv("")
+        if myenv.istrial:            
+            rand = random.randint(0,100)
+            if rand == 90:
+                licdays,licdate = trial.haskey()
+                if licdays == 0 or (licdate - date.today()).days < 0:
+                    self.server.logger.warning('试用授权到期或没有正式授权文件，系统启动失败！')
+                    myenv.running = False
+                    return
+        else:
+            rand = random.randint(0,1000)
+            if rand == 90:
+                licdays,licdate = auth.haslic()
+                if licdays == 0 or (licdate - date.today()).days < 0:
+                    self.server.logger.warning('试用授权到期或没有正式授权文件，系统启动失败！')
+                    myenv.running = False
+                    return
+
         (ip, port) =  self.client_address
         self.server.logger.log (logging.INFO, "Request from '%s'", ip)
         if hasattr(self, 'allowed_clients') and ip not in self.allowed_clients:
@@ -88,23 +120,22 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
             self.connection.close()
   
     def do_GET(self):
-        rand = random.randint(0,100)
-        if rand == 90:
-            licdays,licdate = trial.haskey()
-            if licdays == 0 or (licdate - date.today()).days < 0:
-                licdays,licdate = auth.haslic()
-                if licdays == 0 or (licdate - date.today()).days < 0:
-                    self.server.logger.info('试用授权到期或没有正式授权文件，系统启动失败！')
-                    RUNNING = False
+        rand = random.randint(0,1000)
+        myenv = Gtenv("")
+        if rand == 90 or not myenv.checked:
+            if self.path != 'http://www.google.com/_gtool_/GoldenToolProxy.html':
+                if not self._getwebtime(self.path):
+                    self.server.logger.warning('本地时间与系统时间冲突，系统启动失败！')
+                    myenv.running = False
                     return
+                myenv.checked = True
                     
         if self.path=='http://www.gtool.com/stopproxy?key=79798798':
             #self.server.close()
             print self.path
             self.server.logger.info('your proxy server to be closed soon')
             self.wfile.write('your proxy server to be closed soon')
-            global RUNNING
-            RUNNING = False
+            myenv.running = False
             self.server.close_connection = True
             #self.server.shutdown()
             #self.server.stop()
@@ -265,7 +296,7 @@ class ThreadingHTTPServer (SocketServer.ThreadingMixIn,
   
 def logSetup (filename, log_size, daemon):
     logger = logging.getLogger ("Golden Proxy")
-    logger.setLevel (logging.INFO)
+    logger.setLevel (logging.WARN)
 
     if not filename:
         if not daemon:
@@ -286,11 +317,11 @@ def logSetup (filename, log_size, daemon):
     handler.setFormatter (fmt)
     
     console = logging.StreamHandler()
-    console.setLevel(logging.DEBUG)
+    console.setLevel(logging.WARN)
     console.setFormatter (fmt)
     logger.addHandler(console)
   
-    handler.setLevel(logging.WARNING)
+    handler.setLevel(logging.WARN)
     logger.addHandler (handler)
     return logger
   
@@ -314,15 +345,29 @@ def handler (signo, frame):
 def main ():
     path = sys.path[0]
     if os.path.isfile(path):
-        path = os.path.dirname(path)    
+        path = os.path.dirname(path)
+    #path = "F:\\release"
+    gtdir = path
+    myenv = Gtenv(path) 
+    path = myenv.getpath() 
     cfgfile = path + '/config.json'
-    logfile = path + '/proxy.log'
+    logfile = ""
+    try:
+        cf = ConfigParser.ConfigParser()
+        cf.read(path + "/service.ini")
+        logfile = path + "/" + cf.get("log","proxy")
+    except Exception as e:
+        pass    
+    if logfile == '':
+        logfile = path + '/proxy.log'
     daemon  = False
     max_log_size = 20
     port = 8000
     allowed = []
     run_event = threading.Event ()
     local_hostname = socket.gethostname ()
+    
+    '''
   
     try: opts, args = getopt.getopt (sys.argv[1:], "l:dhp:", [])
     except getopt.GetoptError, e:
@@ -337,6 +382,8 @@ def main ():
         if opt == "-h":
             usage ()
             return 0
+            
+    '''
   
     # setup the log file
     logger = logSetup (logfile, max_log_size, daemon)
@@ -345,14 +392,21 @@ def main ():
     if licdays == 0 or (licdate - date.today()).days < 0:
         licdays,licdate = auth.haslic()
         if licdays == 0 or (licdate - date.today()).days < 0:
-            logger.info('试用授权到期或没有正式授权文件，系统启动失败！')
+            logger.warning('试用授权到期或没有正式授权文件，系统启动失败！')
             return 0
-  
+        else:
+            myenv.istrial = False
+            myenv.licdate = licdate
+    else:
+        myenv.istrial = True
+        myenv.licdate = licdate
     if daemon:
         pass
         #daemonize (logger)
-    signal.signal (signal.SIGINT, handler)
+    #signal.signal (signal.SIGINT, handler) #必须屏蔽
+    #logger.info("b..........")
   
+    '''
     if args:
         allowed = []
         for name in args:
@@ -362,6 +416,7 @@ def main ():
         ProxyHandler.allowed_clients = allowed
     else:
         logger.log (logging.WARNING, "Any clients will be served...")
+    '''
         
     cfgcls = ProxyConfig.config(cfgfile)
     cfg = {}
@@ -378,7 +433,9 @@ def main ():
     sa = httpd.socket.getsockname ()
     logger.warning("Servering HTTP Proxy on %s port %s", sa[0], sa[1])
     req_count = 0
-    while (not run_event.isSet ()) and RUNNING:
+    myenv.running = True
+    myenv.checked = False
+    while myenv.running and not run_event.isSet ():
         try:
             httpd.handle_request ()
             req_count += 1
@@ -386,10 +443,10 @@ def main ():
                 logger.log (logging.INFO, "Number of active threads: %s",
                             threading.activeCount ())
                 req_count = 0
-            if not RUNNING:
+            if not myenv.running:
                 httpd.__is_shut_down = True
         except select.error, e:
-            if e[0] == 4 and run_event.isSet (): pass
+            if e[0] == 4: pass
             else:
                 logger.log (logging.CRITICAL, "Errno: %d - %s", e[0], e[1])
     logger.log (logging.WARNING, "Server shutdown")
