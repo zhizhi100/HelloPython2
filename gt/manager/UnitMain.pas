@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Buttons, Menus, UnitAbout, IniFiles, UnitTool, 
-  ExtCtrls, shellapi, DateUtils, UnitLic, Registry;
+  Dialogs, StdCtrls, Buttons, Menus, UnitAbout, IniFiles, UnitTool, ExtCtrls,
+  shellapi, DateUtils, UnitLic, Registry, UnitAuto, UnitCore;
 
 type
   TFormMain = class(TForm)
@@ -44,6 +44,10 @@ type
     N10: TMenuItem;
     IE1: TMenuItem;
     N11: TMenuItem;
+    btn1: TBitBtn;
+    grp1: TGroupBox;
+    lblkey: TLabel;
+    lbl3: TLabel;
     procedure btnmoreClick(Sender: TObject);
     procedure N1Click(Sender: TObject);
     procedure N2Click(Sender: TObject);
@@ -58,27 +62,29 @@ type
     procedure lbl1Click(Sender: TObject);
     procedure N8Click(Sender: TObject);
     procedure N9Click(Sender: TObject);
-    procedure chkagreeMouseUp(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
+    procedure chkagreeMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure N11Click(Sender: TObject);
-    procedure rbtmpMouseUp(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
+    procedure rbtmpMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure IE1Click(Sender: TObject);
+    procedure btn1Click(Sender: TObject);
+    procedure lbl3Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   private
     { Private declarations }
-    proxyserv : string;
-    webserv : string;
-    proxylog : string;
-    weblog : string;
-    tmplog : string;
-    registed : Boolean;
+    proxyserv: string;
+    webserv: string;
+    proxylog: string;
+    weblog: string;
+    tmplog: string;
+    registed: Boolean;
+    inited: Boolean;
     procedure readini();
     procedure showregisted();
     procedure showunregisted();
     procedure showrunning();
     procedure showstopped();
-    function queryservice(serv : string):Boolean;
-    function isregisted():Boolean;
+    function queryservice(serv: string): Boolean;
+    function isregisted(): Boolean;
     procedure querystate();
     procedure queryinstalnation();
   public
@@ -91,11 +97,11 @@ var
 implementation
 
 {$R *.dfm}
-function readlog(f:string):string;
+function readlog(f: string): string;
 var
   iFileHandle: Integer;
   Buffer: PChar;
-  i : Integer;
+  i: Integer;
   size: Integer;
 begin
   size := 4096;
@@ -104,7 +110,7 @@ begin
   begin
     try
       iFileHandle := FileOpen(f, fmShareDenyNone);
-      i := FileSeek(iFileHandle, (0- size), 2);
+      i := FileSeek(iFileHandle, (0 - size), 2);
       Buffer := PChar(AllocMem(size + 1));
       i := FileRead(iFileHandle, Buffer^, size);
       FileClose(iFileHandle);
@@ -117,7 +123,7 @@ end;
 
 procedure TFormMain.queryinstalnation();
 var
-  a,b:Boolean;
+  a, b: Boolean;
 begin
   a := isinstalled(proxyserv);
   b := isinstalled(webserv);
@@ -151,9 +157,9 @@ begin
   end;
 end;
 
-function TFormMain.isregisted():Boolean;
+function TFormMain.isregisted(): Boolean;
 var
-  a,b:Boolean;
+  a, b: Boolean;
 begin
   a := isinstalled(proxyserv);
   b := isinstalled(webserv);
@@ -161,23 +167,23 @@ begin
   Result := a and b;
 end;
 
-function TFormMain.queryservice(serv : string):Boolean;
+function TFormMain.queryservice(serv: string): Boolean;
 begin
   Result := False;
 end;
 
 procedure TFormMain.readini;
 var
-  iniFile:TiniFile;
-  p : string;
+  iniFile: TiniFile;
+  p: string;
 begin
-  p := ExtractFileDir(Application.Exename)+'\service.ini';
+  p := ExtractFileDir(Application.Exename) + '\service.ini';
   iniFile := TiniFile.Create(p);
-  proxyserv := iniFile.ReadString('service','proxy','proxy');
-  webserv := iniFile.ReadString('service','local','local');
-  proxylog := iniFile.ReadString('log','proxy','proxy');
-  weblog := iniFile.ReadString('log','local','local');
-  tmplog := iniFile.ReadString('log','tmp','tmp');
+  proxyserv := iniFile.ReadString('service', 'proxy', 'proxy');
+  webserv := iniFile.ReadString('service', 'local', 'local');
+  proxylog := iniFile.ReadString('log', 'proxy', 'proxy');
+  weblog := iniFile.ReadString('log', 'local', 'local');
+  tmplog := iniFile.ReadString('log', 'tmp', 'tmp');
   inifile.free();
 end;
 
@@ -217,11 +223,11 @@ end;
 
 procedure TFormMain.btnmoreClick(Sender: TObject);
 var
-  x,y:Integer;
+  x, y: Integer;
 begin
-  x := btnmore.left+formmain.Left - 60;
-  y := btnmore.top+formmain.Top - 70;
-  pm1.Popup(x,y);
+  x := btnmore.left + formmain.Left - 60;
+  y := btnmore.top + formmain.Top - 70;
+  pm1.Popup(x, y);
 end;
 
 procedure TFormMain.N1Click(Sender: TObject);
@@ -241,34 +247,22 @@ end;
 
 procedure TFormMain.FormShow(Sender: TObject);
 var
-  msg : string;
-  installed : Boolean;
+  msg: string;
+  installed: Boolean;
   p: string;
   f: string;
-  log: string;  
+  log: string;
 begin
   msg := 'Hello!';
   //ShowMessage(msg);
   //frmtest.Show;
   readini();
-  installed := isregisted();
-  if installed then
-  begin
-    //ShowMessage('registed!');
-    showregisted();
-    querystate();
-    tmr1.Enabled := True;
-  end
-  else
-  begin
-    ShowMessage('服务尚未注册，请点击【注册服务】按钮以确保Golden Tool正常工作！');
-    showunregisted();
-  end;
+
   p := ExtractFileDir(Application.Exename);
   f := p + '\' + tmplog;
-    log := readlog(f);
-    mmolog.Lines.Clear;
-    mmolog.Lines.Add(log);
+  log := readlog(f);
+  mmolog.Lines.Clear;
+  mmolog.Lines.Add(log);
 end;
 
 procedure TFormMain.N7Click(Sender: TObject);
@@ -278,16 +272,16 @@ end;
 
 procedure TFormMain.btninstallClick(Sender: TObject);
 var
-  a,b:Boolean;
-  p,fa,fb : string;
+  a, b: Boolean;
+  p, fa, fb: string;
 begin
-  if MessageDlg('金三助手将安装必需的系统服务，360安全卫士等杀毒软件可能会阻止。'+#13+#13+
-    '请在杀毒软件中允许服务安装，或暂时关闭杀毒软件。'+#13+#13+'是否继续安装服务？',mtconfirmation,[mbYes,mbNo],0)=mrNo then Exit;
+  if MessageDlg('金三助手将安装必需的系统服务，360安全卫士等杀毒软件可能会阻止。' + #13 + #13 + '请在杀毒软件中允许服务安装，或暂时关闭杀毒软件。' + #13 + #13 + '是否继续安装服务？', mtconfirmation, [mbYes, mbNo], 0) = mrNo then
+    Exit;
   p := ExtractFileDir(Application.Exename);
   fa := p + '/' + proxyserv + '.exe';
   fb := p + '/' + webserv + '.exe';
-  a := installserv(proxyserv,fa);
-  b := installserv(webserv,fb);
+  a := installserv(proxyserv, fa);
+  b := installserv(webserv, fb);
   if a and b then
   begin
     ShowMessage('服务注册成功，请点击【启动】按钮启动服务！');
@@ -305,10 +299,10 @@ begin
   queryinstalnation();
 end;
 
-function needreload(f:string):Boolean;
+function needreload(f: string): Boolean;
 var
-  age : TDateTime;
-  i : Int64;
+  age: TDateTime;
+  i: Int64;
 begin
   Result := True;
   if FileExists(f) then
@@ -350,10 +344,10 @@ end;
 
 procedure TFormMain.btnremoveClick(Sender: TObject);
 var
-  a,b:Boolean;
-  i : Integer;
+  a, b: Boolean;
+  i: Integer;
 begin
-  i := Application.MessageBox('卸载服务后 Golden Tool 将无法正常工作，是否确定需要卸载服务？','询问',MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON2);
+  i := Application.MessageBox('卸载服务后 金三助手 将无法正常工作，是否确定需要卸载服务？', '询问', MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON2);
   if (i = IDYES) then
   begin
     a := uninstallserv(proxyserv);
@@ -377,7 +371,7 @@ end;
 
 procedure TFormMain.btnstrartClick(Sender: TObject);
 var
-  a,b:Boolean;
+  a, b: Boolean;
 begin
   a := startserv(proxyserv);
   b := startserv(webserv);
@@ -386,10 +380,10 @@ end;
 
 procedure TFormMain.btnstopClick(Sender: TObject);
 var
-  a,b:Boolean;
-  i : Integer;
+  a, b: Boolean;
+  i: Integer;
 begin
-  i := Application.MessageBox('停止服务后 Golden Tool 将无法正常工作，是否确定需要停止服务？','询问',MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON2);
+  i := Application.MessageBox('停止服务后 金三助手 将无法正常工作，是否确定需要停止服务？', '询问', MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON2);
   if (i = IDYES) then
   begin
     a := stopserv(proxyserv);
@@ -400,7 +394,7 @@ end;
 
 procedure TFormMain.lbl1Click(Sender: TObject);
 var
-  f : string;
+  f: string;
 begin
   f := ExtractFileDir(Application.Exename) + '/' + 'readme.txt';
   ShellExecute(Handle, 'Open', PChar('notepad.exe'), PChar(f), nil, SW_SHOWNORMAL);
@@ -408,7 +402,7 @@ end;
 
 procedure TFormMain.N8Click(Sender: TObject);
 var
-  url : string;
+  url: string;
 begin
   url := 'http://127.0.0.1:8001/static/LocalServer.html';
   ShellExecute(Handle, 'open', 'IExplore.EXE', PChar(url), nil, SW_SHOWNORMAL);
@@ -416,22 +410,21 @@ end;
 
 procedure TFormMain.N9Click(Sender: TObject);
 var
-  url : string;
+  url: string;
 begin
   url := 'http://www.google.com/_gtool_/GoldenToolProxy.html';
   ShellExecute(Handle, 'open', 'IExplore.EXE', PChar(url), nil, SW_SHOWNORMAL);
 end;
 
-procedure TFormMain.chkagreeMouseUp(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Integer);
+procedure TFormMain.chkagreeMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
-  i : Integer;
-  a,b,installed :Boolean;
+  i: Integer;
+  a, b, installed: Boolean;
 begin
   if not chkagree.Checked then
   begin
-    i := Application.MessageBox('不同意用户使用协议，系统将自动停止服务。是否同意用户协议并继续使用系统服务？','询问',MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1);
-    if i =  IDYES then
+    i := Application.MessageBox('不同意用户使用协议，系统将自动停止服务。是否同意用户协议并继续使用系统服务？', '询问', MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON1);
+    if i = IDYES then
     begin
       chkagree.Checked := True;
     end
@@ -452,10 +445,10 @@ end;
 procedure TFormMain.N11Click(Sender: TObject);
 begin
   frmlic.ShowModal;
+  lblkey.Caption := checkKey();
 end;
 
-procedure TFormMain.rbtmpMouseUp(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Integer);
+procedure TFormMain.rbtmpMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
   p: string;
   f: string;
@@ -476,12 +469,12 @@ end;
 
 procedure TFormMain.IE1Click(Sender: TObject);
 var
-  path : string;
-  ARegistry : TRegistry;
+  path: string;
+  ARegistry: TRegistry;
 begin
-  if MessageDlg('金三助手将修改注册表，360安全卫士等杀毒软件可能会阻止。'+#13+#13+
-    '请在杀毒软件中允许服务安装，或暂时关闭杀毒软件。'+#13+#13+'是否继续安装服务？',mtconfirmation,[mbYes,mbNo],0)=mrNo then Exit;
-  path := 'file://'+ExtractFilePath(Application.Exename)+'static/gtproxy.pac';
+  if MessageDlg('金三助手将修改注册表，360安全卫士等杀毒软件可能会阻止。' + #13 + #13 + '请在杀毒软件中允许服务安装，或暂时关闭杀毒软件。' + #13 + #13 + '是否继续安装服务？', mtconfirmation, [mbYes, mbNo], 0) = mrNo then
+    Exit;
+  path := 'file://' + ExtractFilePath(Application.Exename) + 'static/gtproxy.pac';
   ARegistry := TRegistry.Create; //建立一个TRegistry实例
   with ARegistry do
   begin
@@ -496,4 +489,42 @@ begin
   end;
 end;
 
+procedure TFormMain.btn1Click(Sender: TObject);
+begin
+  frminstall.ShowModal();
+  queryinstalnation();
+  querystate();
+end;
+
+procedure TFormMain.lbl3Click(Sender: TObject);
+begin
+  frmlic.ShowModal;
+  lblkey.Caption := checkKey();
+end;
+
+procedure TFormMain.FormActivate(Sender: TObject);
+var
+  installed: Boolean;
+begin
+  if not inited then
+  begin
+    lblkey.Caption := checkKey();
+    installed := isregisted();
+    if installed then
+    begin
+      //ShowMessage('registed!');
+      showregisted();
+      querystate();
+      tmr1.Enabled := True;
+    end
+    else
+    begin
+      ShowMessage('服务尚未注册!'+#13#13+'请点击【一键安装】或【注册服务】按钮安装服务，'+#13#13+'以确保 金三助手 正常工作！');
+      showunregisted();
+    end;
+  end;
+  inited := True;
+end;
+
 end.
+

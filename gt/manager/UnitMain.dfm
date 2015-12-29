@@ -1,8 +1,8 @@
 object FormMain: TFormMain
   Left = 269
   Top = 294
-  Width = 454
-  Height = 357
+  Width = 457
+  Height = 405
   BorderIcons = [biSystemMenu]
   Caption = #37329#19977#21161#25163#31649#29702#24037#20855' Golden Manager'
   Color = clBtnFace
@@ -4525,12 +4525,13 @@ object FormMain: TFormMain
     FFFFFFFFFFFF}
   OldCreateOrder = False
   Position = poScreenCenter
+  OnActivate = FormActivate
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
   object lbl1: TLabel
     Left = 366
-    Top = 248
+    Top = 220
     Width = 48
     Height = 17
     Cursor = crHandPoint
@@ -4654,7 +4655,7 @@ object FormMain: TFormMain
     Left = 6
     Top = 112
     Width = 307
-    Height = 201
+    Height = 209
     Caption = #26085#24535#20449#24687
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
@@ -4714,7 +4715,7 @@ object FormMain: TFormMain
       Left = 8
       Top = 48
       Width = 291
-      Height = 145
+      Height = 153
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -12
@@ -4761,10 +4762,10 @@ object FormMain: TFormMain
   end
   object btnmore: TBitBtn
     Left = 320
-    Top = 277
+    Top = 284
     Width = 113
     Height = 33
-    Caption = #20854#20182#36873#39033
+    Caption = #20854#20182#36873#39033'...'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -15
@@ -4776,7 +4777,7 @@ object FormMain: TFormMain
   end
   object chkagree: TCheckBox
     Left = 324
-    Top = 248
+    Top = 220
     Width = 41
     Height = 17
     Caption = #21516#24847
@@ -4790,6 +4791,62 @@ object FormMain: TFormMain
     State = cbChecked
     TabOrder = 5
     OnMouseUp = chkagreeMouseUp
+  end
+  object btn1: TBitBtn
+    Left = 320
+    Top = 244
+    Width = 113
+    Height = 33
+    Caption = #8730'   '#19968#38190#23433#35013
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clGreen
+    Font.Height = -15
+    Font.Name = #24494#36719#38597#40657
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 6
+    OnClick = btn1Click
+  end
+  object grp1: TGroupBox
+    Left = 6
+    Top = 320
+    Width = 427
+    Height = 41
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = #24494#36719#38597#40657
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 7
+    object lblkey: TLabel
+      Left = 8
+      Top = 16
+      Width = 130
+      Height = 19
+      Caption = #24744#23578#26410#30003#35831#35797#29992#25480#26435#65281
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clRed
+      Font.Height = -13
+      Font.Name = #24494#36719#38597#40657
+      Font.Style = []
+      ParentFont = False
+    end
+    object lbl3: TLabel
+      Left = 312
+      Top = 16
+      Width = 110
+      Height = 19
+      Cursor = crHandPoint
+      Caption = #30003#35831#35797#29992'/'#25480#26435#31649#29702
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlue
+      Font.Height = -13
+      Font.Name = #24494#36719#38597#40657
+      Font.Style = [fsUnderline]
+      ParentFont = False
+      OnClick = lbl3Click
+    end
   end
   object pm1: TPopupMenu
     Left = 408

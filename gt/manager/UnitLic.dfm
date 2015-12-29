@@ -88,7 +88,7 @@ object frmlic: Tfrmlic
     Width = 381
     Height = 49
     BevelInner = bvLowered
-    Caption = #24744#23578#26410#30003#35831#35797#29992#23494#38053#65281
+    Caption = #24744#23578#26410#30003#35831#35797#29992#25480#26435#65281
     Font.Charset = ANSI_CHARSET
     Font.Color = clRed
     Font.Height = -21

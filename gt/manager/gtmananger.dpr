@@ -1,13 +1,19 @@
 program gtmananger;
 
 uses
-  Forms,Windows,Dialogs,System,SysUtils,
+  Forms,
+  Windows,
+  Dialogs,
+  System,
+  SysUtils,
   UnitMain in 'UnitMain.pas' {FormMain},
   UnitAbout in 'UnitAbout.pas' {AboutBox},
   UnitTool in 'UnitTool.pas',
   UnitTest in 'UnitTest.pas' {frmtest},
   GetDSN in 'GetDSN.pas',
-  UnitLic in 'UnitLic.pas' {frmlic};
+  UnitLic in 'UnitLic.pas' {frmlic},
+  UnitAuto in 'UnitAuto.pas' {frminstall},
+  UnitCore in 'UnitCore.pas';
 
 {$R *.res}
 var 
@@ -28,6 +34,7 @@ begin
   Application.CreateForm(TAboutBox, AboutBox);
   Application.CreateForm(Tfrmtest, frmtest);
   Application.CreateForm(Tfrmlic, frmlic);
+  Application.CreateForm(Tfrminstall, frminstall);
   Application.Run;
   ReleaseMutex(mymutex);
 end.
