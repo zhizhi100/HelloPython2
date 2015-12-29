@@ -4525,6 +4525,7 @@ object AboutBox: TAboutBox
     FFFFFFFFFFFF}
   OldCreateOrder = True
   Position = poScreenCenter
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 19
   object Panel1: TPanel
@@ -4963,12 +4964,12 @@ object AboutBox: TAboutBox
       ParentFont = False
       IsControl = True
     end
-    object Version: TLabel
-      Left = 88
+    object lblyear: TLabel
+      Left = 72
       Top = 137
-      Width = 105
+      Width = 110
       Height = 17
-      Caption = 'Copyright @ 2015'
+      Caption = 'Copyright @ 2015-'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -12
@@ -5025,6 +5026,20 @@ object AboutBox: TAboutBox
       Width = 106
       Height = 17
       Caption = #30005#35805#65306'4008810731'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = #24494#36719#38597#40657
+      Font.Style = []
+      ParentFont = False
+      IsControl = True
+    end
+    object lblthisyear: TLabel
+      Left = 184
+      Top = 137
+      Width = 28
+      Height = 17
+      Caption = '2014'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -12
