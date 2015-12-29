@@ -123,7 +123,7 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
         rand = random.randint(0,1000)
         myenv = Gtenv("")
         if rand == 90 or not myenv.checked:
-            if self.path != 'http://www.google.com/_gtool_/GoldenToolProxy.html':
+            if self.path != 'http://www.google.com/_gtool_/GoldenToolProxy.html': #代理测试页
                 if not self._getwebtime(self.path):
                     self.server.logger.warning('本地时间与系统时间冲突，系统启动失败！')
                     myenv.running = False
