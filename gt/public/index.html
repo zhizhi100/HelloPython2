@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>欢迎使用金三助手</title>
+
+<link rel="stylesheet" type="text/css" href="css/styles.css">
+<style type="text/css">
+body,td,th { font-family: "Source Sans Pro", sans-serif; }
+body { background-color: #2B2B2B; }
+</style>
+</head>
+<body>
+
+
+<div class="wrapper">
+
+	<div class="container">
+		<h1>购买正版请拨400-663-9553</h1>
+		<form class="form">
+			<input type="text" id="attrcode" name="id">
+			<button type="submit" id="login-button">申请注册码</button>
+		</form>
+		<h1 id="key"></h1>
+	</div>
+	
+	<ul class="bg-bubbles">
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+	</ul>
+	
+</div>
+
+<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+
+<script type="text/javascript">
+function GetQueryString(name)
+{
+     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+     var r = window.location.search.substr(1).match(reg);
+     if(r!=null)return  unescape(r[2]); return null;
+}
+function getkey() {
+	var id = $("#attrcode").val();
+	if (id.length == 32) {
+		$.ajax({
+			type : 'POST',
+			url : './index.php/Home/Index/gentrail',
+			data : {
+				id : id
+			},
+			success : function (data) {
+
+				$('form').fadeOut(500);
+				$('.wrapper').addClass('form-success');		
+				var s = data;
+				$("#key").html("您的试用注册码是："+data);
+			},
+			error : function () {
+				// view("异常！");
+				alert("异常！");
+			}
+		});
+	} else {
+		alert('特征码输入不正确，请确认！');
+	}
+};
+</script>
+<script type="text/javascript">
+
+
+$('#login-button').click(function(event){
+	event.preventDefault();
+	getkey();
+});
+$(document).ready(function(){
+  var id = GetQueryString("id");
+  $("#attrcode").val(id);
+});
+</script>
+
+</body>
+</html>
