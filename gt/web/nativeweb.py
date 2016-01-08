@@ -99,6 +99,11 @@ class Lic(tornado.web.RequestHandler):
         self.write(myenv.licdate.strftime('%Y-%m-%d'))
         self.write("'}")
         
+class CZY(tornado.web.RequestHandler):
+    def get(self):
+        myenv = Gtenv("")
+        self.write('{"uid":"'+myenv.uid+'"}')
+        
 def writelicjs():
     s = ""
     myenv = Gtenv("")
@@ -127,6 +132,7 @@ def startweb():
     gtdir = path
     webenv = Gtenv(path)
     path = webenv.getpath()
+       
     logfile = ''
     try:
         cf = ConfigParser.ConfigParser()
@@ -175,6 +181,7 @@ def startweb():
         (r"/sysinfo",G3info),
         (r"/SaveRemoteQuery",SaveRemoteQuery),
         (r"/jsonp",JSONP),
+        (r"/czy",CZY),
         (r"/nsrlistjsonp",NsrlistJsonp),
         (r"/nsrinfo",GetNsrDetail)
         ],**settings)

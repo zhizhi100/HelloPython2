@@ -6,9 +6,10 @@ Created on 2015年11月15日
 '''
 import tornado.web
 import json
-from gt.gtcore.nsr import Nsr
+from gt.gtcore.nsr import Nsr,UNsr
 import gt.gtcore.sysinfo as g3sys 
 from gt.gtcore import nsr
+from gt.gtcore.env import Gtenv
         
 class AjaxHandler(tornado.web.RequestHandler):
     def work(self):
@@ -18,6 +19,7 @@ class AjaxHandler(tornado.web.RequestHandler):
         return succ,msg,data
     
     def _work(self):
+        self.uid = self.get_argument("uid", "")
         succ,msg,data = self.work()
         j = {}
         if succ:
@@ -45,7 +47,7 @@ class Querynsr(AjaxHandler):
         p['name']=nsrmc
         p['page']=page
         p['pagesize']=size
-        n = Nsr()
+        n = UNsr(self.uid)
         succ,data = n.getmany(p)
         if succ:
             return succ,'',data
@@ -54,7 +56,7 @@ class Querynsr(AjaxHandler):
         
 class Querytrace(AjaxHandler):
     def work(self):
-        n = Nsr()
+        n = UNsr(self.uid)
         succ,data = n.getlogs()
         if succ:
             return succ,'',data
@@ -76,6 +78,11 @@ class G3info(AjaxHandler):
         if act == 'set':
             key = self.get_argument('key', 'key')
             val = self.get_argument('val', 'val')
+            env = Gtenv("")
+            dt = json.loads(val)
+            #env.uid = dt["uid"]
+            env.setuid(dt["uid"])
+            #print env.uid     
             succ,msg = g3.set(key,val)
             return succ,msg,''
 
@@ -91,7 +98,7 @@ class SaveRemoteQuery(AjaxHandler):
             for c in cols:
                 if not j.has_key(c):
                     j[c]=""                       
-        n = Nsr()
+        n = UNsr(self.uid)
         n.savemany(infos)
         return True,'',''
            

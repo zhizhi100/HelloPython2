@@ -89,11 +89,16 @@ class Loadnsr(Repost):
 class GetNsrDetail(Repost):
     def _on_success(self, response):
         if response.body:
-            from gt.gtcore.nsr import Nsr
-            nsr = Nsr()
-            info = nsr.getxxfromquery(response.body)
-            nsr.savetrace(info)
-            nsr.save(info)
+            from gt.gtcore.nsr import UNsr
+            from gt.gtcore.env import Gtenv
+            env = Gtenv("")
+            uid = env.uid
+            #print uid
+            if uid:
+                nsr = UNsr(uid)
+                info = nsr.getxxfromquery(response.body)
+                nsr.savetrace(info)
+                nsr.save(info)
         
 class Downloader(Repost):
     def test(self):
@@ -205,11 +210,12 @@ class JSONP(Repost):
             arr.append("totalcount=3")
             arr.append("totalflag=1")
             #arr.append("gwssswjg1="+ self.data["gwssswjg1"])
-            arr.append("gwssswjg1=24301811600")
+            #arr.append("gwssswjg1=24301811600")
             arr.append("qxswjgstr=")
             mc = self.data['mc']
             mc = urllib.url2pathname(mc)
-            arr.append("cxsql=SELECT NSR.NSRSBH, NSR.NSRMC, NSR.NSRZT_DM, NSR.KZZTDJLX_DM, /*税务登记类型,已变更*/ NSR.DJZCLX_DM, NSR.GDGHLX_DM, NSR.DWLSGX_DM, (SELECT HY.SJHY_DM FROM DM_GY_HY HY WHERE SUBSTRB(NSR.HY_DM, 1, 2) = HY.HY_DM(+) AND ROWNUM = 1) HYML, SUBSTRB(NSR.HY_DM, 1, 2) HYDL, SUBSTRB(NSR.HY_DM, 1, 3) HYZL, NSR.HY_DM, NSR.ZCDZ, NSR.SCJYDZ, NSR.FDDBRXM, NSR.FDDBRSFZJLX_DM, NSR.FDDBRSFZJHM, NSR.DJRQ, NSR.ZGSWJ_DM, NSR.ZGSWSKFJ_DM, NSR.SSGLY_DM, NSR.JDXZ_DM, KZ.JYFW, KZ.YGZNSRLX_DM, KZ.KJZDZZ_DM, KZ.BZFS_DM, KZ.HSFS_DM, KZ.GYKGLX_DM, KZ.GYTZBL, KZ.ZRRTZBL, KZ.WZTZBL, KZ.ZCZB, KZ.TZZE, KZ.CYRS, KZ.WJCYRS, KZ.HHRS, KZ.GGRS, KZ.GDGRS, HX_ZTSJ.F_CX_DJ_PZJGXX('PZSLJG_DM', NSR.DJXH) PZSLJG_DM, HX_ZTSJ.F_CX_DJ_PZJGXX('ZZLX_DM', NSR.DJXH) ZZLX_DM, HX_ZTSJ.F_CX_DJ_PZJGXX('ZZHM', NSR.DJXH) ZZHM, HX_ZTSJ.F_CX_DJ_PZJGXX('KYSLRQ', NSR.DJXH) KYSLRQ, HX_ZTSJ.F_CX_DJ_PZJGXX('SCJYQXQ', NSR.DJXH) SCJYQXQ, HX_ZTSJ.F_CX_DJ_PZJGXX('SCJYQXZ', NSR.DJXH) SCJYQXZ, KZ.ZCDLXDH, KZ.SCJYDLXDH, KZ.FDDBRGDDH, KZ.FDDBRYDDH, KZ.BSRXM, KZ.BSRGDDH, KZ.BSRYDDH, KZ.CWFZRXM, KZ.CWFZRGDDH, KZ.CWFZRYDDH, NSR.FJMQYBZ, NSR.KQCCSZTDJBZ, NSR.YXBZ, NSR.LRR_DM, NSR.LRRQ, NSR.XGR_DM, NSR.XGRQ, NSR.NSRBM, NSR.SSDABH, NSR.SHXYDM, '联系信息' LXXX, (SELECT '受理信息' FROM DJ_YSQYWSLXXB SL WHERE NSR.DJXH = SL.DJXH AND ROWNUM = 1) SLXX, KZ.ZFJGLX_DM, (SELECT '总机构信息' FROM DJ_ZJGXX ZJG WHERE NSR.DJXH = ZJG.DJXH AND ROWNUM = 1) ZJGXX, (SELECT '分支机构信息' FROM DJ_FZJGXX FZ WHERE NSR.DJXH = FZ.DJXH AND ROWNUM = 1) FZJGXX, NSR.DJXH FROM DJ_NSRXX NSR, DJ_NSRXX_KZ KZ WHERE NSR.DJXH = KZ.DJXH AND NSR.ZGSWJ_DM IN (SELECT SWJG_DM FROM DM_GY_SWJG V START WITH V.SWJG_DM IN ('24301110000') CONNECT BY PRIOR V.SWJG_DM = V.SJSWJG_DM) AND (('Y' = 'N') OR ('N' = 'N' AND NSR.KZZTDJLX_DM <> '1600')) AND NSR.YXBZ IN ('Y') AND NSR.NSRMC LIKE '%"+mc+"%' AND NSR.DJRQ >= TO_DATE('1971-12-01', 'YYYY-MM-DD')") 
+            swjg = self.data['swjg']
+            arr.append("cxsql=SELECT NSR.NSRSBH, NSR.NSRMC, NSR.NSRZT_DM, NSR.KZZTDJLX_DM, /*税务登记类型,已变更*/ NSR.DJZCLX_DM, NSR.GDGHLX_DM, NSR.DWLSGX_DM, (SELECT HY.SJHY_DM FROM DM_GY_HY HY WHERE SUBSTRB(NSR.HY_DM, 1, 2) = HY.HY_DM(+) AND ROWNUM = 1) HYML, SUBSTRB(NSR.HY_DM, 1, 2) HYDL, SUBSTRB(NSR.HY_DM, 1, 3) HYZL, NSR.HY_DM, NSR.ZCDZ, NSR.SCJYDZ, NSR.FDDBRXM, NSR.FDDBRSFZJLX_DM, NSR.FDDBRSFZJHM, NSR.DJRQ, NSR.ZGSWJ_DM, NSR.ZGSWSKFJ_DM, NSR.SSGLY_DM, NSR.JDXZ_DM, KZ.JYFW, KZ.YGZNSRLX_DM, KZ.KJZDZZ_DM, KZ.BZFS_DM, KZ.HSFS_DM, KZ.GYKGLX_DM, KZ.GYTZBL, KZ.ZRRTZBL, KZ.WZTZBL, KZ.ZCZB, KZ.TZZE, KZ.CYRS, KZ.WJCYRS, KZ.HHRS, KZ.GGRS, KZ.GDGRS, HX_ZTSJ.F_CX_DJ_PZJGXX('PZSLJG_DM', NSR.DJXH) PZSLJG_DM, HX_ZTSJ.F_CX_DJ_PZJGXX('ZZLX_DM', NSR.DJXH) ZZLX_DM, HX_ZTSJ.F_CX_DJ_PZJGXX('ZZHM', NSR.DJXH) ZZHM, HX_ZTSJ.F_CX_DJ_PZJGXX('KYSLRQ', NSR.DJXH) KYSLRQ, HX_ZTSJ.F_CX_DJ_PZJGXX('SCJYQXQ', NSR.DJXH) SCJYQXQ, HX_ZTSJ.F_CX_DJ_PZJGXX('SCJYQXZ', NSR.DJXH) SCJYQXZ, KZ.ZCDLXDH, KZ.SCJYDLXDH, KZ.FDDBRGDDH, KZ.FDDBRYDDH, KZ.BSRXM, KZ.BSRGDDH, KZ.BSRYDDH, KZ.CWFZRXM, KZ.CWFZRGDDH, KZ.CWFZRYDDH, NSR.FJMQYBZ, NSR.KQCCSZTDJBZ, NSR.YXBZ, NSR.LRR_DM, NSR.LRRQ, NSR.XGR_DM, NSR.XGRQ, NSR.NSRBM, NSR.SSDABH, NSR.SHXYDM, '联系信息' LXXX, (SELECT '受理信息' FROM DJ_YSQYWSLXXB SL WHERE NSR.DJXH = SL.DJXH AND ROWNUM = 1) SLXX, KZ.ZFJGLX_DM, (SELECT '总机构信息' FROM DJ_ZJGXX ZJG WHERE NSR.DJXH = ZJG.DJXH AND ROWNUM = 1) ZJGXX, (SELECT '分支机构信息' FROM DJ_FZJGXX FZ WHERE NSR.DJXH = FZ.DJXH AND ROWNUM = 1) FZJGXX, NSR.DJXH FROM DJ_NSRXX NSR, DJ_NSRXX_KZ KZ WHERE NSR.DJXH = KZ.DJXH AND NSR.ZGSWJ_DM IN (SELECT SWJG_DM FROM DM_GY_SWJG V START WITH V.SWJG_DM IN ('"+ swjg +"') CONNECT BY PRIOR V.SWJG_DM = V.SJSWJG_DM) AND (('Y' = 'N') OR ('N' = 'N' AND NSR.KZZTDJLX_DM <> '1600')) AND NSR.YXBZ IN ('Y') AND NSR.NSRMC LIKE '%"+mc+"%' AND NSR.DJRQ >= TO_DATE('1971-12-01', 'YYYY-MM-DD')") 
             arr.append("footvalue={}")
             arr.append("page=1")
             arr.append("start=0")
@@ -240,6 +246,8 @@ class JSONP(Repost):
                 s = response.body.strip()
                 s = s.replace("'","\\'")
                 s = s.replace("\\r\\n","")
+                s = s.replace("\\r","")
+                s = s.replace("\\n","")
                 t = ''.join(self.funcname) + ''
                 self.write(t +"('"+s+"');")
                 #self.write(response.body)
@@ -265,7 +273,7 @@ class NsrlistJsonp(JSONP):
         arr.append("footvalue=")
         arr.append("page=1")
         arr.append("start=0")
-        arr.append("limit=50")
+        limit = self.data['limit']
         body = "&".join(arr)
         body = urllib.quote(body,"='&")
         print body
