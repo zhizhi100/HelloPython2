@@ -61,7 +61,7 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
         myenv = Gtenv("")
         if myenv.istrial:            
             rand = random.randint(0,100)
-            if rand == 90:
+            if rand == 90:                
                 licdays,licdate = trial.haskey()
                 if licdays == 0 or (licdate - date.today()).days < 0:
                     self.server.logger.warning('试用授权到期或没有正式授权文件，系统启动失败！')
@@ -123,7 +123,7 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
         rand = random.randint(0,1000)
         myenv = Gtenv("")
         if rand == 90 or not myenv.checked:
-            if self.path != 'http://www.google.com/_gtool_/GoldenToolProxy.html': #代理测试页
+            if self.path != 'http://www.google.com/_gtool_/GoldenToolProxy.html':
                 if not self._getwebtime(self.path):
                     self.server.logger.warning('本地时间与系统时间冲突，系统启动失败！')
                     myenv.running = False
@@ -133,7 +133,7 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
         if self.path=='http://www.gtool.com/stopproxy?key=79798798':
             #self.server.close()
             print self.path
-            self.server.logger.info('your proxy server to be closed soon')
+            self.server.logger.warning('your proxy server to be closed soon')
             self.wfile.write('your proxy server to be closed soon')
             myenv.running = False
             self.server.close_connection = True
@@ -387,6 +387,8 @@ def main ():
   
     # setup the log file
     logger = logSetup (logfile, max_log_size, daemon)
+    
+    #logger.info("a..........")
     
     licdays,licdate = trial.haskey()
     if licdays == 0 or (licdate - date.today()).days < 0:
