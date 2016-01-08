@@ -17,6 +17,7 @@ class Singleton(object):
 class Gtenv(Singleton):
     def __init__(self,envpath):
         self.verison = '1.2.1'
+        #self.uid = ""
         if not hasattr(self, 'path'):
             self.path = envpath
     def getpath(self):
@@ -28,6 +29,9 @@ class Gtenv(Singleton):
     
     def getlic(self):
         return self.licdate,self.licdays
+    
+    def setuid(self,uid):
+        self.uid = uid
     
 if __name__ == '__main__':
     myenv = Gtenv("")

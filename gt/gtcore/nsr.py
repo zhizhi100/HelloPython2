@@ -211,6 +211,8 @@ class Nsr(object):
             
     def savetrace(self,info):
         if info is None:info=self.info
+        if not info['nsrsbh']:
+            return False,'无效的数据'
         dm = info['nsrsbh']
         isnew = not self._isloged(dm)
         if isnew: #primary key get the last position
@@ -256,6 +258,19 @@ class Nsr(object):
                 )'''
         sql3 = 'CREATE INDEX logtime_index ON gt_nsr_access(logtime)' 
         return {sql,sql2,sql3}
+    
+class UNsr(Nsr):
+
+    def __init__(self,uid):       
+        sql = self._create_tb_sql()
+        myenv = env.Gtenv("")
+        path = myenv.getpath()
+        self.dao = Dao(path + "/" + uid +'_gtnsr.db',sql)
+        cols_str = 'ygznsrlxDm|hsfsDm|wjcyrs|djrq|whsyjsfjfxxdjbz|bsrdzxx|djzclxDm|cwfzrsfzjhm|gdghlxDm|fddbrdzxx|zcdz|nsrztDm|zzjglxDm|nsrzgswjgxxList|zgswjmc|shxydm|scjydlxdh|scjyqxq|fddbrxm|jyfw|scjyqxz|bsrsfzjhm|zzlxDm|cwfzrsfzjzlDm|wztzbl|zcdzxzqhszDm|djxh|zcdzxzqhszmc|bsrsfzjzlDm|swdlrmc|zczb|fddbryddh|hymc|fddbrsfzjlxmc|fddbrgddh|kjzdzzDm|hjszd|scjydz|fddbrsfzjhm|swdlrlxdh|jdxzDm|wz|gykglxDm|pzsljgDm|scjydyzbm|bzfsDm|kqccsztdjbz|zgswjg|cwfzrdzxx|tzze|hyDm|zfjglxDm|fddbrsfzjlxDm|dwlsgxDm|djjgDm|zzhm|gdgrs|gytzbl|lrrq|pzsljglxDm|lsswdjyxqz|wcjyhdssglzmbh|cyrs|lsswdjyxqq|zzjgDm|bsryddh|ggrs|cwfzrgddh|swdlrnsrsbh|bsrxm|kzztdjlxmc|jdxzmc|ssdabh|nsrmc|pzsljgmc|scjydzxzqhszmc|zrrtzbl|scjydzxzqhszDm|zzsqylxDm|hhrs|lrrDm|zgswskfjDm|bsrgddh|kyslrq|kzztdjlxDm|zcdyzbm|zgswskfjmc|nsrfyhyxxList|ssglyDm|nsrbm|pzzmhwjh|zgswjDm|zsxmcxbzDm|cwfzryddh|swdjblbz|djzclxmc|nsrztmc|zzsjylb|yhsjnfsDm|gdslxDm|ssglymc|zcdlxdh|fjmqybz|swdlrdzxx|gjhdqszDm|cwfzrxm|logtime|nsrsbh'
+        self.cols = cols_str.split('|')
+        for i in self.cols:
+            self.info[i]=''
+
     
 if __name__ == '__main__':
     '''
