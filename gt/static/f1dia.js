@@ -44,8 +44,11 @@ var latestnsr = function () {
 	};
 	var query = function () {
 		jq.ajax({
-			url : '/_gtoolquery_/querytrace', // 跳转到 action
+			url : '/_gtoolquery_/querytrace?uid=' + uname, // 跳转到 action
 			type : 'post',
+			data : {
+				uid : uname
+			},
 			cache : false,
 			dataType : 'json',
 			success : function (d) {
@@ -157,6 +160,7 @@ var nsrlist = function () {
 		jq.ajax({
 			url : '/_gtoolquery_/querynsr', // 跳转到 action
 			data : {
+				uid : uname,
 				name : mc
 			},
 			type : 'get',
@@ -171,6 +175,10 @@ var nsrlist = function () {
 						total : d['data'].length
 					}
 					jq("#t2").datagrid('loadData', data);
+					if (d['data'].length > 0) {}
+					else {
+						alert("没有符合条件的纳税人！可尝试后台查询。");
+					}
 				} else {
 					alert(d['message']);
 				}
@@ -181,14 +189,14 @@ var nsrlist = function () {
 		})
 	};
 	var getinitparam = function (p) {
-		var key = 'queryinitparam';
+		var key = uid + 'queryinitparam';
 		if (!store.enabled) {
 			alert('disabled');
 			return '';
 		}
 		var param = store.get(key);
 		var dt = new Date();
-		var tag = "" + dt.getFullYear() + "" + dt.getMonth() + "" + dt.getDate() + "";
+		var tag = formatDate(dt, "yyyyMMdd");
 		if (!param || typeof(param) == "undefined" || param.indexOf(tag) != 0) {
 			store.remove(key);
 			return '';
@@ -197,14 +205,14 @@ var nsrlist = function () {
 		}
 	};
 	var getqueryparam = function () {
-		var key = 'queryparam';
+		var key = uid + 'queryparam';
 		if (!store.enabled) {
 			alert('disabled');
 			return '';
 		}
 		var param = store.get(key);
 		var dt = new Date();
-		var tag = "" + dt.getFullYear() + "" + dt.getMonth() + "" + dt.getDate() + "";
+		var tag = formatDate(dt, "yyyyMMdd");
 		if (!param || typeof(param) == "undefined" || param.indexOf(tag) != 0) {
 			store.remove(key);
 			return '';
@@ -212,10 +220,28 @@ var nsrlist = function () {
 			return param.substring(8);
 		}
 	};
+	var get_cx_swjg = function (path, gwjg) {
+		var key = uid + 'gwssswjg';
+		if (!store.enabled) {
+			alert('disabled');
+			return '';
+		}
+		var param = store.get(key);
+		var dt = new Date();
+		var tag = formatDate(dt, "yyyyMMdd");
+		if (!param || typeof(param) == "undefined" || param.indexOf(tag) != 0) {
+			store.remove(key);
+			return '';
+		} else {
+			var p = param.substring(8);
+			return p;
+		}
+	};
 	var savequery = function (nsrs) {
 		jq.ajax({
 			url : '_gtoolquery_/SaveRemoteQuery', // 跳转到 action
 			data : {
+				uid : uname,
 				nsrs : JSON.stringify(nsrs)
 			},
 			type : 'post',
@@ -241,6 +267,11 @@ var nsrlist = function () {
 		}
 		var sjymc = initparam;
 		param = JSON.parse(param);
+		var swjg = get_cx_swjg(param.path, param.gwssswjg);
+		if (swjg.length == 0) {
+			alert('系统参数错误！');
+			return;
+		}
 		var path = param.path;
 		var i = path.indexOf("sword");
 		path = path.substring(0, i - 1);
@@ -250,8 +281,11 @@ var nsrlist = function () {
 			 + param.gnssgwxh + '&n=' + new Date().getTime()
 			 + "&cxlx=" + "1";
 		data = {
+			uid : uname,
 			mc : mc,
-			gwssswjg1 : "24301811600",
+			//gwssswjg1 : "24301811600",
+			limit : "50",
+			swjg : swjg,
 			sqlxh : "10010002",
 			gtool_remotelistnsr : 1
 		};
@@ -281,7 +315,11 @@ var nsrlist = function () {
 						total : d.topics.length
 					};
 					jq("#t2").datagrid('loadData', data);
-					savequery(data.rows);
+					if (d.topics.length > 0) {
+						savequery(data.rows);
+					} else {
+						alert("没有符合条件的纳税人！");
+					}
 				}
 				if (d.failmsg && d.failmsg.length > 0) {
 					alert(d.failmsg + "\r\n\r\n为确保后台查询正常工作，请首先在【查询统计（核心征管）-登记】模块下随意点击一个菜单项，然后再执行后台查询。");
@@ -408,11 +446,14 @@ var latest = latestnsr();
 var query = nsrlist();
 var words = keywords();
 jq(document).ready(function () {
-	latest.init();
 	initquery();
+	latest.init();
 	jq("#keywords").html(words.listhtml());
 	jq(document).on("click", ".keywords", function () {
 		//alert(jq(this).text());
 		jq("#mc").val(jq(this).text());
 	});
+	var dt = new Date();
+	var tag = formatDate(dt, "yyyy");
+	jq("#copyright").html("Copyright@2015-" + tag);
 });

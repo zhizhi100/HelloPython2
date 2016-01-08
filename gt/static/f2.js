@@ -1,4 +1,15 @@
-﻿function querymenu() {
+﻿function getCookie(name) {
+	var arr,
+	reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+	if (arr = document.cookie.match(reg))
+		return unescape(arr[2]);
+	else
+		return null;
+}
+
+var uid = getCookie("_cookie_user_name");
+
+function querymenu() {
 	var rs = "税务登记信息查询";
 	var hash = new Hash({
 			'text' : rs
@@ -16,8 +27,12 @@
 			d = d[1];
 			d = d.data;
 			d = d[0];
+			if (typeof(d) == "undefined") {
+				swordAlert("功能查询出错！请确认是否具备【税务登记信息查询】的权限。");
+				return;
+			}
 			saveinfo(d);
-			addiframe(d.path);
+			addiframe(d.path, d.gwssswjg);
 		},
 		onError : function onHandleLoginError() {
 			swordAlert("功能查询出错！");
@@ -26,9 +41,39 @@
 	submit.submit();
 };
 
-function addiframe(url) {
+function parseUrl(url) {
+	var r = {
+		protocol : /([^\/]+:)\/\/(.*)/i,
+		host : /(^[^\:\/]+)((?:\/|:|$)?.*)/,
+		port : /\:?([^\/]*)(\/?.*)/,
+		pathname : /([^\?#]+)(\??[^#]*)(#?.*)/
+	};
+	var tmp,
+	res = {};
+	res["href"] = url;
+	for (p in r) {
+		tmp = r[p].exec(url);
+		res[p] = tmp[1];
+		url = tmp[2];
+		if (url === "") {
+			url = "/";
+		}
+		if (p === "pathname") {
+			res["pathname"] = tmp[1];
+			res["search"] = tmp[2];
+			res["hash"] = tmp[3];
+		}
+	}
+	return res;
+};
+
+function addiframe(url, swjg) {
+	//var path = parseUrl(url);
+	//var link = path["protocol"] + "//" + path["host"] + '/download.sword?ctrl=CX301CxcshCtrl_getTjTree';
+	//link = link + '&moreCheck=true&sName=CX301CxcshCtrl_getTjTree&zndm=01&node=root&parentID=&checked=true&zdmrbz=1&tjlx=ORGTREE&gwssswjg='+swjg;
 	var ifr = document.createElement('iframe');
 	ifr.src = url;
+	ifr.style.display = "none";
 	document.body.appendChild(ifr);
 	window.setTimeout(function () {
 		document.body.removeChild(ifr);
@@ -36,6 +81,7 @@ function addiframe(url) {
 };
 
 function saveinfo(info) {
+	info.uid = window.uid;
 	var c = {
 		val : JSON.encode(info),
 		act : "set",

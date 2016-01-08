@@ -84,7 +84,7 @@
 						</tr>
 					</thead>
 				</table>
-					<div style="padding:2px;align:right;" align="right"><a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="selectnsr(query.selected());">确定</a>
+					<div style="padding:2px;align:right;" align="right"><span style="align:left;" width="300px"; align="left">注意：后台查询只显示最前<b>50</b>条数据！</span><a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="selectnsr(query.selected());">确定</a>
 					<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="onselQx();">取消</a>
 					<a href="#" style="display:none" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="teststore();">test</a></div>
 				</div>
@@ -92,16 +92,20 @@
 			<div id="tab_con_3" style="display:none"> 
 				<div style="padding:10px;" align="left">
 				<h1>本地查询</h1>
-				<span>来源于本地数据，响应速度更快</span>
+				<span><ul><li>来源于本地数据</li><li>响应速度更快</li></ul></span>
 				<h1>后台查询</h1>
-				<span>来源于服务器数据，速度稍慢，数据更全</span>
+				<span><ul><li>来源于服务器数据</li><li>只显示前50条数据</li><li>速度稍慢</li><li>数据更全</li><li>后台数据将被缓存至本地</li></span>
+				
+				<div style="height:200px;overflow:auto;display:none">
+				<button onclick="liststore();">list</button><span id="stores"></span>
+				<button onclick="clearstore();">clear</button></div>
 				</div>
 			</div>
 			<div id="tab_con_4" style="display:none">
 				<div style="padding:10px;" align="center"><h1>&nbsp;</h1><h1>&nbsp;</h1>
 				<h1>金三助手</h1><h1>&nbsp;</h1>
 				<h3>V1.2.1</h3><h1>&nbsp;</h1>
-				<h3>Copyright@2015</h3><h1>&nbsp;</h1>
+				<h3 id="copyright">Copyright@2015</h3><h1>&nbsp;</h1>
 				</div>
 			</div>
 		</div>
@@ -109,6 +113,24 @@
 
 
 <script language="javascript" type="text/javascript">
+function nsrkeyup(e){
+	if (window.event.keyCode == 13){
+		query.list(jq('#mc').val());words.add(jq('#mc').val());jq('#keywords').html(words.listhtml());
+	}
+}
+function liststore(){
+	var s = "";
+	store.forEach(function(key, val) {
+		console.log(key, '==', val)
+		s = s + key + '===' + val + '<br>';
+	})
+	jq("#stores").html(s);
+}
+
+function clearstore(){
+	store.clear();
+}
+
 function remotequery(mc) {
 	query.remotelist(mc);
 }
@@ -144,7 +166,7 @@ function teststore(){
 	}
 }
 </script>
-<script src="./initquery.js?v=9" type="text/javascript"></script>
-<script src="./f1dia.js?v=47" type="text/javascript"></script>
+<script src="./initquery.js?v=36" type="text/javascript"></script>
+<script src="./f1dia.js?v=75" type="text/javascript"></script>
 
 </body>
