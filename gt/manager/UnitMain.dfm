@@ -2,7 +2,7 @@ object FormMain: TFormMain
   Left = 269
   Top = 294
   Width = 457
-  Height = 405
+  Height = 391
   BorderIcons = [biSystemMenu]
   Caption = #37329#19977#21161#25163#31649#29702#24037#20855' Golden Manager'
   Color = clBtnFace
@@ -4531,7 +4531,7 @@ object FormMain: TFormMain
   TextHeight = 15
   object lbl1: TLabel
     Left = 366
-    Top = 220
+    Top = 245
     Width = 48
     Height = 17
     Cursor = crHandPoint
@@ -4548,7 +4548,7 @@ object FormMain: TFormMain
     Left = 6
     Top = 5
     Width = 155
-    Height = 102
+    Height = 84
     Caption = #36816#34892#29366#24577
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
@@ -4559,7 +4559,7 @@ object FormMain: TFormMain
     TabOrder = 0
     object Label1: TLabel
       Left = 16
-      Top = 32
+      Top = 24
       Width = 75
       Height = 20
       Caption = #20195#29702#26381#21153#65306
@@ -4572,7 +4572,7 @@ object FormMain: TFormMain
     end
     object Label2: TLabel
       Left = 16
-      Top = 64
+      Top = 48
       Width = 75
       Height = 20
       Caption = #26412#22320#26381#21153#65306
@@ -4585,7 +4585,7 @@ object FormMain: TFormMain
     end
     object lblproxy: TLabel
       Left = 115
-      Top = 37
+      Top = 29
       Width = 15
       Height = 15
       Caption = #9608
@@ -4598,7 +4598,7 @@ object FormMain: TFormMain
     end
     object lblweb: TLabel
       Left = 115
-      Top = 69
+      Top = 53
       Width = 15
       Height = 15
       Caption = #9608
@@ -4614,7 +4614,7 @@ object FormMain: TFormMain
     Left = 168
     Top = 5
     Width = 265
-    Height = 102
+    Height = 84
     Caption = #36816#34892#31649#29702
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
@@ -4625,7 +4625,7 @@ object FormMain: TFormMain
     TabOrder = 1
     object btnstrart: TButton
       Left = 8
-      Top = 40
+      Top = 32
       Width = 73
       Height = 33
       Caption = #21551#21160'(&S)'
@@ -4634,7 +4634,7 @@ object FormMain: TFormMain
     end
     object btnstop: TButton
       Left = 96
-      Top = 40
+      Top = 32
       Width = 73
       Height = 33
       Caption = #20572#27490'(&T)'
@@ -4643,7 +4643,7 @@ object FormMain: TFormMain
     end
     object btnrestart: TButton
       Left = 184
-      Top = 40
+      Top = 32
       Width = 73
       Height = 33
       Caption = #37325#21551'(&R)'
@@ -4653,7 +4653,7 @@ object FormMain: TFormMain
   end
   object GroupBox3: TGroupBox
     Left = 6
-    Top = 112
+    Top = 137
     Width = 307
     Height = 209
     Caption = #26085#24535#20449#24687
@@ -4730,7 +4730,7 @@ object FormMain: TFormMain
   end
   object GroupBox4: TGroupBox
     Left = 320
-    Top = 112
+    Top = 137
     Width = 113
     Height = 105
     Caption = #26381#21153#31649#29702
@@ -4762,7 +4762,7 @@ object FormMain: TFormMain
   end
   object btnmore: TBitBtn
     Left = 320
-    Top = 284
+    Top = 309
     Width = 113
     Height = 33
     Caption = #20854#20182#36873#39033'...'
@@ -4777,7 +4777,7 @@ object FormMain: TFormMain
   end
   object chkagree: TCheckBox
     Left = 324
-    Top = 220
+    Top = 245
     Width = 41
     Height = 17
     Caption = #21516#24847
@@ -4794,7 +4794,7 @@ object FormMain: TFormMain
   end
   object btn1: TBitBtn
     Left = 320
-    Top = 244
+    Top = 269
     Width = 113
     Height = 33
     Caption = #8730'   '#19968#38190#23433#35013
@@ -4809,9 +4809,9 @@ object FormMain: TFormMain
   end
   object grp1: TGroupBox
     Left = 6
-    Top = 320
+    Top = 88
     Width = 427
-    Height = 41
+    Height = 47
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
@@ -4821,7 +4821,7 @@ object FormMain: TFormMain
     TabOrder = 7
     object lblkey: TLabel
       Left = 8
-      Top = 16
+      Top = 17
       Width = 130
       Height = 19
       Caption = #24744#23578#26410#30003#35831#35797#29992#25480#26435#65281
@@ -4833,8 +4833,8 @@ object FormMain: TFormMain
       ParentFont = False
     end
     object lbl3: TLabel
-      Left = 312
-      Top = 16
+      Left = 304
+      Top = 17
       Width = 110
       Height = 19
       Cursor = crHandPoint
@@ -4850,7 +4850,7 @@ object FormMain: TFormMain
   end
   object pm1: TPopupMenu
     Left = 408
-    Top = 280
+    Top = 305
     object test1: TMenuItem
       Caption = 'test'
       Visible = False
@@ -4905,6 +4905,6 @@ object FormMain: TFormMain
     Enabled = False
     OnTimer = tmr1Timer
     Left = 192
-    Top = 109
+    Top = 134
   end
 end

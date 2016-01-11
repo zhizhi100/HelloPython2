@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Buttons, Menus, UnitAbout, IniFiles, UnitTool, ExtCtrls,
-  shellapi, DateUtils, UnitLic, Registry, UnitAuto, UnitCore;
+  shellapi, DateUtils, UnitLic, Registry, UnitAuto, UnitCore, util_utf8;
 
 type
   TFormMain = class(TForm)
@@ -97,7 +97,7 @@ var
 implementation
 
 {$R *.dfm}
-function readlog(f: string): string;
+function readlog(f: string): WideString;
 var
   iFileHandle: Integer;
   Buffer: PChar;
@@ -452,7 +452,7 @@ procedure TFormMain.rbtmpMouseUp(Sender: TObject; Button: TMouseButton; Shift: T
 var
   p: string;
   f: string;
-  log: string;
+  log: WideString;
 begin
   if rbtmp.Checked then
     f := tmplog;
@@ -464,7 +464,10 @@ begin
   f := p + '\' + f;
   log := readlog(f);
   mmolog.Lines.Clear;
-  mmolog.Lines.Add(log);
+  if rbtmp.Checked then
+    mmolog.Lines.Add(log)
+  else
+    mmolog.Lines.Add(UTF8ToAnsi(log));
 end;
 
 procedure TFormMain.IE1Click(Sender: TObject);

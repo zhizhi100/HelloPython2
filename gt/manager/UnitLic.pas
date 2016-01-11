@@ -250,8 +250,10 @@ end;
 procedure Tfrmlic.btngetkeyClick(Sender: TObject);
 var
   url : string;
+  p: string;
 begin
-  url := 'http://127.0.0.1:8001/static/trial.html?id='+feature;
+  p := ExtractFileDir(Application.Exename);
+  url := 'file://'+ p +'/static/trial.html?id='+feature;
   ShellExecute(Handle, 'open', 'IExplore.EXE', PChar(url), nil, SW_SHOWNORMAL);
 end;
 

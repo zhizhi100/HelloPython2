@@ -13,7 +13,8 @@ uses
   GetDSN in 'GetDSN.pas',
   UnitLic in 'UnitLic.pas' {frmlic},
   UnitAuto in 'UnitAuto.pas' {frminstall},
-  UnitCore in 'UnitCore.pas';
+  UnitCore in 'UnitCore.pas',
+  util_utf8 in 'util_utf8.pas';
 
 {$R *.res}
 var 
