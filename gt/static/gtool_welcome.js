@@ -1,13 +1,13 @@
 $(document).ready(function () {
 	$(".loginbtn:first").each(function () {
-		$(".loginbtn").parent().append("<label><input name='saveuser' id='saveuser' type='checkbox'>保存账号密码</label>");
+		$(".loginbtn").parent().append("<label><input name='saveuser' id='saveuser' type='checkbox'>保存账号</label>");
 
 		save = store.get("save");
 		user = store.get("user");
-		pwd = store.get("pwd");
+		//pwd = store.get("pwd");
 		if (save) {
 			$("#username").val(user);
-			$("#password").val(pwd);
+			//$("#password").val(pwd);
 			$("#saveuser").attr("checked", true)
 		}
 
@@ -16,7 +16,7 @@ $(document).ready(function () {
 			pwd = $("#password").val();
 			save = $("#saveuser").attr("checked");
 			store.set("save", save);
-			store.set("pwd", pwd);
+			//store.set("pwd", pwd);
 			store.set("user", user);
 			//alert(save)
 		})
