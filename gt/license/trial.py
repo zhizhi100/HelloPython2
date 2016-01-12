@@ -11,12 +11,11 @@ import hashlib
 from datetime import date
 import datetime   
 
-m2 = hashlib.md5() 
-
 def mymd5(t):
+    m2 = hashlib.md5() 
     m2.update(t)
     p = m2.hexdigest()
-    #p = p.upper()
+    p = p.upper()
     return p
 
 def getid():
@@ -24,7 +23,8 @@ def getid():
     id = ''
     for cpu in c.Win32_Processor():
         id = cpu.ProcessorId.strip()
-        break  
+        break
+    m2 = hashlib.md5()  
     m2.update(id)   
     key = m2.hexdigest()
     key = key.upper()
@@ -78,7 +78,29 @@ def test():
     print key3
     a = date(2015,1,1)
     print a.strftime('%Y%m%d')
+    
+def authkey():
+    from gt.gtcore.env import Gtenv
+    myenv = Gtenv(".")
+    path = myenv.getpath()
+    print haskey()
+    
+def testmd5():
+    src = '568B8FA5CDFD8A2623BDA1D8AB7B7B3420160121'
+    '''
+    import hashlib   
+    m2a = hashlib.md5()   
+    m2a.update(src)   
+    print m2.hexdigest()
+    
+    m2b = hashlib.md5()
+    m2b.update(src)
+    print m2b.hexdigest()
+    ''' 
+    print mymd5(src)
             
 if __name__ == '__main__':
-    test()
-    print getid()
+    #test()
+    #print getid()
+    print authkey()
+    testmd5()

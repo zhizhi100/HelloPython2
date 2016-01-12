@@ -40,7 +40,7 @@ class IndexController extends Controller {
     	//$key = $key.'|'.$key1;
     	$key1 = substr($key1, 0, 1).substr($key1, 8, 1).substr($key1, 16, 1).substr($key1, 24, 1);
     	$key3 = $id.$key1.$key2.date('Ymd',strtotime('+'.$days.' day'));
-    	$key3 = md5($key3);
+    	$key3 = md5(strtoupper($key3));
     	$key3 = substr($key3, 0, 1).substr($key3, 8, 1).substr($key3, 16, 1).substr($key3, 24, 1).substr($key3, 31, 1);
     	$key = '';
     	$key = $key.$key1.$key2.$key3;
