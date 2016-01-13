@@ -14,7 +14,8 @@ uses
   UnitLic in 'UnitLic.pas' {frmlic},
   UnitAuto in 'UnitAuto.pas' {frminstall},
   UnitCore in 'UnitCore.pas',
-  util_utf8 in 'util_utf8.pas';
+  util_utf8 in 'util_utf8.pas',
+  uQRCode in 'uQRCode.pas';
 
 {$R *.res}
 var 

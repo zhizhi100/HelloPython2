@@ -4648,7 +4648,7 @@ object FormMain: TFormMain
       Height = 33
       Caption = #37325#21551'(&R)'
       TabOrder = 2
-      OnClick = btnstrartClick
+      OnClick = btnrestartClick
     end
   end
   object GroupBox3: TGroupBox
@@ -4903,6 +4903,7 @@ object FormMain: TFormMain
   end
   object tmr1: TTimer
     Enabled = False
+    Interval = 2000
     OnTimer = tmr1Timer
     Left = 192
     Top = 134

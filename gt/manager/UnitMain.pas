@@ -69,6 +69,7 @@ type
     procedure btn1Click(Sender: TObject);
     procedure lbl3Click(Sender: TObject);
     procedure FormActivate(Sender: TObject);
+    procedure btnrestartClick(Sender: TObject);
   private
     { Private declarations }
     proxyserv: string;
@@ -76,6 +77,7 @@ type
     proxylog: string;
     weblog: string;
     tmplog: string;
+    days : Integer;
     registed: Boolean;
     inited: Boolean;
     procedure readini();
@@ -256,7 +258,7 @@ begin
   msg := 'Hello!';
   //ShowMessage(msg);
   //frmtest.Show;
-  readini();
+
 
   p := ExtractFileDir(Application.Exename);
   f := p + '\' + tmplog;
@@ -373,6 +375,14 @@ procedure TFormMain.btnstrartClick(Sender: TObject);
 var
   a, b: Boolean;
 begin
+  if (days < 0) then
+  begin
+    ShowMessage('本次试用已经截止，请继续申请试用或购买正式授权！');
+    frmlic.ShowModal;
+    lblkey.Caption := checkKey();
+    days := usebleDys();
+    Exit;
+  end;
   a := startserv(proxyserv);
   b := startserv(webserv);
   querystate();
@@ -503,15 +513,18 @@ procedure TFormMain.lbl3Click(Sender: TObject);
 begin
   frmlic.ShowModal;
   lblkey.Caption := checkKey();
+  days := usebleDys();
 end;
 
 procedure TFormMain.FormActivate(Sender: TObject);
 var
   installed: Boolean;
 begin
+  readini();
   if not inited then
   begin
     lblkey.Caption := checkKey();
+    days := usebleDys();
     installed := isregisted();
     if installed then
     begin
@@ -525,8 +538,39 @@ begin
       ShowMessage('服务尚未注册!'+#13#13+'请点击【一键安装】或【注册服务】按钮安装服务，'+#13#13+'以确保 金三助手 正常工作！');
       showunregisted();
     end;
+    if (days < 0) then
+    begin
+      frmlic.ShowModal;
+      lblkey.Caption := checkKey();
+      days := usebleDys();
+    end;
+    if ((days > 0) and (days < 3)) then
+    begin
+      ShowMessage('本次试用日期还有【'+ IntToStr(days) +'】天截止，请及时重新申请试用或购买正式授权，以确保 金三助手 正常工作！');
+    end;
   end;
   inited := True;
+end;
+
+procedure TFormMain.btnrestartClick(Sender: TObject);
+var
+  a, b: Boolean;
+begin
+  if (days < 0) then
+  begin
+    ShowMessage('本次试用已经截止，请继续申请试用或购买正式授权！');
+    frmlic.ShowModal;
+    lblkey.Caption := checkKey();
+    days := usebleDys();
+    Exit;
+  end;
+  a := stopserv(proxyserv);
+  b := stopserv(webserv);
+  querystate();
+  Sleep(2000);
+  a := startserv(proxyserv);
+  b := startserv(webserv);
+  querystate();
 end;
 
 end.

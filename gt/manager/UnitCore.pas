@@ -7,6 +7,7 @@ uses
   Controls, Dialogs, Forms, Winsock, ComObj, ActiveX, ShlObj, Registry;
 
 function checkKey(): string;
+function usebleDys():Integer;
 
 procedure quicklink();
 
@@ -170,7 +171,7 @@ begin
   ipstr := ips[i];
   if FileExists(p + '\' + ipstr + '.lic') then
   begin
-    Result := '存在正式授权！';
+    Result := '您已获得正式授权！';
     Exit;
   end;
   ip := SplitString(ipstr, '.');
@@ -231,7 +232,97 @@ begin
     begin
        //显示授权内容
       valid := True;
-      Result := '试用期限：' + FormatDateTime('yyyy-mm-dd', a);
+      Result := '试用期限：' + FormatDateTime('yyyy-mm-dd', a ) + ' 00:00:00';
+    end;
+  end;
+end;
+
+function usebleDys():Integer;
+var
+  _eax, _ebx, _ecx, _edx: Longword;
+  s, s1, s2, results, feature: string;
+  md5: TMD5Digest;
+  t: string;
+  p: string;
+  fn: string;
+  key, key1, key2: string;
+  F: TextFile;
+  days: Integer;
+  a: TDateTime;
+  FSetting: TFormatSettings;
+  valid: Boolean;
+  ips: TIPList;
+  ipstr: string;
+  ip: TStringList;
+  i: Integer;
+begin
+  Result := -1;
+  p := ExtractFileDir(Application.Exename);
+  ips := getIP();
+  i := low(ips);
+  ipstr := ips[i];
+  if FileExists(p + '\' + ipstr + '.lic') then
+  begin
+    Result := 1000;
+    Exit;
+  end;
+  ip := SplitString(ipstr, '.');
+  ipstr := IntToHex(StrToInt(ip[0]) + 255, 0) + IntToHex(StrToInt(ip[1]) + 255, 0) + IntToHex(StrToInt(ip[2]) + 255, 0) + IntToHex(StrToInt(ip[3]) + 255, 0);
+  asm
+        push    eax
+        push    ebx
+        push    ecx
+        push    edx
+        mov     eax, 1
+        db      $0F, $A2
+        mov     _eax, eax
+        mov     _ebx, ebx
+        mov     _ecx, ecx
+        mov     _edx, edx
+        pop     edx
+        pop     ecx
+        pop     ebx
+        pop     eax
+  end;
+  s := IntToHex(_eax, 8);
+  s1 := IntToHex(_edx, 8);
+  s2 := IntToHex(_ecx, 8);
+  results := s1 + s;
+  t := s1 + s;
+  feature := t;
+  MD5String(t, @md5);
+  feature := MD5DigestToStr(md5);
+  t := feature;
+
+  fn := p + '\key.triallic';
+  if not FileExists(fn) then
+    Exit;
+  AssignFile(F, fn); { File selected in dialog }
+  Reset(F);
+  Readln(F, S);                        { Read first line of file }
+  key := s;
+  CloseFile(F);
+  if Length(key) > 5 then
+  begin
+    key1 := copy(key, 0, 4);
+    key2 := Copy(key, 5, 3);
+    days := HexToInt(key2);
+    days := days mod 1000;
+      //FSetting := TFormatSettings.Create(LOCALE_USER_DEFAULT);
+    FSetting.ShortDateFormat := 'yyyy-MM-dd';
+    FSetting.DateSeparator := '-';
+      //FSetting.TimeSeparator:=':';
+    FSetting.LongTimeFormat := 'hh:mm:ss.zzz';
+    a := StrToDateTime('2015-01-01 00:00.000', FSetting);
+    a := a + days;
+    s := FormatDateTime('yyyymmdd', a);
+    s := t + s;
+    MD5String(s, @md5);
+    t := MD5DigestToStr(md5);
+    s := '' + t[1] + t[9] + t[17] + t[25];
+    if (key1 = s) then
+    begin
+      Result := trunc(a - Now() + 1);
     end;
   end;
 end;
