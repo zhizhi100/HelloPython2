@@ -147,11 +147,11 @@ begin
   b := isrunning(webserv);
   if a and b then
   begin
-    showrunning;
+    showrunning();
   end
   else
   begin
-    showstopped;
+    showstopped();
     if a then
       lblproxy.Font.Color := clGreen;
     if b then
@@ -327,6 +327,7 @@ begin
   if registed then
   begin
     querystate();
+    if mmolog.Focused then Exit;
     if rbtmp.Checked then
       f := tmplog;
     if rbproxy.Checked then
@@ -567,7 +568,8 @@ begin
   a := stopserv(proxyserv);
   b := stopserv(webserv);
   querystate();
-  Sleep(2000);
+  FormMain.Refresh;
+  Sleep(1000);
   a := startserv(proxyserv);
   b := startserv(webserv);
   querystate();
