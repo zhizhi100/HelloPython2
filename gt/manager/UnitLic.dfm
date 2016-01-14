@@ -36,6 +36,7 @@ object frmlic: Tfrmlic
     Top = 64
     Width = 200
     Height = 200
+    Stretch = True
   end
   object lbl2: TLabel
     Left = 240

@@ -4531,7 +4531,7 @@ object FormMain: TFormMain
   TextHeight = 15
   object lbl1: TLabel
     Left = 366
-    Top = 245
+    Top = 207
     Width = 48
     Height = 17
     Cursor = crHandPoint
@@ -4730,7 +4730,7 @@ object FormMain: TFormMain
   end
   object GroupBox4: TGroupBox
     Left = 320
-    Top = 137
+    Top = 91
     Width = 113
     Height = 105
     Caption = #26381#21153#31649#29702
@@ -4777,7 +4777,7 @@ object FormMain: TFormMain
   end
   object chkagree: TCheckBox
     Left = 324
-    Top = 245
+    Top = 207
     Width = 41
     Height = 17
     Caption = #21516#24847
@@ -4794,7 +4794,7 @@ object FormMain: TFormMain
   end
   object btn1: TBitBtn
     Left = 320
-    Top = 269
+    Top = 230
     Width = 113
     Height = 33
     Caption = #8730'   '#19968#38190#23433#35013
@@ -4810,7 +4810,7 @@ object FormMain: TFormMain
   object grp1: TGroupBox
     Left = 6
     Top = 88
-    Width = 427
+    Width = 307
     Height = 47
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
@@ -4833,7 +4833,7 @@ object FormMain: TFormMain
       ParentFont = False
     end
     object lbl3: TLabel
-      Left = 304
+      Left = 192
       Top = 17
       Width = 110
       Height = 19
@@ -4847,6 +4847,21 @@ object FormMain: TFormMain
       ParentFont = False
       OnClick = lbl3Click
     end
+  end
+  object btnuninstall: TBitBtn
+    Left = 320
+    Top = 270
+    Width = 113
+    Height = 33
+    Caption = #215'   '#19968#38190#21368#36733
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clRed
+    Font.Height = -15
+    Font.Name = #24494#36719#38597#40657
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 8
+    OnClick = btnuninstallClick
   end
   object pm1: TPopupMenu
     Left = 408

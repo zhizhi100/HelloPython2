@@ -48,6 +48,7 @@ type
     grp1: TGroupBox;
     lblkey: TLabel;
     lbl3: TLabel;
+    btnuninstall: TBitBtn;
     procedure btnmoreClick(Sender: TObject);
     procedure N1Click(Sender: TObject);
     procedure N2Click(Sender: TObject);
@@ -70,6 +71,7 @@ type
     procedure lbl3Click(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure btnrestartClick(Sender: TObject);
+    procedure btnuninstallClick(Sender: TObject);
   private
     { Private declarations }
     proxyserv: string;
@@ -277,28 +279,29 @@ var
   a, b: Boolean;
   p, fa, fb: string;
 begin
-  if MessageDlg('金三助手将安装必需的系统服务，360安全卫士等杀毒软件可能会阻止。' + #13 + #13 + '请在杀毒软件中允许服务安装，或暂时关闭杀毒软件。' + #13 + #13 + '是否继续安装服务？', mtconfirmation, [mbYes, mbNo], 0) = mrNo then
-    Exit;
-  p := ExtractFileDir(Application.Exename);
-  fa := p + '/' + proxyserv + '.exe';
-  fb := p + '/' + webserv + '.exe';
-  a := installserv(proxyserv, fa);
-  b := installserv(webserv, fb);
-  if a and b then
+  if MessageDlg('金三助手将安装必需的系统服务，360安全卫士等杀毒软件可能会阻止。' + #13 + #13 + '请在杀毒软件中允许服务安装，或暂时关闭杀毒软件。' + #13 + #13 + '是否继续安装服务？', mtconfirmation, [mbYes, mbNo], 0) = mrYes then
   begin
-    ShowMessage('服务注册成功，请点击【启动】按钮启动服务！');
-    showregisted();
-    tmr1.Enabled := True;
-    registed := True;
-  end
-  else
-  begin
-    ShowMessage('服务注册失败！请检查系统环境并重新尝试注册服务！');
-    showunregisted();
-    tmr1.Enabled := False;
-    registed := False;
+    p := ExtractFileDir(Application.Exename);
+    fa := p + '/' + proxyserv + '.exe';
+    fb := p + '/' + webserv + '.exe';
+    a := installserv(proxyserv, fa);
+    b := installserv(webserv, fb);
+    if a and b then
+    begin
+      ShowMessage('服务注册成功，请点击【启动】按钮启动服务！');
+      showregisted();
+      tmr1.Enabled := True;
+      registed := True;
+    end
+    else
+    begin
+      ShowMessage('服务注册失败！请检查系统环境并重新尝试注册服务！');
+      showunregisted();
+      tmr1.Enabled := False;
+      registed := False;
+    end;
+    queryinstalnation();
   end;
-  queryinstalnation();
 end;
 
 function needreload(f: string): Boolean;
@@ -394,7 +397,8 @@ var
   a, b: Boolean;
   i: Integer;
 begin
-  i := Application.MessageBox('停止服务后 金三助手 将无法正常工作，是否确定需要停止服务？', '询问', MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON2);
+  i := Application.MessageBox('停止服务后 金三助手 将无法正常工作，是否确定需要停止服务？' + #13 + #13 + '若需停用金三助手，请使用 一键卸载 功能，谢谢！',
+     '询问', MB_YESNO or MB_ICONQUESTION or MB_DEFBUTTON2);
   if (i = IDYES) then
   begin
     a := stopserv(proxyserv);
@@ -486,20 +490,21 @@ var
   path: string;
   ARegistry: TRegistry;
 begin
-  if MessageDlg('金三助手将修改注册表，360安全卫士等杀毒软件可能会阻止。' + #13 + #13 + '请在杀毒软件中允许服务安装，或暂时关闭杀毒软件。' + #13 + #13 + '是否继续安装服务？', mtconfirmation, [mbYes, mbNo], 0) = mrNo then
-    Exit;
-  path := 'file://' + ExtractFilePath(Application.Exename) + 'static/gtproxy.pac';
-  ARegistry := TRegistry.Create; //建立一个TRegistry实例
-  with ARegistry do
+  if MessageDlg('金三助手将修改注册表，360安全卫士等杀毒软件可能会阻止。' + #13 + #13 + '请在杀毒软件中允许服务安装，或暂时关闭杀毒软件。' + #13 + #13 + '是否继续安装服务？', mtconfirmation, [mbYes, mbNo], 0) = mrYes then
   begin
-    RootKey := HKEY_CURRENT_USER;
-    if OpenKey('Software\Microsoft\Windows\CurrentVersion\Internet Settings', True) then
+    path := 'file://' + ExtractFilePath(Application.Exename) + 'static/gtproxy.pac';
+    ARegistry := TRegistry.Create; //建立一个TRegistry实例
+    with ARegistry do
     begin
-      WriteString('AutoConfigURL', path);
-      ShowMessage('IE代理配置完成，请在本地代理服务测试功能中检验代理及服务是否正常工作！');
+      RootKey := HKEY_CURRENT_USER;
+      if OpenKey('Software\Microsoft\Windows\CurrentVersion\Internet Settings', True) then
+      begin
+        WriteString('AutoConfigURL', path);
+        ShowMessage('IE代理配置完成，请在本地代理服务测试功能中检验代理及服务是否正常工作！');
+      end;
+      CloseKey;
+      Destroy;
     end;
-    CloseKey;
-    Destroy;
   end;
 end;
 
@@ -573,6 +578,47 @@ begin
   a := startserv(proxyserv);
   b := startserv(webserv);
   querystate();
+end;
+
+procedure TFormMain.btnuninstallClick(Sender: TObject);
+var
+  path: string;
+  ARegistry: TRegistry;
+  a, b: Boolean;
+begin
+  if MessageDlg('金三助手将修改注册表，360安全卫士等杀毒软件可能会阻止。' + #13 + #13 + '请在杀毒软件中允许服务安装，或暂时关闭杀毒软件。' + #13 + #13 + '是否继续卸载服务？', mtconfirmation, [mbYes, mbNo], 0) = mrYes then
+  begin
+    path := 'file://' + ExtractFilePath(Application.Exename) + 'static/gtproxy.pac';
+    ARegistry := TRegistry.Create; //建立一个TRegistry实例
+    with ARegistry do
+    begin
+      RootKey := HKEY_CURRENT_USER;
+      if OpenKey('Software\Microsoft\Windows\CurrentVersion\Internet Settings', True) then
+      begin
+        WriteString('AutoConfigURL', '');
+        ShowMessage('还原IE代理设置成功！');
+      end;
+      CloseKey;
+      Destroy;
+    end;
+    a := stopserv(proxyserv);
+    b := stopserv(webserv);
+    querystate();
+    FormMain.Refresh;
+    if (a and b) then
+      ShowMessage('停止 金三后台服务成功！');
+    a := uninstallserv(proxyserv);
+    b := uninstallserv(webserv);
+    querystate();
+    if (a and b) then
+    begin
+      registed := False;
+      showunregisted();
+      ShowMessage('卸载 金三后台服务成功！' + #13 + #13 + '若需继续使用金三助手功能请选择一键安装，谢谢！');
+    end
+    else
+      ShowMessage('卸载 金三后台服务失败，可稍后重试一键卸载！');
+  end;
 end;
 
 end.

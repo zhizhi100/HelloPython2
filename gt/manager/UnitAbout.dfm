@@ -4995,9 +4995,9 @@ object AboutBox: TAboutBox
     object lbl2: TLabel
       Left = 100
       Top = 60
-      Width = 65
+      Width = 72
       Height = 17
-      Caption = 'Version 1.1'
+      Caption = 'Version 1.12'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -12

@@ -38,7 +38,8 @@ var
 
 implementation
 
-uses uQRCode;
+uses
+  qrenc;
 {$R *.dfm}
 
 function EnQrText(txtdata: PChar; outfile: PChar): PChar; stdcall; external 'EnCodeQr.dll';
@@ -230,9 +231,22 @@ begin
   t := edtfeature.Text;
   feature := t;
   p := ExtractFileDir(Application.Exename);
-  url := 'http://gt3.weixin51.cn?act=trial&id=' + feature;
+  url := 'http://gt3.weixin51.cn?act=trial&id=' + feature + ipstr;
   tf := p + '\key.bmp';
-  CreateQRCode(url,4,1,6,tf);
+  //CreateQRCode(url,4,1,6,tf);
+    qr(
+      AnsiString(url),
+      AnsiString(tf),
+      2,
+      6,
+      0,
+      1,
+      0,
+      0,
+      0,
+      clBlack,
+      clWhite
+    );
   img1.Picture.LoadFromFile(tf);
   fn := p + '\key.triallic';
   if not FileExists(fn) then
@@ -281,7 +295,7 @@ begin
   url := 'http://gt3.weixin51.cn?act=trial&id=' + feature;
   //ShellExecute(Handle, 'open', 'IExplore.EXE', PChar(url), nil, SW_SHOWNORMAL);
   f := p + '\key.bmp';
-  CreateQRCode(url,4,1,6,f);
+  //CreateQRCode(url,4,1,6,f);
   img1.Picture.LoadFromFile(f);
 end;
 

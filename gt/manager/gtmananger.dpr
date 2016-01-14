@@ -15,7 +15,18 @@ uses
   UnitAuto in 'UnitAuto.pas' {frminstall},
   UnitCore in 'UnitCore.pas',
   util_utf8 in 'util_utf8.pas',
-  uQRCode in 'uQRCode.pas';
+  uQRCode in 'uQRCode.pas',
+  bitstream in 'qrcode\bitstream.pas',
+  mask in 'qrcode\mask.pas',
+  mmask in 'qrcode\mmask.pas',
+  mqrspec in 'qrcode\mqrspec.pas',
+  qrenc in 'qrcode\qrenc.pas',
+  qrencode in 'qrcode\qrencode.pas',
+  qrinput in 'qrcode\qrinput.pas',
+  qrspec in 'qrcode\qrspec.pas',
+  rscode in 'qrcode\rscode.pas',
+  split in 'qrcode\split.pas',
+  struct in 'qrcode\struct.pas';
 
 {$R *.res}
 var 
