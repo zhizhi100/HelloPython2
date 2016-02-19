@@ -234,7 +234,10 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
                 self.send_header(key,val)
         self.end_headers()
         html = r['html'] 
+        self.wfile.write("\r\n")
+        self.wfile.write()
         self.wfile.write(html)
+        self.wfile.write("\r\n0000\r\n\r\n")
       
     def do_POST(self):      
         oldpath = self.path
@@ -304,11 +307,11 @@ def logSetup (filename, log_size, daemon):
             handler = logging.StreamHandler ()
         else:
             handler = logging.handlers.RotatingFileHandler (DEFAULT_LOG_FILENAME,
-                                                            maxBytes=(log_size*(1<<20)),
+                                                            maxBytes=(log_size*(1<<16)),
                                                             backupCount=5)
     else:
         handler = logging.handlers.RotatingFileHandler (filename,
-                                                        maxBytes=(log_size*(1<<20)),
+                                                        maxBytes=(log_size*(1<<16)),
                                                         backupCount=5)
     fmt = logging.Formatter ("[%(asctime)-12s.%(msecs)03d] "
                              "%(levelname)-8s {%(name)s %(threadName)s}"
@@ -361,7 +364,7 @@ def main ():
     if logfile == '':
         logfile = path + '/proxy.log'
     daemon  = False
-    max_log_size = 20
+    max_log_size = 2
     port = 8000
     allowed = []
     run_event = threading.Event ()
