@@ -1,0 +1,40 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script language="javascript" type="text/javascript" src="/swordweb/core/jsimport/Sword.js" ></script>
+<script src="jquery-1.9.0.min.js"></script><script>var jq=jQuery.noConflict();</script>
+<script type="text/javascript" src="store+json2.min.js"></script>
+<script type="text/javascript" src="fav.js?v=23"></script>
+<title>Hello,Golden Tool User!</title>
+<style type="text/css"> 
+#okbtn {
+	float:right;	
+	width:91px;
+	height:40px;
+	margin-right: 20px;
+	margin-bottom: 20px;
+	text-align:center;
+	font:14px;
+}
+td {
+	height:350px;
+	border:1px solid #000;
+	border-width:1px 1px 1px 1px;
+}
+</style>
+</head>
+<body> 
+<table width="100%">
+<tr><th style="width:48%;">最<b>近</b>使用</th><th style="width:48%;"><b>收藏</b>功能</th></tr>
+<tr><td><div id="aclist"></div></td><td><div id="fvlist">您还没有添加……</div></td></tr>
+</table>
+<button id="okbtn" onclick="sure();">关闭</button>
+<script language="javascript" type="text/javascript">
+function sure() {
+	var box = this.parent[this.name];
+	box.options.func('确定');	
+	box.closePopUpBox();
+}
+</script>
+</body>
+</html>

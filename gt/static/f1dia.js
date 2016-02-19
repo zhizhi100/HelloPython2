@@ -4,6 +4,16 @@ window.console = window.console || (function () {
 		return c;
 	})();
 
+function stripscript(s) {
+	s = s.replace(/\s/g, "");
+	var pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？]")
+		var rs = "";
+	for (var i = 0; i < s.length; i++) {
+		rs = rs + s.substr(i, 1).replace(pattern, '');
+	}
+	return rs;
+}
+
 jq(function () {
 	jq("#tab_left_1").bind("click", function () {
 		jq("#tab_con_2").hide();
@@ -175,6 +185,7 @@ var nsrlist = function () {
 						total : d['data'].length
 					}
 					jq("#t2").datagrid('loadData', data);
+					jq("#remoteqrybtn").show("slow");
 					if (d['data'].length > 0) {}
 					else {
 						alert("没有符合条件的纳税人！可尝试后台查询。");
@@ -315,6 +326,7 @@ var nsrlist = function () {
 						total : d.topics.length
 					};
 					jq("#t2").datagrid('loadData', data);
+					jq("#remoteqrybtn").hide("slow");
 					if (d.topics.length > 0) {
 						savequery(data.rows);
 					} else {
@@ -456,4 +468,5 @@ jq(document).ready(function () {
 	var dt = new Date();
 	var tag = formatDate(dt, "yyyy");
 	jq("#copyright").html("Copyright@2015-" + tag);
+	jq("#remoteqrybtn").hide();
 });

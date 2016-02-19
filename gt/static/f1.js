@@ -12,6 +12,7 @@ nsrs.push("dksbdForm_skfnsrsbh"); //发票代开
 nsrs.push("cxtjForm_nsrsbh"); //cxtjForm_nsrsbh 文书补打
 nsrs.push("xgnsrjbxxForm_nsrsbh"); //修改设立税务登记
 nsrs.push("jbxxForm_nsrsbh"); //发票开具
+
 nsrs.push("zzwtxyqrxxForm_nsrsbh");
 nsrs.push("tbnstzForm_nsrsbh");
 nsrs.push("nsdbjcclForm_nsrsbh");
@@ -64,6 +65,8 @@ searchs.push(function (e) {
 				//页面数据还原
 				clearData();
 				//收款方身份证件类型
+
+
 				var zjlxDm_s = dksbdForm.getValue('skfsfzjlxDm').code;
 				//如果身份证件不为空，通过身份证件种类及号码查询自然人信息
 				if ($chk(zjlxDm_s)) {
@@ -88,6 +91,8 @@ searchs.push(function (e) {
 				//页面数据还原
 				clearData();
 				//收款方身份证件类型
+
+
 				var zjlxDm_s = dksbdForm.getValue('skfsfzjlxDm').code;
 				//如果身份证件不为空，通过身份证件种类及号码查询自然人信息
 				if ($chk(zjlxDm_s)) {
@@ -128,6 +133,8 @@ searchs.push(function (e) {
 		return;
 	}
 	if (typeof(queryNsrxxbyNsrsbh) != "undefined" && typeof(queryNsrxx) != "undefined") { //变更纳税人
+
+
 		var nsrsbh = jq(jqs).val();
 		queryNsrxxbyNsrsbh(nsrsbh, queryNsrxx, "2", "SLSXA011002002");
 		return;
@@ -154,13 +161,13 @@ var gt_searchnsr = function () {};
 var jqs = "";
 var gthelp = function () {
 	var nsrinput = jq(jqs).get(0);
-	if (nsrinput.readOnly){
+	if (nsrinput.readOnly) {
 		alert("纳税人识别号不可编辑！请切换下一户再查询。")
 		return;
 	}
-	if (nsrinput.disabled){
+	if (nsrinput.disabled) {
 		alert("纳税人识别号不可编辑！请切换下一户再查询。")
-		return;	
+		return;
 	}
 	var _func = function (a, b) {
 		jq(jqs).val(a);
@@ -194,7 +201,11 @@ var intid;
 var env;
 var findtimes = 0;
 var isNative = function (method) { //判定是否为原生方法
+
+
 	return !!method && (/\{\s*\[native code\]\s*\}/.test(method + "")); //这里是为了兼容opera9.x的
+
+
 };
 var gtevtfunc = function () {
 	console.log("a");
@@ -315,7 +326,11 @@ var initf1 = function () {
 					eval(js);
 					});
 					var e = jQuery.Event("keyup"); //模拟一个键盘事件
+
+
 					e.keyCode = 13; //keyCode=13是回车
+
+
 					e.code = 13;
 					thediv.trigger(e);					*/
 					//thediv.addEvent('onkeyup',function(){ eval("event.keyCode=13;"+js);})
@@ -335,7 +350,11 @@ var initf1 = function () {
 					//	eval(js);
 					//};
 					//var e = jQuery.Event("keyup"); //模拟一个键盘事件
+
+
 					//e.keyCode = 13; //keyCode=13是回车
+
+
 					//e.code = 13;
 					//thediv.trigger(e);
 					//thediv.focus();
@@ -383,6 +402,7 @@ var initf1 = function () {
 					}
 					return;
 				}
+
 				var customEvent = document.createEventObject();
 				customEvent.bubbles = false;
 				customEvent.cancelable = false;
@@ -428,8 +448,6 @@ var initf1 = function () {
 	});
 }
 
-
-
 jq(document).ready(function () {
 	intid = self.setInterval("initf1()", 500);
 	jq.ajax({
@@ -440,6 +458,7 @@ jq(document).ready(function () {
 			env = data;
 		}
 	});
+
 	jq.ajax({
 		url : '_gtoolquery_/czy',
 		dataType : "json",
@@ -448,4 +467,5 @@ jq(document).ready(function () {
 			uid = data.uid;
 		}
 	});
+
 });

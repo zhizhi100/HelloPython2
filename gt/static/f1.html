@@ -41,12 +41,12 @@
 						data-options="rownumbers:true,singleSelect:true,remoteSort:false">
 					<thead data-options="frozen:true">
 						<tr>
-							<th data-options="field:'nsrsbh',width:150" sortable="true">纳税人识别号</th>
 							<th data-options="field:'nsrmc',width:200" sortable="true">纳税人名称</th>
 						</tr>
 					</thead>
 					<thead>
 						<tr>
+							<th data-options="field:'nsrsbh',width:150" sortable="true">纳税人识别号</th>						
 							<th data-options="field:'zgswskfjmc',width:250,align:'left'" sortable="true">主管税务科所分局</th>
 							<th data-options="field:'ssglymc',width:60,align:'left'" sortable="true">税管员</th>
 							<th data-options="field:'scjydz',width:500" sortable="true">注册经营地址</th>
@@ -60,20 +60,20 @@
 			</div>
 			<div id="tab_con_2" style="display:none"><div style="padding: 0px; overflow: hidden"> 
 				<div style="margin:1px 0;"></div>
-				<div><span style="font-size: 14px;">纳税人名称：</span><input type="text" name="mc" style="width:200" id="mc">
-				<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="query.list(jq('#mc').val());words.add(jq('#mc').val());jq('#keywords').html(words.listhtml());">本地查询</a>
-				<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="query.remotelist(jq('#mc').val());words.add(jq('#mc').val());jq('#keywords').html(words.listhtml());">后台查询</a>
+				<div><span style="font-size: 14px;">纳税人名称：</span><input type="text" name="mc" style="width:200" id="mc" onkeyup="nsrkeyup(e);">
+				<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="lquery();">本地查询</a>
+				<a id="remoteqrybtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="rquery();">后台查询</a>
 				<span id="keywords"></span></div>
 				<table id="t2" class="easyui-datagrid" title="按名称查询纳税人" style="height:330px"
 						data-options="rownumbers:true,singleSelect:true,remoteSort:false">
 					<thead data-options="frozen:true">
 						<tr>
-							<th data-options="field:'nsrsbh',width:150" sortable="true">纳税人识别号</th>
 							<th data-options="field:'nsrmc',width:200" sortable="true">纳税人名称</th>
 						</tr>
 					</thead>
 					<thead>
 						<tr>
+							<th data-options="field:'nsrsbh',width:150" sortable="true">纳税人识别号</th>						
 							<th data-options="field:'nsrztmc',width:60,align:'left'" sortable="true">状态</th>
 							<th data-options="field:'zgswskfjmc',width:250,align:'left'" sortable="true">主管税务科所分局</th>
 							<th data-options="field:'ssglymc',width:60,align:'left'" sortable="true">税管员</th>
@@ -113,6 +113,24 @@
 
 
 <script language="javascript" type="text/javascript">
+function lquery() {
+	var a = jq('#mc').val();
+	a = stripscript(a);
+	jq('#mc').val(a);
+	query.list(a);
+	words.add(a);
+	jq('#keywords').html(words.listhtml());
+}
+
+function rquery() {
+	var a = jq('#mc').val();
+	a = stripscript(a);
+	jq('#mc').val(a);
+	query.remotelist(a);
+	words.add(a);
+	jq('#keywords').html(words.listhtml());
+}
+
 function nsrkeyup(e){
 	if (window.event.keyCode == 13){
 		query.list(jq('#mc').val());words.add(jq('#mc').val());jq('#keywords').html(words.listhtml());
@@ -167,6 +185,6 @@ function teststore(){
 }
 </script>
 <script src="./initquery.js?v=36" type="text/javascript"></script>
-<script src="./f1dia.js?v=75" type="text/javascript"></script>
+<script src="./f1dia.js?v=80" type="text/javascript"></script>
 
 </body>
