@@ -16,6 +16,51 @@ from tornado.httpclient import AsyncHTTPClient
 from tornado.web import HTTPError, asynchronous
 import urlparse,urllib
 
+class Reget(tornado.web.RequestHandler):
+    @asynchronous
+    def get(self):
+        headers = dict(self.request.headers)
+        url = ''
+        if headers.has_key('Gtool_url'):
+            url = headers['Gtool_url']
+            del headers['Gtool_url']
+        else:
+            raise HTTPError(500)
+        try:
+            logging.info('to fecth url:%s',url)
+            #self._before_post(self.request)
+            AsyncHTTPClient().fetch(
+                HTTPRequest(url=url,
+                            method="POST",
+                            body=self.request.body,
+                            headers=headers,
+                            follow_redirects=False),
+                self._on_proxy)
+            logging.info('finished in fecthing url:%s',url)
+        except tornado.httpclient.HTTPError, x:
+            if hasattr(x, "response") and x.response:
+                self._on_proxy(x.response)
+            else:
+                logging.error("Tornado signalled HTTPError %s", x)
+                 
+    def _on_proxy(self, response):
+        if response.error and not isinstance(response.error,
+                                             tornado.httpclient.HTTPError):
+            raise HTTPError(500)
+        else:
+            self.set_status(response.code)
+            for header in ("Date", "Cache-Control", "Server", "Content-Type", "Location", "Content-Disposition"):
+                v = response.headers.get(header)
+                if v:
+                    self.set_header(header, v)
+            if response.body:
+                self.write(response.body)
+            self.finish()
+            self._on_success(response)
+            
+    def _on_success(self,response):
+        pass
+
 class Repost(tornado.web.RequestHandler):
     def get(self):
         self.write("just for test") 

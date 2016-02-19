@@ -10,6 +10,7 @@ from gt.gtcore.nsr import Nsr,UNsr
 import gt.gtcore.sysinfo as g3sys 
 from gt.gtcore import nsr
 from gt.gtcore.env import Gtenv
+from gt.gtcore.frequence import Freq
         
 class AjaxHandler(tornado.web.RequestHandler):
     def work(self):
@@ -100,6 +101,24 @@ class SaveRemoteQuery(AjaxHandler):
                     j[c]=""                       
         n = UNsr(self.uid)
         n.savemany(infos)
+        return True,'',''
+    
+class QueryFreq(AjaxHandler):
+    def work(self):
+        f = Freq(self.uid)
+        succ,data = f.query()
+        if succ:
+            return succ,'',data
+        else:
+            return succ,data,None
+        
+class SaveFreq(AjaxHandler):
+    def work(self):
+        f = Freq(self.uid)
+        d = self.get_argument('freqs')
+        d = json.loads(d)
+        d = json.loads(d)
+        f.save(d)
         return True,'',''
            
 if __name__ == '__main__':

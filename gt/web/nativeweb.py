@@ -3,6 +3,7 @@
 '''
 Created on 2015年11月3日
 
+
 @author: ZhongPing
 '''
 import sys,os
@@ -13,9 +14,9 @@ import logging
 import time
 import signal
 from tornado.options import define, options
-from reposthandler import Repost,Downloader,GetNsrDetail,JSONP,NsrlistJsonp
+from reposthandler import Repost,Downloader,GetNsrDetail,JSONP,NsrlistJsonp,Reget
 from jobhandler import Job,ThreadJob,ImoportNsr
-from dbhandler import Querynsr,Querytrace,G3info,SaveRemoteQuery
+from dbhandler import Querynsr,Querytrace,G3info,SaveRemoteQuery,QueryFreq,SaveFreq
 from remotehandler import RemoteQuery
 from gt.gtcore.env import Gtenv,gtdir
 import ConfigParser
@@ -31,7 +32,7 @@ def logSetup (filename, log_size, daemon):
     logger.setLevel (-1000)
 
     handler = logging.handlers.RotatingFileHandler (filename,
-                                                    maxBytes=(log_size*(1<<20)),
+                                                    maxBytes=(log_size*(1<<16)),
                                                     backupCount=5)
     fmt = logging.Formatter ("[%(asctime)-12s.%(msecs)03d] "
                              "%(levelname)-8s"
@@ -102,7 +103,10 @@ class Lic(tornado.web.RequestHandler):
 class CZY(tornado.web.RequestHandler):
     def get(self):
         myenv = Gtenv("")
-        self.write('{"uid":"'+myenv.uid+'"}')
+        if (hasattr(myenv,'uid')):
+            self.write('{"uid":"'+myenv.uid+'"}')
+        else:
+            self.write('')
         
 def writelicjs():
     s = ""
@@ -120,6 +124,35 @@ def writelicjs():
     fo = open(fname,'w')
     fo.write(s)
     fo.close()
+    
+def writepac(enable):
+    myenv = Gtenv("")
+    path = myenv.getpath()
+    file = path + "/static/gtproxy.pac"
+    if not os.path.exists(file):
+        return
+    file_object = open(file)
+    try:
+        list_of_all_the_lines = file_object.readlines()
+        line = list_of_all_the_lines[1]
+        pos = line.find('return "DIRECT";')
+        if (pos > 0):
+            usingproxy = False
+        else:
+            usingproxy = True
+        if enable:
+            if not usingproxy:
+                del list_of_all_the_lines[1]
+        else:
+            if usingproxy:
+                list_of_all_the_lines.insert(1,'    return "DIRECT";\r\n')   
+    finally:
+        file_object.close()
+    file_object = open(file,'w')
+    try:
+        file_object.writelines(list_of_all_the_lines)
+    finally:
+        file_object.close()                
         
 def startweb():
     #parse_command_line is very important
@@ -144,13 +177,15 @@ def startweb():
         logfile = path + "/" +DEFAULT_LOG_FILENAME    
     
     daemon  = False
-    max_log_size = 20
+    max_log_size = 2
     logger = logSetup (logfile, max_log_size, daemon)
     
+    writepac(True)
     licdays,licdate = trial.haskey()
     if licdays == 0 or (licdate - date.today()).days < 0:
         licdays,licdate = auth.haslic()
         if licdays == 0 or (licdate - date.today()).days < 0:
+            writepac(False)
             logger.warning(u'试用授权到期或没有正式授权文件，系统启动失败！')
             return 0
         else:
@@ -181,14 +216,17 @@ def startweb():
         (r"/sysinfo",G3info),
         (r"/SaveRemoteQuery",SaveRemoteQuery),
         (r"/jsonp",JSONP),
+        (r"/reget",Reget),
         (r"/czy",CZY),
+        (r"/queryfreq",QueryFreq),
+        (r"/savefreq",SaveFreq),
         (r"/nsrlistjsonp",NsrlistJsonp),
         (r"/nsrinfo",GetNsrDetail)
         ],**settings)
     
     http_server = tornado.httpserver.HTTPServer(app)
     http_server.listen(8001)
-    logger.log(logging.INFO,"Servering HTTP on localhost port:%s",8001)
+    logger.warning("Servering HTTP on localhost port:%s",8001)
     
     #signal never work in windows system
     #signal.signal(signal.SIGTERM, sig_handler)
@@ -201,7 +239,7 @@ def startweb():
     #    shutdown()
     except Exception as e:
         print e
-        logger.log(logging.INFO,"exception")
+        logger.warning("exception")
 
 if __name__ == '__main__':
     startweb()
