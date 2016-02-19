@@ -11,6 +11,8 @@ import hashlib
 from datetime import date
 import datetime   
 
+import pythoncom
+
 def mymd5(t):
     m2 = hashlib.md5() 
     m2.update(t)
@@ -19,12 +21,14 @@ def mymd5(t):
     return p
 
 def getid():
-    c = wmi.WMI()
+    pythoncom.CoInitialize()
+    c=wmi.WMI()
     id = ''
     for cpu in c.Win32_Processor():
         id = cpu.ProcessorId.strip()
-        break
-    m2 = hashlib.md5()  
+        break  
+    pythoncom.CoUninitialize()
+    m2 = hashlib.md5() 
     m2.update(id)   
     key = m2.hexdigest()
     key = key.upper()
@@ -65,7 +69,7 @@ def haskey():
                         has = days 
     if has > 730:
         has = 0
-    return has,date(2015,1,1) + datetime.timedelta(has)           
+    return has,date(2015,1,1) + datetime.timedelta(has)   
           
 def test():
     key = '01234567890ab'
@@ -79,28 +83,13 @@ def test():
     a = date(2015,1,1)
     print a.strftime('%Y%m%d')
     
-def authkey():
+def authtrial():
     from gt.gtcore.env import Gtenv
     myenv = Gtenv(".")
     path = myenv.getpath()
     print haskey()
-    
-def testmd5():
-    src = '568B8FA5CDFD8A2623BDA1D8AB7B7B3420160121'
-    '''
-    import hashlib   
-    m2a = hashlib.md5()   
-    m2a.update(src)   
-    print m2.hexdigest()
-    
-    m2b = hashlib.md5()
-    m2b.update(src)
-    print m2b.hexdigest()
-    ''' 
-    print mymd5(src)
             
 if __name__ == '__main__':
-    #test()
-    #print getid()
-    print authkey()
-    testmd5()
+    test()
+    print getid()
+    authtrial()
