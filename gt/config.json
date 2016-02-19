@@ -24,14 +24,14 @@
 				"Comment" : ""
 			}, {
 				"Action" : "AppendHTML",
-				"Content" : "<iframe id='_gtframe' src='_gtool_/func.html?v=9' style='display:none'></iframe><script src='js/gtool_jquery-1.9.0.min.js'></script><script>var jq=jQuery.noConflict();</script><script src='_gtool_/f1.js?v=99'></script>",
+				"Content" : "<iframe id='_gtframe' src='_gtool_/func.html?v=9' style='display:none'></iframe><script src='js/gtool_jquery-1.9.0.min.js'></script><script>var jq=jQuery.noConflict();</script><script src='_gtool_/f1.js?v=175'></script>",
 				"MatchMode" : "Regex",
 				"MatchContent" : "http://.*/sword\\?ctrl=.*sName=.*",
 				"Type" : "html",
 				"Comment" : "Yyssb"
 			}, {
 				"Action" : "AppendHTML",
-				"Content" : "<script src='_gtool_/f2.js?v=7'></script>",
+				"Content" : "<script src='_gtool_/f2.js?v=15'></script>",
 				"MatchMode" : "HasKeyword",
 				"MatchContent" : "ctrl=MH003InitLoginxxCtrl_openWin",
 				"Type" : "html",
@@ -106,6 +106,13 @@
 				"Comment" : ""
 			}, {
 				"Action" : "Change",
+				"Content" : "http://localhost:8001/static/sword.js",
+				"MatchMode" : "HasKeyword",
+				"MatchContent" : "Swor2d.js",
+				"Type" : "js",
+				"Comment" : ""
+			},{
+				"Action" : "Change",
 				"Content" : "http://localhost:8001/static/gtool_f1.js",
 				"MatchMode" : "HasKeyword",
 				"MatchContent" : "gtool_f1.js",
@@ -143,7 +150,7 @@
 				"MatchMode" : "HasKeyword",
 				"MatchContent" : "download.sword?rUUID=",
 				"Type" : "js",
-				"Comment" : "may be should delete this rule "
+				"Comment" : ""
 			}
 		]
 	}
