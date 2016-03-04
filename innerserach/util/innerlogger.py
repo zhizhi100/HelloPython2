@@ -10,7 +10,7 @@ import logging.config
 CONF_LOG = "testlogger.config"  
 
 def logger(qualname):
-    logging.config.fileConfig("E:/workspace/HelloPython2/innerserach/logging.conifg") 
+    logging.config.fileConfig("E:/workspace/HelloPython2/innerserach/logging.config") 
     logger = logging.getLogger(qualname)
     return logger
 

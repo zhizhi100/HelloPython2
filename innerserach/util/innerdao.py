@@ -133,6 +133,122 @@ class Dao(object):
         #to be finished
         #generate sql and execute,like ormap/thinkphp
         pass
+    
+class FileDAO(object):
+    dao = None
+    def __init__(self,title):
+        path = title+'_files.db'
+        sql = '''CREATE TABLE `files` (
+                          `id` INTEGER PRIMARY KEY,
+                          `name` varchar(255) NOT NULL,
+                          `path` varchar(2048) NOT NULL,
+                          `isfile` int(1) DEFAULT NULL,
+                          `mtime` TIMESTAMP default (datetime('now', 'localtime')), 
+                          `parent` varchar(2048) DEFAULT NULL,
+                          `hotrank` int(11) DEFAULT NULL
+                        )'''
+        sqlb = '''CREATE TABLE `tmpfiles` (
+                          `id` INTEGER PRIMARY KEY,
+                          `name` varchar(255) NOT NULL,
+                          `path` varchar(2048) NOT NULL,
+                          `isfile` int(1) DEFAULT NULL,
+                          `mtime` TIMESTAMP default (datetime('now', 'localtime')), 
+                          `parent` varchar(2048) DEFAULT NULL,
+                          `hotrank` int(11) DEFAULT NULL
+                        )'''
+        sqlc = '''CREATE TABLE `newfilejobs` (
+                          `id` INTEGER PRIMARY KEY,
+                          `name` varchar(255) NOT NULL,
+                          `path` varchar(2048) NOT NULL,
+                          `isfile` int(1) DEFAULT NULL,
+                          `mtime` TIMESTAMP default (datetime('now', 'localtime')), 
+                          `parent` varchar(2048) DEFAULT NULL,
+                          `operation` varchar(20) DEFAULT NULL
+                        )'''
+        sqllist = {sql,sqlb,sqlc}
+        self.dao = Dao(path=path,initsqllist=sqllist)
+    
+    def addfile(self,afile):
+        sql = '''INSERT INTO `files`(`name`,`path`,`isfile`,`mtime`,`parent`) 
+                VALUES (?,?,?,?,?)
+                '''
+        list = {afile.name,afile.path,afile.isfile,afile.mtime,afile.parent}
+        self.dao.save(sql, list)
+        
+    def addfiles(self,files,curpath = None):
+        fs = []
+        for afile in files:
+            t = (afile.name,afile.path,afile.isfile,afile.mtime,afile.parent)
+            fs.append(t)
+        sql = 'delete from tmpfiles'
+        self.dao.define(sql)
+        sql = '''INSERT INTO `tmpfiles`(`name`,`path`,`isfile`,`mtime`,`parent`) 
+                VALUES (?,?,?,?,?)
+                '''
+        self.dao.savemany(sql, fs, 100)
+        #new files
+        sql = '''insert into newfilejobs(`name`,`path`,`isfile`,`mtime`,`parent`,`operation`) 
+                    select a.name,a.path,a.isfile,a.mtime,a.parent,'new' 
+                    from tmpfiles a
+                    where not exists(select 1 from files b where b.path=a.path )
+                '''
+        self.dao.define(sql)
+        #modified files
+        sql = '''insert into newfilejobs(`name`,`path`,`isfile`,`mtime`,`parent`,`operation`) 
+                    select a.name,a.path,a.isfile,a.mtime,a.parent,'modified' from files b,tmpfiles a 
+                        where a.path=b.path and a.mtime<>b.mtime
+                '''
+        self.dao.define(sql)
+        #deleted files
+        if curpath is not None:
+            #add job
+            sql = '''insert into newfilejobs(`name`,`path`,`isfile`,`mtime`,`parent`,`operation`) 
+                        select a.name,a.path,a.isfile,a.mtime,a.parent,'deleted' from files a 
+                            where not exists(select 1 from tmpfiles b where b.path=a.path ) and a.parent=?
+                    ''' 
+            self.dao.define(sql,(curpath,))
+            #delete the files record
+            sql = '''delete from files a 
+                            where not exists(select 1 from tmpfiles b where b.path=a.path ) and a.parent=?
+                    ''' 
+            self.dao.define(sql,(curpath,))            
+        #modified files        
+        sql = '''update files set mtime=(select c.mtime from ( 
+                    select a.path,b.mtime from files a,tmpfiles b 
+                        where a.path=b.path and a.mtime<>b.mtime) c
+                where files.path=c.path
+                '''
+        self.dao.define(sql)
+        #new files
+        sql = '''insert into files(`name`,`path`,`isfile`,`mtime`,`parent`) 
+                    select a.name,a.path,a.isfile,a.mtime,a.parent from tmpfiles a 
+                        where not exists ( select 1 from files b where b.path=a.path )
+                '''
+        self.dao.define(sql)
+        
+    def gethotdir(self,fromtimestamp):
+        sql = 'SELECT `name`,`path`,`isfile`,`mtime`,`id` FROM `files` WHERE `isfile`=0 and `mtime`>?'
+        (succ,msg,row) = self.dao.getmany(sql, (fromtimestamp,))
+        return row
+        
+    def getfile(self,fid):
+        sql = 'SELECT `name`,`path`,`isfile`,`mtime`,`parent` FROM `files` WHERE `id`=?'
+        (succ,msg,row) = self.dao.get(sql, (fid,))
+        return row
+    
+    def getchildfiles(self,fid):
+        sql = 'SELECT `name`,`path`,`isfile`,`mtime`,`id` FROM `files` WHERE `parent`=?'
+        (succ,msg,row) = self.dao.getmany(sql, (fid,))
+        return row
+    
+    def istravled(self):
+        sql = 'SELECT `id` FROM `files` limit 1'
+        (succ,msg,row) = self.dao.get(sql)
+        if row is None:
+            return False
+        else:
+            return True
+           
         
 def test():
     k = 8
@@ -160,7 +276,19 @@ def test():
     k = k[0]
     print k[0]
     '''
+        
+def testb():
+    fdao = FileDAO('testa')
+    fdao.istravled()
+    import time
+    now = int(time.time())
+    fromtimestamp = now - 20 * 365 * 24 * 60 * 60
+    dirs = fdao.gethotdir(fromtimestamp)
+    for dir in dirs:
+        print dir
+        print dir[1]
     
 if __name__ == '__main__':
-    test()    
+    #test()
+    testb()    
     

@@ -1,0 +1,4 @@
+sc create schserv binpath= "E:\workspace\HelloPython2\innerserach\serv\dist\serachservice.exe -service" type= share start= auto displayname= "serachserv"
+
+
+sc create schduserv binpath= "E:\workspace\HelloPython2\innerserach\serv\dist\scheduleservice.exe -service" type= share start= auto displayname= "scheduleserv"
